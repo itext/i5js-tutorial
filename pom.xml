@@ -88,6 +88,45 @@
 				</includes>
 			</resource>
 		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2</version>
+				<executions>
+					<execution>
+						<id>HTMLParsingDefault</id>
+						<phase>test</phase>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>tutorial.xmlworker.HTMLParsingDefault</mainClass>
+						</configuration>
+					</execution>
+					<execution>
+						<id>HTMLParsingDefault2</id>
+						<phase>test</phase>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>tutorial.xmlworker.HTMLParsingDefault2</mainClass>
+						</configuration>
+					</execution>
+					<execution>
+						<id>HTMLParsingToList</id>
+						<phase>test</phase>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>tutorial.xmlworker.HTMLParsingToList</mainClass>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
 	<!-- Dependencies -->
 	<dependencies>

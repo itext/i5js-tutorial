@@ -9,7 +9,7 @@ import com.itextpdf.tool.xml.Writable;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
 import com.itextpdf.tool.xml.pipeline.WritableElement;
 
-public class HtmlParsingToList {
+public class HTMLParsingToList {
 
 	public static void main(String[] args) throws IOException {
 		XMLWorkerHelper.getInstance().parseXHtml(new ElementHandler() {
@@ -17,10 +17,10 @@ public class HtmlParsingToList {
 			public void add(final Writable w) {
 				if (w instanceof WritableElement) {
 					List<Element> elements = ((WritableElement)w).elements();
-					System.out.println(elements.get(0).getClass().getName());
+					// do something with the elements
 				}
 
 			}
-		}, HtmlParsingToList.class.getResourceAsStream("/html/walden.html"));
+		}, HTMLParsingToList.class.getResourceAsStream("/html/walden.html"));
 	}
 }
