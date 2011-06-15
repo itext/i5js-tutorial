@@ -124,6 +124,16 @@
 							<mainClass>tutorial.xmlworker.HTMLParsingToList</mainClass>
 						</configuration>
 					</execution>
+					<execution>
+						<id>HTMLParsingProcess</id>
+						<phase>test</phase>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>tutorial.xmlworker.HTMLParsingProcess</mainClass>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 		</plugins>

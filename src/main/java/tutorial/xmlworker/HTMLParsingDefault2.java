@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
 
@@ -16,7 +15,6 @@ public class HTMLParsingDefault2 {
 		File results = new File("results");
 		results.mkdir();
 		new File(results, "xmlworker").mkdir();
-		FontFactory.registerDirectories();
 		Document document = new Document();
 		PdfWriter writer = PdfWriter.getInstance(document,
 				new FileOutputStream("results/xmlworker/walden2.pdf"));
