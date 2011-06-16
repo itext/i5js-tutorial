@@ -134,6 +134,26 @@
 							<mainClass>tutorial.xmlworker.HTMLParsingProcess</mainClass>
 						</configuration>
 					</execution>
+					<execution>
+						<id>HTMLParsingImagesLinks0</id>
+						<phase>test</phase>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>tutorial.xmlworker.HTMLParsingImagesLinks0</mainClass>
+						</configuration>
+					</execution>
+					<execution>
+						<id>HTMLParsingImagesLinks1</id>
+						<phase>test</phase>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>tutorial.xmlworker.HTMLParsingImagesLinks1</mainClass>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 		</plugins>
@@ -150,7 +170,7 @@
 		<dependency>
 			<groupId>com.itextpdf.tool</groupId>
 			<artifactId>xmlworker</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>

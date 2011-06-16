@@ -15,10 +15,12 @@ import com.itextpdf.tool.xml.parser.XMLParser;
 import com.itextpdf.tool.xml.pipeline.css.CSSResolver;
 import com.itextpdf.tool.xml.pipeline.css.CssResolverPipeline;
 import com.itextpdf.tool.xml.pipeline.end.PdfWriterPipeline;
+import com.itextpdf.tool.xml.pipeline.html.AbstractImageProvider;
 import com.itextpdf.tool.xml.pipeline.html.HtmlPipeline;
 import com.itextpdf.tool.xml.pipeline.html.HtmlPipelineContext;
+import com.itextpdf.tool.xml.pipeline.html.LinkProvider;
 
-public class HTMLParsingProcess {
+public class HTMLParsingImagesLinks1 {
 
 	public static void main(String[] args) throws IOException, DocumentException {
 		File results = new File("results");
@@ -26,11 +28,21 @@ public class HTMLParsingProcess {
 		new File(results, "xmlworker").mkdir();
 		Document document = new Document();
 		PdfWriter writer = PdfWriter.getInstance(document,
-				new FileOutputStream(new File("results/xmlworker/walden3.pdf")));
-		writer.setInitialLeading(12.5f);
+				new FileOutputStream("results/xmlworker/thoreau1.pdf"));
 		document.open();
 		HtmlPipelineContext htmlContext = new HtmlPipelineContext();
 		htmlContext.setTagFactory(Tags.getHtmlTagProcessorFactory());
+		htmlContext.setImageProvider(new AbstractImageProvider() {
+			public String getImageRootPath() {
+				return "src/main/resources/html/";
+			}
+		}).setTagFactory(Tags.getHtmlTagProcessorFactory());
+		htmlContext.setLinkProvider(new LinkProvider() {
+
+			public String getLinkRoot() {
+				return "http://tutorial.itextpdf.com/src/main/resources/html/";
+			}
+		}).setTagFactory(Tags.getHtmlTagProcessorFactory());
 		CSSResolver cssResolver =
 			XMLWorkerHelper.getInstance().getDefaultCssResolver(true);
 		Pipeline<?> pipeline =
@@ -39,7 +51,7 @@ public class HTMLParsingProcess {
 						new PdfWriterPipeline(document, writer)));
 		XMLWorker worker = new XMLWorker(pipeline, true);
 		XMLParser p = new XMLParser(worker);
-		p.parse(HTMLParsingProcess.class.getResourceAsStream("/html/walden.html"));
+		p.parse(HTMLParsingProcess.class.getResourceAsStream("/html/thoreau.html"));
 		document.close();
 	}
 }
