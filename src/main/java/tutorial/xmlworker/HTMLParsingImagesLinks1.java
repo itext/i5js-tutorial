@@ -41,13 +41,13 @@ public class HTMLParsingImagesLinks1 {
 			public String getImageRootPath() {
 				return "src/main/resources/html/";
 			}
-		}).setTagFactory(Tags.getHtmlTagProcessorFactory());
+		});
 		htmlContext.setLinkProvider(new LinkProvider() {
 
 			public String getLinkRoot() {
 				return "http://tutorial.itextpdf.com/src/main/resources/html/";
 			}
-		}).setTagFactory(Tags.getHtmlTagProcessorFactory());
+		});
 		CSSResolver cssResolver =
 			XMLWorkerHelper.getInstance().getDefaultCssResolver(true);
 		Pipeline<?> pipeline =
