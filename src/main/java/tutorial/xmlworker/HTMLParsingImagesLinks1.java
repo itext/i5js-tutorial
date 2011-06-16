@@ -6,6 +6,9 @@ import java.io.IOException;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.log.LoggerFactory;
+import com.itextpdf.text.log.SysoLogger;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.Pipeline;
 import com.itextpdf.tool.xml.XMLWorker;
@@ -23,9 +26,11 @@ import com.itextpdf.tool.xml.pipeline.html.LinkProvider;
 public class HTMLParsingImagesLinks1 {
 
 	public static void main(String[] args) throws IOException, DocumentException {
+		LoggerFactory.getInstance().setLogger(new SysoLogger());
 		File results = new File("results");
 		results.mkdir();
 		new File(results, "xmlworker").mkdir();
+		FontFactory.registerDirectories();
 		Document document = new Document();
 		PdfWriter writer = PdfWriter.getInstance(document,
 				new FileOutputStream("results/xmlworker/thoreau1.pdf"));
