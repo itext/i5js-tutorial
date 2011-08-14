@@ -20,7 +20,7 @@ public class HTMLParsingImagesLinks0 {
 				new FileOutputStream("results/xmlworker/thoreau0.pdf"));
 		document.open();
 		XMLWorkerHelper.getInstance().parseXHtml(writer, document,
-				HTMLParsingImagesLinks0.class.getResourceAsStream("/html/thoreau.html"));
+				HTMLParsingImagesLinks0.class.getResourceAsStream("/html/thoreau.html"), null);
 		document.close();
 	}
 }

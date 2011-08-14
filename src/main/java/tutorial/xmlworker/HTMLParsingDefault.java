@@ -20,7 +20,7 @@ public class HTMLParsingDefault {
 				new FileOutputStream("results/xmlworker/walden1.pdf"));
 		document.open();
 		XMLWorkerHelper.getInstance().parseXHtml(writer, document,
-				HTMLParsingDefault.class.getResourceAsStream("/html/walden.html"));
+				HTMLParsingDefault.class.getResourceAsStream("/html/walden.html"), null);
 		document.close();
 	}
 }

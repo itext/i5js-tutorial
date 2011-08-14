@@ -35,6 +35,6 @@ public class HTMLParsingToList {
 				}
 
 			}
-		}, HTMLParsingToList.class.getResourceAsStream("/html/walden.html"));
+		}, HTMLParsingToList.class.getResourceAsStream("/html/walden.html"), null);
 	}
 }
