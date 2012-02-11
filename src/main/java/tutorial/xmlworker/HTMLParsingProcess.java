@@ -29,7 +29,7 @@ public class HTMLParsingProcess {
 				new FileOutputStream(new File("results/xmlworker/walden3.pdf")));
 		writer.setInitialLeading(12.5f);
 		document.open();
-		HtmlPipelineContext htmlContext = new HtmlPipelineContext();
+		HtmlPipelineContext htmlContext = new HtmlPipelineContext(null);
 		htmlContext.setTagFactory(Tags.getHtmlTagProcessorFactory());
 		CSSResolver cssResolver =
 			XMLWorkerHelper.getInstance().getDefaultCssResolver(true);

@@ -35,7 +35,7 @@ public class HTMLParsingImagesLinks1 {
 		PdfWriter writer = PdfWriter.getInstance(document,
 				new FileOutputStream("results/xmlworker/thoreau1.pdf"));
 		document.open();
-		HtmlPipelineContext htmlContext = new HtmlPipelineContext();
+		HtmlPipelineContext htmlContext = new HtmlPipelineContext(null);
 		htmlContext.setTagFactory(Tags.getHtmlTagProcessorFactory());
 		htmlContext.setImageProvider(new AbstractImageProvider() {
 			public String getImageRootPath() {
