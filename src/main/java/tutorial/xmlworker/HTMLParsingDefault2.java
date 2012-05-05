@@ -21,7 +21,7 @@ public class HTMLParsingDefault2 {
 		writer.setInitialLeading(12.5f);
 		document.open();
 		XMLWorkerHelper.getInstance().parseXHtml(writer, document,
-				HTMLParsingDefault2.class.getResourceAsStream("/html/walden.html"), null);
+				HTMLParsingDefault2.class.getResourceAsStream("/html/walden.html"));
 		document.close();
 	}
 }
