@@ -7,7 +7,6 @@
 		<version>1.0.0</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.itextpdf</groupId>
 	<artifactId>itext-tutorial</artifactId>
 	<name>iText examples</name>
 	<version>0.0.1-SNAPSHOT</version>
@@ -38,33 +37,6 @@
 			<name>Bruno Lowagie</name>
 			<email>bruno@lowagie.com</email>
 			<url>http://www.lowagie.com</url>
-		</developer>
-		<developer>
-			<id>psoares33</id>
-			<name>Paulo Soares</name>
-			<email>psoares33@users.sourceforge.net</email>
-		</developer>
-		<developer>
-			<id>mstorer</id>
-			<name>Mark Storer</name>
-			<email>mstorer3772@gmail.com</email>
-		</developer>
-		<developer>
-			<id>trumpetinc</id>
-			<name>Kevin Day</name>
-			<email>kevin@trumpetinc.com</email>
-		</developer>
-		<developer>
-			<id>xlv</id>
-			<name>Xavier Le Vourch</name>
-			<email>xavier.levourch@xlv-labs.com</email>
-			<url>http://www.xlv-labs.com</url>
-		</developer>
-		<developer>
-			<id>redlab_b</id>
-			<name>Balder Van Camp</name>
-			<email>balder@redlab.be</email>
-			<url>http://www.redlab.be/</url>
 		</developer>
 	</developers>
 	<licenses>
@@ -163,21 +135,29 @@
 		<dependency>
 			<groupId>com.itextpdf</groupId>
 			<artifactId>itextpdf</artifactId>
-			<version>5.1.4-SNAPSHOT</version>
+			<version>5.2.2-SNAPSHOT</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.itextpdf.tool</groupId>
 			<artifactId>xmlworker</artifactId>
-			<version>1.1.2-SNAPSHOT</version>
+			<version>1.1.4-SNAPSHOT</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-		<dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk15on</artifactId>
+			<version>1.47</version>
+			<type>jar</type>
+			<scope>compile</scope>
+			<optional>true</optional>
+        </dependency>
+        <dependency>
 			<groupId>org.bouncycastle</groupId>
-			<artifactId>bctsp-jdk15</artifactId>
-			<version>1.46</version>
+			<artifactId>bcpkix-jdk15on</artifactId>
+			<version>1.47</version>
 			<type>jar</type>
 			<scope>compile</scope>
 			<optional>true</optional>
