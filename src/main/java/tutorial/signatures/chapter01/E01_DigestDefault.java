@@ -1,8 +1,8 @@
 package tutorial.signatures.chapter01;
 
+import java.math.BigInteger;
+import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.util.Arrays;
 
 public class E01_DigestDefault {
@@ -10,14 +10,16 @@ public class E01_DigestDefault {
 	protected byte[] digest;
 	protected MessageDigest md;
 	
-	public E01_DigestDefault(String password, String algorithm) throws NoSuchAlgorithmException {
-		md = MessageDigest.getInstance(algorithm);
+	protected E01_DigestDefault(String password, String algorithm, String provider) throws GeneralSecurityException {
+		if (provider == null)
+			md = MessageDigest.getInstance(algorithm);
+		else
+			md = MessageDigest.getInstance(algorithm, provider);
 		digest = md.digest(password.getBytes());
 	}
 	
-	public E01_DigestDefault(String password, String algorithm, String provider) throws NoSuchAlgorithmException, NoSuchProviderException {
-		md = MessageDigest.getInstance(algorithm, provider);
-		digest = md.digest(password.getBytes());
+	public static E01_DigestDefault getInstance(String password, String algorithm) throws GeneralSecurityException {
+		return new E01_DigestDefault(password, algorithm, null);
 	}
 	
 	public int getDigestSize() {
@@ -25,11 +27,7 @@ public class E01_DigestDefault {
 	}
 	
 	public String getDigestAsHexString() {
-	    StringBuffer hex = new StringBuffer();
-	    for (int i = 0; i < digest.length; i++) {
-	        hex.append(Integer.toHexString(digest[i] & 0xFF));
-	    }
-	    return hex.toString();
+	    return new BigInteger(1, digest).toString(16);
 	}
 
 	
@@ -39,12 +37,12 @@ public class E01_DigestDefault {
 	
 	public static void showTest(String algorithm) {
 		try {
-			E01_DigestDefault app = new E01_DigestDefault("secret", algorithm);
+			E01_DigestDefault app = getInstance("password", algorithm);
 			System.out.println("Digest using " + algorithm + ": " + app.getDigestSize());
 			System.out.println("Digest: " + app.getDigestAsHexString());
 			System.out.println("Is the password 'password'? " + app.checkPassword("password"));
 			System.out.println("Is the password 'secret'? " + app.checkPassword("secret"));
-		} catch (NoSuchAlgorithmException e) {
+		} catch (GeneralSecurityException e) {
 			System.out.println(e.getMessage());
 		}
 	}
