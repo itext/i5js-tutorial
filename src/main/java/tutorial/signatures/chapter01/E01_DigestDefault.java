@@ -5,17 +5,17 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.Arrays;
 
-public class E03_DigestDefault {
+public class E01_DigestDefault {
 
 	protected byte[] digest;
 	protected MessageDigest md;
 	
-	public E03_DigestDefault(String password, String algorithm) throws NoSuchAlgorithmException {
+	public E01_DigestDefault(String password, String algorithm) throws NoSuchAlgorithmException {
 		md = MessageDigest.getInstance(algorithm);
 		digest = md.digest(password.getBytes());
 	}
 	
-	public E03_DigestDefault(String password, String algorithm, String provider) throws NoSuchAlgorithmException, NoSuchProviderException {
+	public E01_DigestDefault(String password, String algorithm, String provider) throws NoSuchAlgorithmException, NoSuchProviderException {
 		md = MessageDigest.getInstance(algorithm, provider);
 		digest = md.digest(password.getBytes());
 	}
@@ -39,7 +39,7 @@ public class E03_DigestDefault {
 	
 	public static void showTest(String algorithm) {
 		try {
-			E03_DigestDefault app = new E03_DigestDefault("secret", algorithm);
+			E01_DigestDefault app = new E01_DigestDefault("secret", algorithm);
 			System.out.println("Digest using " + algorithm + ": " + app.getDigestSize());
 			System.out.println("Digest: " + app.getDigestAsHexString());
 			System.out.println("Is the password 'password'? " + app.checkPassword("password"));
