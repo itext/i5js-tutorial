@@ -6,30 +6,30 @@ import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.security.KeyStore;
-import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 
 import javax.crypto.Cipher;
 
 public class E03_EncryptDecrypt {
 
-	protected String keystore;
+	protected KeyStore ks;
 	
-	public E03_EncryptDecrypt(String keystore) {
-		this.keystore = keystore;
+	public E03_EncryptDecrypt(String keystore, String ks_pass) throws GeneralSecurityException, IOException {
+		initKeyStore(keystore, ks_pass);
 	}
 	
-	public Key getPublicKey(String ks_pass, String alias) throws GeneralSecurityException, IOException {
-		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+	public void initKeyStore(String keystore, String ks_pass) throws GeneralSecurityException, IOException {
+		ks = KeyStore.getInstance(KeyStore.getDefaultType());
 		ks.load(new FileInputStream(keystore), ks_pass.toCharArray());
+	}
+	
+	public Key getPublicKey(String alias) throws GeneralSecurityException, IOException {
 		X509Certificate certificate = (X509Certificate) ks.getCertificate(alias);
 		return certificate.getPublicKey();
 	}
 	
-	public PrivateKey getPrivateKey(String ks_pass, String alias, String pk_pass) throws GeneralSecurityException, IOException {
-		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-		ks.load(new FileInputStream(keystore), ks_pass.toCharArray());
-		return (PrivateKey)ks.getKey(alias, pk_pass.toCharArray());
+	public Key getPrivateKey(String alias, String pk_pass) throws GeneralSecurityException, IOException {
+		return ks.getKey(alias, pk_pass.toCharArray());
 	}
 	
 	public byte[] encrypt(Key key, String message) throws GeneralSecurityException {
@@ -47,9 +47,9 @@ public class E03_EncryptDecrypt {
 	}
 	
 	public static void main(String[] args) throws GeneralSecurityException, IOException {
-		E03_EncryptDecrypt app = new E03_EncryptDecrypt("src/main/resources/signatures/ks");
-		Key publicKey = app.getPublicKey("password", "demo");
-		Key privateKey = app.getPrivateKey("password", "demo", "password");
+		E03_EncryptDecrypt app = new E03_EncryptDecrypt("src/main/resources/signatures/ks", "password");
+		Key publicKey = app.getPublicKey("demo");
+		Key privateKey = app.getPrivateKey("demo", "password");
 		
 		System.out.println("Let's encrypt 'secret message' with a public key");
 		byte[] encrypted = app.encrypt(publicKey, "secret message");
