@@ -1,4 +1,4 @@
-package tutorial.signatures.chapter01;
+package tutorial.signatures;
 
 import java.security.GeneralSecurityException;
 import java.security.Security;
