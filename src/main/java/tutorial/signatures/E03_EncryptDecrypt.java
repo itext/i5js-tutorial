@@ -6,6 +6,7 @@ import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.security.KeyStore;
+import java.security.KeyStoreException;
 import java.security.cert.X509Certificate;
 
 import javax.crypto.Cipher;
@@ -23,9 +24,12 @@ public class E03_EncryptDecrypt {
 		ks.load(new FileInputStream(keystore), ks_pass.toCharArray());
 	}
 	
+	public X509Certificate getCertificate(String alias) throws KeyStoreException {
+		return (X509Certificate) ks.getCertificate(alias);
+	}
+	
 	public Key getPublicKey(String alias) throws GeneralSecurityException, IOException {
-		X509Certificate certificate = (X509Certificate) ks.getCertificate(alias);
-		return certificate.getPublicKey();
+		return getCertificate(alias).getPublicKey();
 	}
 	
 	public Key getPrivateKey(String alias, String pk_pass) throws GeneralSecurityException, IOException {

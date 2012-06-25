@@ -11,9 +11,9 @@ import java.util.Properties;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-public class E04_EncryptDecryptCA extends E03_EncryptDecrypt {
+public class E0X_EncryptDecryptCA extends E03_EncryptDecrypt {
 	
-	public E04_EncryptDecryptCA(String keystore, String ks_pass) throws GeneralSecurityException, IOException {
+	public E0X_EncryptDecryptCA(String keystore, String ks_pass) throws GeneralSecurityException, IOException {
 		super(keystore, ks_pass);
 	}
 
@@ -34,7 +34,7 @@ public class E04_EncryptDecryptCA extends E03_EncryptDecrypt {
         String ks_pass = properties.getProperty("PASSWORD");
         String pk_pass = properties.getProperty("PASSWORD");
         
-		E04_EncryptDecryptCA app = new E04_EncryptDecryptCA(path, ks_pass);
+		E0X_EncryptDecryptCA app = new E0X_EncryptDecryptCA(path, ks_pass);
         String alias = app.getAlias();
 		Key publicKey = app.getPublicKey(alias);
 		Key privateKey = app.getPrivateKey(alias, pk_pass);
