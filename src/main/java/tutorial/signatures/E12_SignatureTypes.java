@@ -12,7 +12,10 @@ import java.security.cert.Certificate;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfAnnotation;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfSignatureAppearance;
@@ -48,7 +51,14 @@ public class E12_SignatureTypes {
         MakeSignature.signDetached(appearance, pks, chain, null, null, null, provider, 0, subfilter);
 	}
 	
-	public void addSomething(String src, String dest) throws IOException, DocumentException {
+	public void addText(String src, String dest) throws IOException, DocumentException {
+		PdfReader reader = new PdfReader(src);
+		PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(dest), '\0', true);
+		ColumnText.showTextAligned(stamper.getOverContent(1), Element.ALIGN_LEFT, new Phrase("TOP SECRET"), 36, 820, 0);
+		stamper.close();
+	}
+	
+	public void addAnnotation(String src, String dest) throws IOException, DocumentException {
 		PdfReader reader = new PdfReader(src);
 		PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(dest), '\0', true);
 		PdfAnnotation comment = PdfAnnotation.createText(stamper.getWriter(),
@@ -56,6 +66,35 @@ public class E12_SignatureTypes {
 				"Bruno Specimen has finally signed the document", true, "Comment");
 		stamper.addAnnotation(comment, 1);
 		stamper.close();
+	}
+	
+	public void addWrongAnnotation(String src, String dest) throws IOException, DocumentException {
+		PdfReader reader = new PdfReader(src);
+		PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(dest));
+		PdfAnnotation comment = PdfAnnotation.createText(stamper.getWriter(),
+				new Rectangle(200, 800, 250, 820), "Finally Signed!",
+				"Bruno Specimen has finally signed the document", true, "Comment");
+		stamper.addAnnotation(comment, 1);
+		stamper.close();
+	}
+	
+	public void signAgain(PrivateKey pk, Certificate[] chain,
+			String src, String dest, String provider,
+			String reason, String location,
+			String digestAlgorithm, boolean subfilter)
+					throws GeneralSecurityException, IOException, DocumentException {
+        // Creating the reader and the stamper
+        PdfReader reader = new PdfReader(src);
+        FileOutputStream os = new FileOutputStream(dest);
+        PdfStamper stamper = PdfStamper.createSignature(reader, os, '\0', null, true);
+        // Creating the appearance
+        PdfSignatureAppearance appearance = stamper.getSignatureAppearance();
+        appearance.setReason(reason);
+        appearance.setLocation(location);
+        appearance.setVisibleSignature(new Rectangle(36, 700, 144, 732), 1, "Signature2");
+        // Creating the signature
+        PrivateKeySignature pks = new PrivateKeySignature(pk, digestAlgorithm, provider);
+        MakeSignature.signDetached(appearance, pks, chain, null, null, null, provider, 0, subfilter);
 	}
 	
 	public static void main(String[] args) throws GeneralSecurityException, IOException, DocumentException {
@@ -70,8 +109,13 @@ public class E12_SignatureTypes {
 		app.sign(pk, chain, SRC, String.format(DEST, 1), provider.getName(), "Test 1", "Ghent", PdfSignatureAppearance.NOT_CERTIFIED, DigestAlgorithms.SHA256, MakeSignature.CMS);
 		app.sign(pk, chain, SRC, String.format(DEST, 2), provider.getName(), "Test 2", "Ghent", PdfSignatureAppearance.CERTIFIED_FORM_FILLING_AND_ANNOTATIONS, DigestAlgorithms.SHA256, MakeSignature.CMS);
 		app.sign(pk, chain, SRC, String.format(DEST, 3), provider.getName(), "Test 2", "Ghent", PdfSignatureAppearance.CERTIFIED_NO_CHANGES_ALLOWED, DigestAlgorithms.SHA256, MakeSignature.CMS);
-		app.addSomething(String.format(DEST, 1), String.format(DEST, "1_annotated"));
-		app.addSomething(String.format(DEST, 2), String.format(DEST, "2_annotated"));
-		app.addSomething(String.format(DEST, 3), String.format(DEST, "3_annotated"));
+		app.addAnnotation(String.format(DEST, 1), String.format(DEST, "1_annotated"));
+		app.addAnnotation(String.format(DEST, 2), String.format(DEST, "2_annotated"));
+		app.addAnnotation(String.format(DEST, 3), String.format(DEST, "3_annotated"));
+		app.addText(String.format(DEST, 1), String.format(DEST, "1_text"));
+		app.addWrongAnnotation(String.format(DEST, 1), String.format(DEST, "1_annotated_wrong"));
+		app.signAgain(pk, chain, String.format(DEST, 1), String.format(DEST, "1_double"), provider.getName(), "Second signature test", "Gent", DigestAlgorithms.SHA256, MakeSignature.CMS);
+		app.signAgain(pk, chain, String.format(DEST, 2), String.format(DEST, "2_double"), provider.getName(), "Second signature test", "Gent", DigestAlgorithms.SHA256, MakeSignature.CMS);
+		app.signAgain(pk, chain, String.format(DEST, 3), String.format(DEST, "3_double"), provider.getName(), "Second signature test", "Gent", DigestAlgorithms.SHA256, MakeSignature.CMS);
 	}
 }

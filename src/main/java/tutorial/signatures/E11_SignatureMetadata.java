@@ -35,7 +35,7 @@ public class E11_SignatureMetadata {
 	public void sign(PrivateKey pk, Certificate[] chain,
 			String src, String name, String dest, String provider,
 			String reason, String location, String contact, Calendar signDate,
-			String digestAlgorithm, boolean subfilter)
+			final String fullName, String digestAlgorithm, boolean subfilter)
 					throws GeneralSecurityException, IOException, DocumentException {
         // Creating the reader and the stamper
         PdfReader reader = new PdfReader(src);
@@ -51,7 +51,7 @@ public class E11_SignatureMetadata {
         appearance.setSignatureEvent(
         	new SignatureEvent(){
         		public void getSignatureDictionary(PdfDictionary sig) {
-        			sig.put(PdfName.NAME, new PdfString("Bruno S."));
+        			sig.put(PdfName.NAME, new PdfString(fullName));
         		}
         	}
         );
@@ -69,6 +69,6 @@ public class E11_SignatureMetadata {
         PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD.toCharArray());
         Certificate[] chain = ks.getCertificateChain(alias);
 		E11_SignatureMetadata app = new E11_SignatureMetadata();
-		app.sign(pk, chain, SRC, "Signature1", String.format(DEST, 1), provider.getName(), "Test metadata", "Ghent", "555 123 456", new GregorianCalendar(2012, GregorianCalendar.AUGUST, 2), DigestAlgorithms.SHA256, MakeSignature.CMS);
+		app.sign(pk, chain, SRC, "Signature1", String.format(DEST, 1), provider.getName(), "Test metadata", "Ghent", "555 123 456", new GregorianCalendar(2012, GregorianCalendar.AUGUST, 5), "Bruno L. Specimen", DigestAlgorithms.SHA256, MakeSignature.CMS);
 	}
 }

@@ -46,6 +46,7 @@ public class E09_SignatureAppearance {
         appearance.setReason(reason);
         appearance.setLocation(location);
         appearance.setVisibleSignature(name);
+        // Custom text and custom font
         appearance.setLayer2Text("This document was signed by Bruno Specimen");
         appearance.setLayer2Font(new Font(FontFamily.TIMES_ROMAN));
         // Creating the signature
@@ -67,6 +68,7 @@ public class E09_SignatureAppearance {
         appearance.setReason(reason);
         appearance.setLocation(location);
         appearance.setVisibleSignature(name);
+        // Custom text, custom font, and right-to-left writing
         appearance.setLayer2Text("\u0644\u0648\u0631\u0627\u0646\u0633 \u0627\u0644\u0639\u0631\u0628");
         appearance.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
         appearance.setLayer2Font(new Font(BaseFont.createFont("C:/windows/fonts/arialuni.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED), 12));
@@ -89,6 +91,7 @@ public class E09_SignatureAppearance {
         appearance.setReason(reason);
         appearance.setLocation(location);
         appearance.setVisibleSignature(name);
+        // Custom text and background image
         appearance.setLayer2Text("This document was signed by Bruno Specimen");
         appearance.setImage(Image.getInstance(IMG));
         appearance.setImageScale(1);
@@ -111,6 +114,7 @@ public class E09_SignatureAppearance {
         appearance.setReason(reason);
         appearance.setLocation(location);
         appearance.setVisibleSignature(name);
+        // Default text and scaled background image
         appearance.setImage(Image.getInstance(IMG));
         appearance.setImageScale(-1);
         // Creating the signature

@@ -8,6 +8,7 @@ import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.Security;
 import java.security.cert.Certificate;
+import java.util.Date;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
@@ -43,6 +44,7 @@ public class E10_SignatureAppearances {
         appearance.setReason(reason);
         appearance.setLocation(location);
         appearance.setVisibleSignature(name);
+        appearance.setLayer2Text("Signed on " + new Date().toString());
         appearance.setRenderingMode(renderingMode);
         appearance.setSignatureGraphic(image);
         // Creating the signature
