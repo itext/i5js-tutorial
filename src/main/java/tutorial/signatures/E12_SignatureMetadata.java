@@ -25,7 +25,7 @@ import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import com.itextpdf.text.pdf.security.MakeSignature;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
 
-public class E11_SignatureMetadata {
+public class E12_SignatureMetadata {
 
 	public static final String KEYSTORE = "src/main/resources/signatures/ks";
 	public static final String PASSWORD = "password";
@@ -68,7 +68,7 @@ public class E11_SignatureMetadata {
         String alias = (String)ks.aliases().nextElement();
         PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD.toCharArray());
         Certificate[] chain = ks.getCertificateChain(alias);
-		E11_SignatureMetadata app = new E11_SignatureMetadata();
+		E12_SignatureMetadata app = new E12_SignatureMetadata();
 		app.sign(pk, chain, SRC, "Signature1", String.format(DEST, 1), provider.getName(), "Test metadata", "Ghent", "555 123 456", new GregorianCalendar(2012, GregorianCalendar.AUGUST, 5), "Bruno L. Specimen", DigestAlgorithms.SHA256, MakeSignature.CMS);
 	}
 }

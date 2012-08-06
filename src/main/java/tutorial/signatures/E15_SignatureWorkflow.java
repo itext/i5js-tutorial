@@ -31,7 +31,7 @@ import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import com.itextpdf.text.pdf.security.MakeSignature;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
 
-public class E14_SignatureWorkflow {
+public class E15_SignatureWorkflow {
 	public static final String FORM = "results/signatures/form.pdf";
 	public static final String ALICE = "src/main/resources/signatures/alice";
 	public static final String BOB = "src/main/resources/signatures/bob";
@@ -192,7 +192,7 @@ public class E14_SignatureWorkflow {
 	public static void main(String[] args) throws IOException, DocumentException, GeneralSecurityException {
 		BouncyCastleProvider provider = new BouncyCastleProvider();
 		Security.addProvider(provider);
-		E14_SignatureWorkflow app = new E14_SignatureWorkflow();
+		E15_SignatureWorkflow app = new E15_SignatureWorkflow();
 		app.createForm();
 		app.certify(ALICE, FORM, "sig1", String.format(DEST, 1, "alice"));
 		app.fillOut(String.format(DEST, 1, "alice"), String.format(DEST, 2, "alice_and_filled_out_by_bob"), "approved_bob", "Read and Approved by Bob");

@@ -24,7 +24,7 @@ import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import com.itextpdf.text.pdf.security.MakeSignature;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
 
-public class E09_SignatureAppearance {
+public class E10_SignatureAppearance {
 
 	public static final String KEYSTORE = "src/main/resources/signatures/ks";
 	public static final String PASSWORD = "password";
@@ -130,7 +130,7 @@ public class E09_SignatureAppearance {
         String alias = (String)ks.aliases().nextElement();
         PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD.toCharArray());
         Certificate[] chain = ks.getCertificateChain(alias);
-        E09_SignatureAppearance app = new E09_SignatureAppearance();
+        E10_SignatureAppearance app = new E10_SignatureAppearance();
         app.sign1(pk, chain, SRC, "Signature1", String.format(DEST, 1), provider.getName(),
         		"Custom appearance example", "Ghent",
         		DigestAlgorithms.SHA256, MakeSignature.CMS);
