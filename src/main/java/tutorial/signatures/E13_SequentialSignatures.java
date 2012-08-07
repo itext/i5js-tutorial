@@ -28,7 +28,7 @@ import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import com.itextpdf.text.pdf.security.MakeSignature;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
 
-public class E14_SequentialSignatures {
+public class E13_SequentialSignatures {
 	public static final String FORM = "results/signatures/multiple_signatures.pdf";
 	public static final String ALICE = "src/main/resources/signatures/alice";
 	public static final String BOB = "src/main/resources/signatures/bob";
@@ -104,7 +104,7 @@ public class E14_SequentialSignatures {
 	public static void main(String[] args) throws IOException, DocumentException, GeneralSecurityException {
 		BouncyCastleProvider provider = new BouncyCastleProvider();
 		Security.addProvider(provider);
-		E14_SequentialSignatures app = new E14_SequentialSignatures();
+		E13_SequentialSignatures app = new E13_SequentialSignatures();
 		app.createForm();
 		
 		app.sign(ALICE, PdfSignatureAppearance.CERTIFIED_FORM_FILLING, FORM, "sig1", String.format(DEST, "alice"));

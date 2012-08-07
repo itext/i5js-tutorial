@@ -15,7 +15,7 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import com.itextpdf.text.pdf.security.MakeSignature;
 
-public class E05_SignWithCAcert {
+public class E16_SignWithCAcert {
 	public static final String SRC = "src/main/resources/signatures/hello.pdf";
 	public static final String DEST = "results/signatures/hello_cacert.pdf";
 

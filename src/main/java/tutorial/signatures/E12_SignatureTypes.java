@@ -24,7 +24,7 @@ import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import com.itextpdf.text.pdf.security.MakeSignature;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
 
-public class E13_SignatureTypes {
+public class E12_SignatureTypes {
 
 	public static final String KEYSTORE = "src/main/resources/signatures/ks";
 	public static final String PASSWORD = "password";
@@ -105,17 +105,20 @@ public class E13_SignatureTypes {
         String alias = (String)ks.aliases().nextElement();
         PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD.toCharArray());
         Certificate[] chain = ks.getCertificateChain(alias);
-		E13_SignatureTypes app = new E13_SignatureTypes();
+		E12_SignatureTypes app = new E12_SignatureTypes();
 		app.sign(pk, chain, SRC, String.format(DEST, 1), provider.getName(), "Test 1", "Ghent", PdfSignatureAppearance.NOT_CERTIFIED, DigestAlgorithms.SHA256, MakeSignature.CMS);
 		app.sign(pk, chain, SRC, String.format(DEST, 2), provider.getName(), "Test 2", "Ghent", PdfSignatureAppearance.CERTIFIED_FORM_FILLING_AND_ANNOTATIONS, DigestAlgorithms.SHA256, MakeSignature.CMS);
-		app.sign(pk, chain, SRC, String.format(DEST, 3), provider.getName(), "Test 2", "Ghent", PdfSignatureAppearance.CERTIFIED_NO_CHANGES_ALLOWED, DigestAlgorithms.SHA256, MakeSignature.CMS);
+		app.sign(pk, chain, SRC, String.format(DEST, 3), provider.getName(), "Test 3", "Ghent", PdfSignatureAppearance.CERTIFIED_FORM_FILLING, DigestAlgorithms.SHA256, MakeSignature.CMS);
+		app.sign(pk, chain, SRC, String.format(DEST, 4), provider.getName(), "Test 4", "Ghent", PdfSignatureAppearance.CERTIFIED_NO_CHANGES_ALLOWED, DigestAlgorithms.SHA256, MakeSignature.CMS);
+		app.addWrongAnnotation(String.format(DEST, 1), String.format(DEST, "1_annotated_wrong"));
 		app.addAnnotation(String.format(DEST, 1), String.format(DEST, "1_annotated"));
 		app.addAnnotation(String.format(DEST, 2), String.format(DEST, "2_annotated"));
 		app.addAnnotation(String.format(DEST, 3), String.format(DEST, "3_annotated"));
+		app.addAnnotation(String.format(DEST, 4), String.format(DEST, "4_annotated"));
 		app.addText(String.format(DEST, 1), String.format(DEST, "1_text"));
-		app.addWrongAnnotation(String.format(DEST, 1), String.format(DEST, "1_annotated_wrong"));
 		app.signAgain(pk, chain, String.format(DEST, 1), String.format(DEST, "1_double"), provider.getName(), "Second signature test", "Gent", DigestAlgorithms.SHA256, MakeSignature.CMS);
 		app.signAgain(pk, chain, String.format(DEST, 2), String.format(DEST, "2_double"), provider.getName(), "Second signature test", "Gent", DigestAlgorithms.SHA256, MakeSignature.CMS);
 		app.signAgain(pk, chain, String.format(DEST, 3), String.format(DEST, "3_double"), provider.getName(), "Second signature test", "Gent", DigestAlgorithms.SHA256, MakeSignature.CMS);
+		app.signAgain(pk, chain, String.format(DEST, 4), String.format(DEST, "4_double"), provider.getName(), "Second signature test", "Gent", DigestAlgorithms.SHA256, MakeSignature.CMS);
 	}
 }
