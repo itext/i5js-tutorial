@@ -36,24 +36,6 @@ public class E13_SequentialSignatures {
 	public static final String PASSWORD = "password";
 	public static final String DEST = "results/signed_by_%s.pdf";
 	
-	public class MySignatureFieldEvent implements PdfPCellEvent {
-
-		public PdfFormField field;
-		
-		public MySignatureFieldEvent(PdfFormField field) {
-			this.field = field;
-		}
-		
-		public void cellLayout(PdfPCell cell, Rectangle position,
-				PdfContentByte[] canvases) {
-			PdfWriter writer = canvases[0].getPdfWriter();
-			field.setPage();
-			field.setWidget(position, PdfAnnotation.HIGHLIGHT_INVERT);
-			writer.addAnnotation(field);
-		}
-		
-	}
-	
 	public void createForm() throws IOException, DocumentException {
 		Document document = new Document();
 		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(FORM));
@@ -78,6 +60,24 @@ public class E13_SequentialSignatures {
         field.setFlags(PdfAnnotation.FLAGS_PRINT);
         cell.setCellEvent(new MySignatureFieldEvent(field));
 		return cell;
+	}
+	
+	public class MySignatureFieldEvent implements PdfPCellEvent {
+
+		public PdfFormField field;
+		
+		public MySignatureFieldEvent(PdfFormField field) {
+			this.field = field;
+		}
+		
+		public void cellLayout(PdfPCell cell, Rectangle position,
+				PdfContentByte[] canvases) {
+			PdfWriter writer = canvases[0].getPdfWriter();
+			field.setPage();
+			field.setWidget(position, PdfAnnotation.HIGHLIGHT_INVERT);
+			writer.addAnnotation(field);
+		}
+		
 	}
 	
 	public void sign(String keystore, int level,
@@ -114,5 +114,13 @@ public class E13_SequentialSignatures {
 		app.sign(ALICE, PdfSignatureAppearance.NOT_CERTIFIED, FORM, "sig1", String.format(DEST, "alice2"));
 		app.sign(BOB, PdfSignatureAppearance.NOT_CERTIFIED, String.format(DEST, "alice2"), "sig2", String.format(DEST, "bob2"));
 		app.sign(CAROL, PdfSignatureAppearance.CERTIFIED_FORM_FILLING, String.format(DEST, "bob2"), "sig3", String.format(DEST, "carol2"));
+
+		app.sign(ALICE, PdfSignatureAppearance.NOT_CERTIFIED, FORM, "sig1", String.format(DEST, "alice3"));
+		app.sign(BOB, PdfSignatureAppearance.NOT_CERTIFIED, String.format(DEST, "alice3"), "sig2", String.format(DEST, "bob3"));
+		app.sign(CAROL, PdfSignatureAppearance.CERTIFIED_NO_CHANGES_ALLOWED, String.format(DEST, "bob3"), "sig3", String.format(DEST, "carol3"));
+		
+		app.sign(ALICE, PdfSignatureAppearance.CERTIFIED_FORM_FILLING, FORM, "sig1", String.format(DEST, "alice4"));
+		app.sign(BOB, PdfSignatureAppearance.NOT_CERTIFIED, String.format(DEST, "alice4"), "sig2", String.format(DEST, "bob4"));
+		app.sign(CAROL, PdfSignatureAppearance.CERTIFIED_FORM_FILLING, String.format(DEST, "bob4"), "sig3", String.format(DEST, "carol4"));
 	}
 }
