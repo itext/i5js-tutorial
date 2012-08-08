@@ -51,7 +51,7 @@ public class E03_EncryptDecrypt {
 	}
 	
 	public static void main(String[] args) throws GeneralSecurityException, IOException {
-		E03_EncryptDecrypt app = new E03_EncryptDecrypt("src/main/resources/signatures/ks", "password");
+		E03_EncryptDecrypt app = new E03_EncryptDecrypt("src/main/resources/ks", "password");
 		Key publicKey = app.getPublicKey("demo");
 		Key privateKey = app.getPrivateKey("demo", "password");
 		

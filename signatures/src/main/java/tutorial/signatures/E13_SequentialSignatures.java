@@ -29,12 +29,12 @@ import com.itextpdf.text.pdf.security.MakeSignature;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
 
 public class E13_SequentialSignatures {
-	public static final String FORM = "results/signatures/multiple_signatures.pdf";
-	public static final String ALICE = "src/main/resources/signatures/alice";
-	public static final String BOB = "src/main/resources/signatures/bob";
-	public static final String CAROL = "src/main/resources/signatures/carol";
+	public static final String FORM = "results/multiple_signatures.pdf";
+	public static final String ALICE = "src/main/resources/alice";
+	public static final String BOB = "src/main/resources/bob";
+	public static final String CAROL = "src/main/resources/carol";
 	public static final String PASSWORD = "password";
-	public static final String DEST = "results/signatures/signed_by_%s.pdf";
+	public static final String DEST = "results/signed_by_%s.pdf";
 	
 	public class MySignatureFieldEvent implements PdfPCellEvent {
 

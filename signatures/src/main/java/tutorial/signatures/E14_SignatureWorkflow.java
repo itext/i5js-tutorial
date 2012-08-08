@@ -18,15 +18,11 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.AcroFields;
 import com.itextpdf.text.pdf.PdfAnnotation;
 import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfDictionary;
 import com.itextpdf.text.pdf.PdfFormField;
-import com.itextpdf.text.pdf.PdfName;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPCellEvent;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.PdfSigLockDictionary;
-import com.itextpdf.text.pdf.PdfSigLockDictionary.LockPermissions;
 import com.itextpdf.text.pdf.PdfSignatureAppearance;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -35,14 +31,14 @@ import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import com.itextpdf.text.pdf.security.MakeSignature;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
 
-public class E15_LockFields {
-	public static final String FORM = "results/signatures/form.pdf";
-	public static final String ALICE = "src/main/resources/signatures/alice";
-	public static final String BOB = "src/main/resources/signatures/bob";
-	public static final String CAROL = "src/main/resources/signatures/carol";
-	public static final String DAVE = "src/main/resources/signatures/dave";
+public class E14_SignatureWorkflow {
+	public static final String FORM = "results/form.pdf";
+	public static final String ALICE = "src/main/resources/alice";
+	public static final String BOB = "src/main/resources/bob";
+	public static final String CAROL = "src/main/resources/carol";
+	public static final String DAVE = "src/main/resources/dave";
 	public static final String PASSWORD = "password";
-	public static final String DEST = "results/signatures/step_%s_signed_by_%s.pdf";
+	public static final String DEST = "results/step%s_signed_by_%s.pdf";
 	
 	public class MyTextFieldEvent implements PdfPCellEvent {
 
@@ -91,17 +87,16 @@ public class E15_LockFields {
 		PdfPTable table = new PdfPTable(1);
 		table.setWidthPercentage(100);
 		table.addCell("Written by Alice");
-		table.addCell(createSignatureFieldCell(writer, "sig1", null));
+		table.addCell(createSignatureFieldCell(writer, "sig1"));
 		table.addCell("For approval by Bob");
 		table.addCell(createTextFieldCell("approved_bob"));
-		table.addCell(createSignatureFieldCell(writer, "sig2", null));
+		table.addCell(createSignatureFieldCell(writer, "sig2"));
 		table.addCell("For approval by Carol");
 		table.addCell(createTextFieldCell("approved_carol"));
-		table.addCell(createSignatureFieldCell(writer, "sig3", null));
+		table.addCell(createSignatureFieldCell(writer, "sig3"));
 		table.addCell("For approval by Dave");
 		table.addCell(createTextFieldCell("approved_dave"));
-		PdfSigLockDictionary lock = new PdfSigLockDictionary(LockPermissions.NO_CHANGES_ALLOWED);
-		table.addCell(createSignatureFieldCell(writer, "sig4", lock));
+		table.addCell(createSignatureFieldCell(writer, "sig4"));
 		document.add(table);
 		document.close();
 	}
@@ -113,12 +108,11 @@ public class E15_LockFields {
 		return cell;
 	}
 	
-	protected PdfPCell createSignatureFieldCell(PdfWriter writer, String name, PdfDictionary lock) {
+	protected PdfPCell createSignatureFieldCell(PdfWriter writer, String name) {
 		PdfPCell cell = new PdfPCell();
 		cell.setMinimumHeight(50);
 		PdfFormField field = PdfFormField.createSignature(writer);
         field.setFieldName(name);
-        field.put(PdfName.LOCK, lock);
         field.setFlags(PdfAnnotation.FLAGS_PRINT);
         cell.setCellEvent(new MySignatureFieldEvent(field));
 		return cell;
@@ -198,11 +192,13 @@ public class E15_LockFields {
 	public static void main(String[] args) throws IOException, DocumentException, GeneralSecurityException {
 		BouncyCastleProvider provider = new BouncyCastleProvider();
 		Security.addProvider(provider);
-		E15_LockFields app = new E15_LockFields();
+		E14_SignatureWorkflow app = new E14_SignatureWorkflow();
 		app.createForm();
 		app.certify(ALICE, FORM, "sig1", String.format(DEST, 1, "alice"));
-		app.fillOutAndSign(BOB, String.format(DEST, 1, "alice"), "sig2", "approved_bob", "Read and Approved by Bob", String.format(DEST, 2, "alice_and_bob"));
-		app.fillOutAndSign(CAROL, String.format(DEST, 2, "alice_and_bob"), "sig3", "approved_carol", "Read and Approved by Carol", String.format(DEST, 3, "alice_bob_and_carol"));
-		app.fillOutAndSign(DAVE, String.format(DEST, 3, "alice_bob_and_carol"), "sig4", "approved_dave", "Read and Approved by Dave", String.format(DEST, 4, "alice_bob_carol_and_dave"));
+		app.fillOut(String.format(DEST, 1, "alice"), String.format(DEST, 2, "alice_and_filled_out_by_bob"), "approved_bob", "Read and Approved by Bob");
+		app.sign(BOB, String.format(DEST, 2, "alice_and_filled_out_by_bob"), "sig2", String.format(DEST, 3, "alice_and_bob"));
+		app.fillOut(String.format(DEST, 3, "alice_and_bob"), String.format(DEST, 4, "alice_and_bob_filled_out_by_carol"), "approved_carol", "Read and Approved by Carol");
+		app.sign(CAROL, String.format(DEST, 4, "alice_and_bob_filled_out_by_carol"), "sig3", String.format(DEST, 5, "alice_bob_and_carol"));
+		app.fillOutAndSign(DAVE, String.format(DEST, 5, "alice_bob_and_carol"), "sig4", "approved_dave", "Read and Approved by Dave", String.format(DEST, 6, "alice_bob_carol_and_dave"));
 	}
 }

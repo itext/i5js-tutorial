@@ -30,14 +30,14 @@ import com.itextpdf.text.pdf.security.MakeSignature;
 
 public class E07_CreateEmptyField {
 
-	public static final String KEYSTORE = "src/main/resources/signatures/ks";
+	public static final String KEYSTORE = "src/main/resources/ks";
 	public static final String PASSWORD = "password";
-	public static final String UNSIGNED = "results/signatures/hello_empty.pdf";
+	public static final String UNSIGNED = "results/hello_empty.pdf";
 	public static final String SIGNAME = "Signature1";
-	public static final String DEST = "results/signatures/field_signed.pdf";
+	public static final String DEST = "results/field_signed.pdf";
 
-	public static final String SRC = "src/main/resources/signatures/hello.pdf";
-	public static final String UNSIGNED2 = "results/signatures/hello_empty2.pdf";
+	public static final String SRC = "src/main/resources/hello.pdf";
+	public static final String UNSIGNED2 = "results/hello_empty2.pdf";
 	
     public void createPdf(String filename) throws IOException, DocumentException {
     	// step 1: Create a Document

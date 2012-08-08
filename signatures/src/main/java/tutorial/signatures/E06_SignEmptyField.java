@@ -21,10 +21,10 @@ import com.itextpdf.text.pdf.security.PrivateKeySignature;
 
 public class E06_SignEmptyField {
 
-	public static final String KEYSTORE = "src/main/resources/signatures/ks";
+	public static final String KEYSTORE = "src/main/resources/ks";
 	public static final String PASSWORD = "password";
-	public static final String SRC = "src/main/resources/signatures/hello_to_sign.pdf";
-	public static final String DEST = "results/signatures/field_signed%s.pdf";
+	public static final String SRC = "src/main/resources/hello_to_sign.pdf";
+	public static final String DEST = "results/field_signed%s.pdf";
 	
 	public void sign(PrivateKey pk, Certificate[] chain,
 			String src, String name, String dest, String provider,

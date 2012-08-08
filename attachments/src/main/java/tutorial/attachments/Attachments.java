@@ -19,15 +19,15 @@ public class Attachments {
 	
 	public static void main(String[] args) throws IOException, DocumentException {
 		Attachments app = new Attachments();
-		String originalFile = "src/main/resources/attachments/KS-EI-11-001-EN.pdf";
+		String originalFile = "src/main/resources/KS-EI-11-001-EN.pdf";
 		String fileWithAttachments = "results/KS-EI-11-001-EN.pdf";
 		String[] attachments = {
-				"src/main/resources/attachments/tec00001.xml",
-				"src/main/resources/attachments/tec00033.xml",
-				"src/main/resources/attachments/tec00097.xml",
-				"src/main/resources/attachments/tsieb090.xml",
-				"src/main/resources/attachments/prc_hicp_aind_Label.csv",
-				"src/main/resources/attachments/prc_hicp_aind_1_Data.csv"
+				"src/main/resources/tec00001.xml",
+				"src/main/resources/tec00033.xml",
+				"src/main/resources/tec00097.xml",
+				"src/main/resources/tsieb090.xml",
+				"src/main/resources/prc_hicp_aind_Label.csv",
+				"src/main/resources/prc_hicp_aind_1_Data.csv"
 		};
 		String destFolder = "results/attachments";
 		app.addAttachments(originalFile, fileWithAttachments, attachments);

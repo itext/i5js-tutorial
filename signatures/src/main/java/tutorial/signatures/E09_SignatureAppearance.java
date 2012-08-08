@@ -26,11 +26,11 @@ import com.itextpdf.text.pdf.security.PrivateKeySignature;
 
 public class E09_SignatureAppearance {
 
-	public static final String KEYSTORE = "src/main/resources/signatures/ks";
+	public static final String KEYSTORE = "src/main/resources/ks";
 	public static final String PASSWORD = "password";
-	public static final String IMG = "src/main/resources/signatures/1t3xt.gif";
-	public static final String SRC = "src/main/resources/signatures/hello_to_sign.pdf";
-	public static final String DEST = "results/signatures/signature_appearance%s.pdf";
+	public static final String IMG = "src/main/resources/1t3xt.gif";
+	public static final String SRC = "src/main/resources/hello_to_sign.pdf";
+	public static final String DEST = "results/signature_appearance%s.pdf";
 
 	public void sign1(PrivateKey pk, Certificate[] chain,
 			String src, String name, String dest, String provider,

@@ -16,8 +16,8 @@ import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import com.itextpdf.text.pdf.security.MakeSignature;
 
 public class E16_SignWithCAcert {
-	public static final String SRC = "src/main/resources/signatures/hello.pdf";
-	public static final String DEST = "results/signatures/hello_cacert.pdf";
+	public static final String SRC = "src/main/resources/hello.pdf";
+	public static final String DEST = "results/hello_cacert.pdf";
 
 	public static void main(String[] args) throws IOException, GeneralSecurityException, DocumentException {
 		Properties properties = new Properties();

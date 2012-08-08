@@ -23,11 +23,11 @@ import com.itextpdf.text.pdf.security.PrivateKeySignature;
 
 public class E05_SignHelloWorldWithTempFile {
 
-	public static final String KEYSTORE = "src/main/resources/signatures/ks";
+	public static final String KEYSTORE = "src/main/resources/ks";
 	public static final String PASSWORD = "password";
-	public static final String SRC = "src/main/resources/signatures/hello.pdf";
+	public static final String SRC = "src/main/resources/hello.pdf";
 	public static final String TEMP = "results/signatures/";
-	public static final String DEST = "results/signatures/hello_signed_with_temp.pdf";
+	public static final String DEST = "results/hello_signed_with_temp.pdf";
 	
 	public void sign(PrivateKey pk, Certificate[] chain,
 			String src, String tmp, String dest, String provider,
