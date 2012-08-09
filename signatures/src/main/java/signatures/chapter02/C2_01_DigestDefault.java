@@ -1,16 +1,16 @@
-package tutorial.signatures;
+package signatures.chapter02;
 
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.util.Arrays;
 
-public class E01_DigestDefault {
+public class C2_01_DigestDefault {
 
 	protected byte[] digest;
 	protected MessageDigest md;
 	
-	protected E01_DigestDefault(String password, String algorithm, String provider) throws GeneralSecurityException {
+	protected C2_01_DigestDefault(String password, String algorithm, String provider) throws GeneralSecurityException {
 		if (provider == null)
 			md = MessageDigest.getInstance(algorithm);
 		else
@@ -18,8 +18,8 @@ public class E01_DigestDefault {
 		digest = md.digest(password.getBytes());
 	}
 	
-	public static E01_DigestDefault getInstance(String password, String algorithm) throws GeneralSecurityException {
-		return new E01_DigestDefault(password, algorithm, null);
+	public static C2_01_DigestDefault getInstance(String password, String algorithm) throws GeneralSecurityException {
+		return new C2_01_DigestDefault(password, algorithm, null);
 	}
 	
 	public int getDigestSize() {
@@ -37,7 +37,7 @@ public class E01_DigestDefault {
 	
 	public static void showTest(String algorithm) {
 		try {
-			E01_DigestDefault app = getInstance("password", algorithm);
+			C2_01_DigestDefault app = getInstance("password", algorithm);
 			System.out.println("Digest using " + algorithm + ": " + app.getDigestSize());
 			System.out.println("Digest: " + app.getDigestAsHexString());
 			System.out.println("Is the password 'password'? " + app.checkPassword("password"));

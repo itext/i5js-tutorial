@@ -1,4 +1,4 @@
-package tutorial.signatures;
+package signatures.chapter02;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,11 +11,11 @@ import java.security.cert.X509Certificate;
 
 import javax.crypto.Cipher;
 
-public class E03_EncryptDecrypt {
+public class C2_03_EncryptDecrypt {
 
 	protected KeyStore ks;
 	
-	public E03_EncryptDecrypt(String keystore, String ks_pass) throws GeneralSecurityException, IOException {
+	public C2_03_EncryptDecrypt(String keystore, String ks_pass) throws GeneralSecurityException, IOException {
 		initKeyStore(keystore, ks_pass);
 	}
 	
@@ -51,7 +51,7 @@ public class E03_EncryptDecrypt {
 	}
 	
 	public static void main(String[] args) throws GeneralSecurityException, IOException {
-		E03_EncryptDecrypt app = new E03_EncryptDecrypt("src/main/resources/ks", "password");
+		C2_03_EncryptDecrypt app = new C2_03_EncryptDecrypt("src/main/resources/ks", "password");
 		Key publicKey = app.getPublicKey("demo");
 		Key privateKey = app.getPrivateKey("demo", "password");
 		

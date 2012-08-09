@@ -1,4 +1,4 @@
-package tutorial.signatures;
+package signatures.chapter03;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -22,7 +22,7 @@ import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import com.itextpdf.text.pdf.security.MakeSignature;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
 
-public class E10_SignatureAppearances {
+public class C3_07_SignatureAppearances {
 
 	public static final String KEYSTORE = "src/main/resources/ks";
 	public static final String PASSWORD = "password";
@@ -61,7 +61,7 @@ public class E10_SignatureAppearances {
         PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD.toCharArray());
         Certificate[] chain = ks.getCertificateChain(alias);
         Image image = Image.getInstance(IMG);
-        E10_SignatureAppearances app = new E10_SignatureAppearances();
+        C3_07_SignatureAppearances app = new C3_07_SignatureAppearances();
         app.sign(pk, chain, SRC, "Signature1", String.format(DEST, 1), provider.getName(),
         		"Appearance 1", "Ghent", RenderingMode.DESCRIPTION, null,
         		DigestAlgorithms.SHA256, MakeSignature.CMS);

@@ -1,5 +1,6 @@
-package tutorial.signatures;
+package signatures.chapter03;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.security.cert.Certificate;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfSignatureAppearance;
 import com.itextpdf.text.pdf.PdfStamper;
@@ -19,27 +21,28 @@ import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import com.itextpdf.text.pdf.security.MakeSignature;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
 
-public class E06_SignEmptyField {
+public class C3_02_SignHelloWorldWithTempFile {
 
 	public static final String KEYSTORE = "src/main/resources/ks";
 	public static final String PASSWORD = "password";
-	public static final String SRC = "src/main/resources/hello_to_sign.pdf";
-	public static final String DEST = "results/field_signed%s.pdf";
+	public static final String SRC = "src/main/resources/hello.pdf";
+	public static final String TEMP = "results/signatures/";
+	public static final String DEST = "results/hello_signed_with_temp.pdf";
 	
 	public void sign(PrivateKey pk, Certificate[] chain,
-			String src, String name, String dest, String provider,
+			String src, String tmp, String dest, String provider,
 			String reason, String location,
 			String digestAlgorithm, boolean subfilter)
 					throws GeneralSecurityException, IOException, DocumentException {
         // Creating the reader and the stamper
         PdfReader reader = new PdfReader(src);
         FileOutputStream os = new FileOutputStream(dest);
-        PdfStamper stamper = PdfStamper.createSignature(reader, os, '\0');
+        PdfStamper stamper = PdfStamper.createSignature(reader, os, '\0', new File(tmp));
         // Creating the appearance
         PdfSignatureAppearance appearance = stamper.getSignatureAppearance();
         appearance.setReason(reason);
         appearance.setLocation(location);
-        appearance.setVisibleSignature(name);
+        appearance.setVisibleSignature(new Rectangle(36, 748, 144, 780), 1, "sig");
         // Creating the signature
         PrivateKeySignature pks = new PrivateKeySignature(pk, digestAlgorithm, provider);
         MakeSignature.signDetached(appearance, pks, chain, null, null, null, provider, 0, subfilter);
@@ -53,10 +56,7 @@ public class E06_SignEmptyField {
         String alias = (String)ks.aliases().nextElement();
         PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD.toCharArray());
         Certificate[] chain = ks.getCertificateChain(alias);
-		E06_SignEmptyField app = new E06_SignEmptyField();
-		app.sign(pk, chain, SRC, "Signature1", String.format(DEST, 1), provider.getName(), "Test 1", "Ghent", DigestAlgorithms.SHA256, MakeSignature.CMS);
-		app.sign(pk, chain, SRC, "Signature1", String.format(DEST, 2), provider.getName(), "Test 2", "Ghent", DigestAlgorithms.SHA512, MakeSignature.CMS);
-		app.sign(pk, chain, SRC, "Signature1", String.format(DEST, 3), provider.getName(), "Test 3", "Ghent", DigestAlgorithms.SHA256, MakeSignature.CADES);
-		app.sign(pk, chain, SRC, "Signature1", String.format(DEST, 4), provider.getName(), "Test 4", "Ghent", DigestAlgorithms.RIPEMD160, MakeSignature.CADES);
+		C3_02_SignHelloWorldWithTempFile app = new C3_02_SignHelloWorldWithTempFile();
+		app.sign(pk, chain, SRC, TEMP, DEST, provider.getName(), "Temp test", "Ghent", DigestAlgorithms.SHA256, MakeSignature.CMS);
 	}
 }

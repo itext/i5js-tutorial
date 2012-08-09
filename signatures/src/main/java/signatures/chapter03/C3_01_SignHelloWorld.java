@@ -1,4 +1,4 @@
-package tutorial.signatures;
+package signatures.chapter03;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -20,7 +20,7 @@ import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import com.itextpdf.text.pdf.security.MakeSignature;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
 
-public class E04_SignHelloWorld {
+public class C3_01_SignHelloWorld {
 
 	public static final String KEYSTORE = "src/main/resources/ks";
 	public static final String PASSWORD = "password";
@@ -54,7 +54,7 @@ public class E04_SignHelloWorld {
         String alias = (String)ks.aliases().nextElement();
         PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD.toCharArray());
         Certificate[] chain = ks.getCertificateChain(alias);
-		E04_SignHelloWorld app = new E04_SignHelloWorld();
+		C3_01_SignHelloWorld app = new C3_01_SignHelloWorld();
 		app.sign(pk, chain, SRC, String.format(DEST, 1), provider.getName(), "Test 1", "Ghent", DigestAlgorithms.SHA256, MakeSignature.CMS);
 		app.sign(pk, chain, SRC, String.format(DEST, 2), provider.getName(), "Test 2", "Ghent", DigestAlgorithms.SHA512, MakeSignature.CMS);
 		app.sign(pk, chain, SRC, String.format(DEST, 3), provider.getName(), "Test 3", "Ghent", DigestAlgorithms.SHA256, MakeSignature.CADES);

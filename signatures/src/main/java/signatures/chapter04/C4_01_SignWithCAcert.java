@@ -1,4 +1,4 @@
-package tutorial.signatures;
+package signatures.chapter04;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,11 +11,13 @@ import java.util.Properties;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+import signatures.chapter03.C3_01_SignHelloWorld;
+
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import com.itextpdf.text.pdf.security.MakeSignature;
 
-public class E16_SignWithCAcert {
+public class C4_01_SignWithCAcert {
 	public static final String SRC = "src/main/resources/hello.pdf";
 	public static final String DEST = "results/hello_cacert.pdf";
 
@@ -32,6 +34,6 @@ public class E16_SignWithCAcert {
         String alias = (String)ks.aliases().nextElement();
         PrivateKey pk = (PrivateKey) ks.getKey(alias, pass.toCharArray());
         Certificate[] chain = ks.getCertificateChain(alias);
-		new E04_SignHelloWorld().sign(pk, chain, SRC, DEST, provider.getName(), "Test", "Ghent", DigestAlgorithms.SHA256, MakeSignature.CMS);
+		new C3_01_SignHelloWorld().sign(pk, chain, SRC, DEST, provider.getName(), "Test", "Ghent", DigestAlgorithms.SHA256, MakeSignature.CMS);
 	}
 }

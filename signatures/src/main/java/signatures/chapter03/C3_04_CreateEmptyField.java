@@ -1,4 +1,4 @@
-package tutorial.signatures;
+package signatures.chapter03;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -28,7 +28,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import com.itextpdf.text.pdf.security.MakeSignature;
 
-public class E07_CreateEmptyField {
+public class C3_04_CreateEmptyField {
 
 	public static final String KEYSTORE = "src/main/resources/ks";
 	public static final String PASSWORD = "password";
@@ -86,7 +86,7 @@ public class E07_CreateEmptyField {
     }
     
     public static void main(String[] args) throws IOException, DocumentException, GeneralSecurityException {
-    	E07_CreateEmptyField appCreate = new E07_CreateEmptyField();
+    	C3_04_CreateEmptyField appCreate = new C3_04_CreateEmptyField();
     	appCreate.createPdf(UNSIGNED);
     	appCreate.addField(SRC, UNSIGNED2);
 
@@ -97,7 +97,7 @@ public class E07_CreateEmptyField {
         String alias = (String)ks.aliases().nextElement();
         PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD.toCharArray());
         Certificate[] chain = ks.getCertificateChain(alias);
-    	E06_SignEmptyField appSign = new E06_SignEmptyField();
+    	C3_03_SignEmptyField appSign = new C3_03_SignEmptyField();
         appSign.sign(pk, chain, UNSIGNED, SIGNAME, DEST, provider.getName(), "Test", "Ghent", DigestAlgorithms.SHA256, MakeSignature.CMS);
     }
 }
