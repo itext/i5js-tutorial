@@ -53,9 +53,6 @@ public class C4_01_SignWithCAcert {
 	}
 	
 	public static void main(String[] args) throws IOException, GeneralSecurityException, DocumentException {
-		
-		System.out.println(System.getProperty("java.home"));
-		
 		Properties properties = new Properties();
 		properties.load(new FileInputStream("c:/home/blowagie/key.properties"));
     	String path = properties.getProperty("PRIVATE");
