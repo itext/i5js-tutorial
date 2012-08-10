@@ -19,7 +19,7 @@ import com.itextpdf.text.pdf.security.OcspClientBouncyCastle;
 import com.itextpdf.text.pdf.security.TSAClient;
 import com.itextpdf.text.pdf.security.TSAClientBouncyCastle;
 
-public class C4_07_SignWithTSA extends C4_01_SignWithCAcert {
+public class C4_08_SignWithTSA extends C4_01_SignWithCAcert {
 	public static final String SRC = "src/main/resources/hello.pdf";
 	public static final String DEST = "results/hello_cacert_ocsp_ts.pdf";
 	
@@ -41,7 +41,7 @@ public class C4_07_SignWithTSA extends C4_01_SignWithCAcert {
         Certificate[] chain = ks.getCertificateChain(alias);
         OcspClient ocspClient = new OcspClientBouncyCastle();
         TSAClient tsaClient = new TSAClientBouncyCastle(tsaUrl, tsaUser, tsaPass);
-        C4_07_SignWithTSA app = new C4_07_SignWithTSA();
+        C4_08_SignWithTSA app = new C4_08_SignWithTSA();
 		app.sign(pk, chain, SRC, DEST, provider.getName(), "Test", "Ghent", DigestAlgorithms.SHA256, MakeSignature.CMS,
 				null, ocspClient, tsaClient, 0);
 	}

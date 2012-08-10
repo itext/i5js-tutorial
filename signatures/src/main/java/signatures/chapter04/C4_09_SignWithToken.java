@@ -1,16 +1,11 @@
 package signatures.chapter04;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.PrivateKey;
-import java.security.Security;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
-import java.util.Properties;
-
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.security.CertificateUtil;
@@ -21,7 +16,7 @@ import com.itextpdf.text.pdf.security.OcspClientBouncyCastle;
 import com.itextpdf.text.pdf.security.TSAClient;
 import com.itextpdf.text.pdf.security.TSAClientBouncyCastle;
 
-public class C4_08_SignWithToken extends C4_01_SignWithCAcert {
+public class C4_09_SignWithToken extends C4_01_SignWithCAcert {
 	public static final String SRC = "src/main/resources/hello.pdf";
 	public static final String DEST = "results/hello_token.pdf";
 
@@ -42,7 +37,7 @@ public class C4_08_SignWithToken extends C4_01_SignWithCAcert {
         		break;
         	}
         }
-        C4_08_SignWithToken app = new C4_08_SignWithToken();
+        C4_09_SignWithToken app = new C4_09_SignWithToken();
 		app.sign(pk, chain, SRC, DEST, null, "Test", "Ghent",
 				DigestAlgorithms.SHA256, MakeSignature.CMS,
 				null, ocspClient, tsaClient, 0);
