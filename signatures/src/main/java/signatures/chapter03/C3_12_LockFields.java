@@ -113,12 +113,13 @@ public class C3_12_LockFields {
 		return cell;
 	}
 	
-	protected PdfPCell createSignatureFieldCell(PdfWriter writer, String name, PdfDictionary lock) {
+	protected PdfPCell createSignatureFieldCell(PdfWriter writer, String name, PdfDictionary lock) throws IOException {
 		PdfPCell cell = new PdfPCell();
 		cell.setMinimumHeight(50);
 		PdfFormField field = PdfFormField.createSignature(writer);
         field.setFieldName(name);
-        field.put(PdfName.LOCK, lock);
+        if (lock != null)
+        	field.put(PdfName.LOCK, writer.addToBody(lock).getIndirectReference());
         field.setFlags(PdfAnnotation.FLAGS_PRINT);
         cell.setCellEvent(new MySignatureFieldEvent(field));
 		return cell;
@@ -159,6 +160,7 @@ public class C3_12_LockFields {
         PdfStamper stamper = PdfStamper.createSignature(reader, os, '\0', null, true);
 		AcroFields form = stamper.getAcroFields();
 		form.setField(fname, value);
+		form.setFieldProperty(fname, "setfflags", PdfFormField.FF_READ_ONLY, null);
         // Creating the appearance
         PdfSignatureAppearance appearance = stamper.getSignatureAppearance();
         appearance.setVisibleSignature(name);
