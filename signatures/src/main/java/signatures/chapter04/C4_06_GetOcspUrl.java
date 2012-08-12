@@ -13,7 +13,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import com.itextpdf.text.pdf.security.CertificateUtil;
 
-public class C4_05_GetOcspUrl {
+public class C4_06_GetOcspUrl {
 	public static void main(String[] args) throws IOException, GeneralSecurityException {
 		Properties properties = new Properties();
 		properties.load(new FileInputStream("c:/home/blowagie/key.properties"));

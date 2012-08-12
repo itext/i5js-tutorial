@@ -17,7 +17,7 @@ import com.itextpdf.text.pdf.security.MakeSignature;
 import com.itextpdf.text.pdf.security.OcspClient;
 import com.itextpdf.text.pdf.security.OcspClientBouncyCastle;
 
-public class C4_06_SignWithOCSP extends C4_01_SignWithCAcert {
+public class C4_07_SignWithOCSP extends C4_01_SignWithCAcert {
 	public static final String SRC = "src/main/resources/hello.pdf";
 	public static final String DEST = "results/hello_cacert_ocsp.pdf";
 	
@@ -35,7 +35,7 @@ public class C4_06_SignWithOCSP extends C4_01_SignWithCAcert {
         PrivateKey pk = (PrivateKey) ks.getKey(alias, pass.toCharArray());
         Certificate[] chain = ks.getCertificateChain(alias);
         OcspClient ocspClient = new OcspClientBouncyCastle();
-        C4_06_SignWithOCSP app = new C4_06_SignWithOCSP();
+        C4_07_SignWithOCSP app = new C4_07_SignWithOCSP();
 		app.sign(pk, chain, SRC, DEST, provider.getName(), "Test", "Ghent", DigestAlgorithms.SHA256, MakeSignature.CMS,
 				null, ocspClient, null, 0);
 	}
