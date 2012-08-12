@@ -26,6 +26,7 @@ import com.itextpdf.text.pdf.PdfPCellEvent;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfSigLockDictionary;
+import com.itextpdf.text.pdf.PdfSigLockDictionary.LockAction;
 import com.itextpdf.text.pdf.PdfSigLockDictionary.LockPermissions;
 import com.itextpdf.text.pdf.PdfSignatureAppearance;
 import com.itextpdf.text.pdf.PdfStamper;
@@ -94,13 +95,15 @@ public class C3_12_LockFields {
 		table.addCell(createSignatureFieldCell(writer, "sig1", null));
 		table.addCell("For approval by Bob");
 		table.addCell(createTextFieldCell("approved_bob"));
-		table.addCell(createSignatureFieldCell(writer, "sig2", null));
+		PdfSigLockDictionary lock = new PdfSigLockDictionary(LockAction.INCLUDE, "sig1", "approved_bob", "sig2");
+		table.addCell(createSignatureFieldCell(writer, "sig2", lock));
 		table.addCell("For approval by Carol");
 		table.addCell(createTextFieldCell("approved_carol"));
-		table.addCell(createSignatureFieldCell(writer, "sig3", null));
+		lock = new PdfSigLockDictionary(LockAction.EXCLUDE, "approved_dave", "sig4");
+		table.addCell(createSignatureFieldCell(writer, "sig3", lock));
 		table.addCell("For approval by Dave");
 		table.addCell(createTextFieldCell("approved_dave"));
-		PdfSigLockDictionary lock = new PdfSigLockDictionary(LockPermissions.NO_CHANGES_ALLOWED);
+		lock = new PdfSigLockDictionary(LockPermissions.NO_CHANGES_ALLOWED);
 		table.addCell(createSignatureFieldCell(writer, "sig4", lock));
 		document.add(table);
 		document.close();
@@ -141,6 +144,8 @@ public class C3_12_LockFields {
         PdfSignatureAppearance appearance = stamper.getSignatureAppearance();
         appearance.setVisibleSignature(name);
         appearance.setCertificationLevel(PdfSignatureAppearance.CERTIFIED_FORM_FILLING);
+		AcroFields form = stamper.getAcroFields();
+		form.setFieldProperty(name, "setfflags", PdfFormField.FF_READ_ONLY, null);
         // Creating the signature
         PrivateKeySignature pks = new PrivateKeySignature(pk, DigestAlgorithms.SHA256, "BC");
         MakeSignature.signDetached(appearance, pks, chain, null, null, null, "BC", 0, MakeSignature.CMS);
@@ -160,6 +165,7 @@ public class C3_12_LockFields {
         PdfStamper stamper = PdfStamper.createSignature(reader, os, '\0', null, true);
 		AcroFields form = stamper.getAcroFields();
 		form.setField(fname, value);
+		form.setFieldProperty(name, "setfflags", PdfFormField.FF_READ_ONLY, null);
 		form.setFieldProperty(fname, "setfflags", PdfFormField.FF_READ_ONLY, null);
         // Creating the appearance
         PdfSignatureAppearance appearance = stamper.getSignatureAppearance();
