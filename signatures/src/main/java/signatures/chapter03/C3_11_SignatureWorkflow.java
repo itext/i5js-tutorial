@@ -139,33 +139,12 @@ public class C3_11_SignatureWorkflow {
         MakeSignature.signDetached(appearance, pks, chain, null, null, null, "BC", 0, MakeSignature.CMS);
 	}
 	
-	public void fillOutAndSign(String keystore,
-			String src, String name, String fname, String value, String dest)
-					throws GeneralSecurityException, IOException, DocumentException {
-		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-		ks.load(new FileInputStream(keystore), PASSWORD.toCharArray());
-        String alias = (String)ks.aliases().nextElement();
-        PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD.toCharArray());
-        Certificate[] chain = ks.getCertificateChain(alias);
-        // Creating the reader and the stamper
-        PdfReader reader = new PdfReader(src);
-        FileOutputStream os = new FileOutputStream(dest);
-        PdfStamper stamper = PdfStamper.createSignature(reader, os, '\0', null, true);
-		AcroFields form = stamper.getAcroFields();
-		form.setField(fname, value);
-        // Creating the appearance
-        PdfSignatureAppearance appearance = stamper.getSignatureAppearance();
-        appearance.setVisibleSignature(name);
-        // Creating the signature
-        PrivateKeySignature pks = new PrivateKeySignature(pk, DigestAlgorithms.SHA256, "BC");
-        MakeSignature.signDetached(appearance, pks, chain, null, null, null, "BC", 0, MakeSignature.CMS);
-	}
-	
 	public void fillOut(String src, String dest, String name, String value) throws IOException, DocumentException {
 		PdfReader reader = new PdfReader(src);
 		PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(dest), '\0', true);
 		AcroFields form = stamper.getAcroFields();
 		form.setField(name, value);
+		form.setFieldProperty(name, "setfflags", PdfFormField.FF_READ_ONLY, null);
 		stamper.close();
 	}
 	
@@ -181,6 +160,29 @@ public class C3_11_SignatureWorkflow {
         PdfReader reader = new PdfReader(src);
         FileOutputStream os = new FileOutputStream(dest);
         PdfStamper stamper = PdfStamper.createSignature(reader, os, '\0', null, true);
+        // Creating the appearance
+        PdfSignatureAppearance appearance = stamper.getSignatureAppearance();
+        appearance.setVisibleSignature(name);
+        // Creating the signature
+        PrivateKeySignature pks = new PrivateKeySignature(pk, DigestAlgorithms.SHA256, "BC");
+        MakeSignature.signDetached(appearance, pks, chain, null, null, null, "BC", 0, MakeSignature.CMS);
+	}
+	
+	public void fillOutAndSign(String keystore,
+			String src, String name, String fname, String value, String dest)
+					throws GeneralSecurityException, IOException, DocumentException {
+		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+		ks.load(new FileInputStream(keystore), PASSWORD.toCharArray());
+        String alias = (String)ks.aliases().nextElement();
+        PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD.toCharArray());
+        Certificate[] chain = ks.getCertificateChain(alias);
+        // Creating the reader and the stamper
+        PdfReader reader = new PdfReader(src);
+        FileOutputStream os = new FileOutputStream(dest);
+        PdfStamper stamper = PdfStamper.createSignature(reader, os, '\0', null, true);
+		AcroFields form = stamper.getAcroFields();
+		form.setField(fname, value);
+		form.setFieldProperty(fname, "setfflags", PdfFormField.FF_READ_ONLY, null);
         // Creating the appearance
         PdfSignatureAppearance appearance = stamper.getSignatureAppearance();
         appearance.setVisibleSignature(name);

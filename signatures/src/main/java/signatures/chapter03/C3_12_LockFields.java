@@ -37,7 +37,7 @@ import com.itextpdf.text.pdf.security.MakeSignature;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
 
 public class C3_12_LockFields {
-	public static final String FORM = "results/form.pdf";
+	public static final String FORM = "results/form_lock.pdf";
 	public static final String ALICE = "src/main/resources/alice";
 	public static final String BOB = "src/main/resources/bob";
 	public static final String CAROL = "src/main/resources/carol";
@@ -212,5 +212,7 @@ public class C3_12_LockFields {
 		app.fillOutAndSign(BOB, String.format(DEST, 1, "alice"), "sig2", "approved_bob", "Read and Approved by Bob", String.format(DEST, 2, "alice_and_bob"));
 		app.fillOutAndSign(CAROL, String.format(DEST, 2, "alice_and_bob"), "sig3", "approved_carol", "Read and Approved by Carol", String.format(DEST, 3, "alice_bob_and_carol"));
 		app.fillOutAndSign(DAVE, String.format(DEST, 3, "alice_bob_and_carol"), "sig4", "approved_dave", "Read and Approved by Dave", String.format(DEST, 4, "alice_bob_carol_and_dave"));
+		app.fillOut(String.format(DEST, 2, "alice_and_bob"), String.format(DEST, 5, "alice_and_bob_broken_by_chuck"), "approved_bob", "Changed by Chuck");
+		app.fillOut(String.format(DEST, 4, "alice_bob_carol_and_dave"), String.format(DEST, 6, "dave_broken_by_chuck"), "approved_carol", "Changed by Chuck");
 	}
 }
