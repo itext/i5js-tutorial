@@ -1,5 +1,6 @@
 package signatures.chapter04;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -42,9 +43,11 @@ public class C4_05_SignWithCRLOffline extends C4_01_SignWithCAcert {
         String alias = (String)ks.aliases().nextElement();
         PrivateKey pk = (PrivateKey) ks.getKey(alias, pass.toCharArray());
         Certificate[] chain = ks.getCertificateChain(alias);
-        CertificateFactory cf = CertificateFactory.getInstance("X.509");
-		CRL crl = (CRL)cf.generateCRL(new FileInputStream(CRL));
-        CrlClient crlClient = new CrlClientOffline(crl);
+        FileInputStream is = new FileInputStream(CRL);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        byte[] buf = new byte[1024];
+        while (is.read(buf) != -1) baos.write(buf);
+        CrlClient crlClient = new CrlClientOffline(baos.toByteArray());
         List<CrlClient> crlList = new ArrayList<CrlClient>();
         crlList.add(crlClient);
         C4_05_SignWithCRLOffline app = new C4_05_SignWithCRLOffline();
