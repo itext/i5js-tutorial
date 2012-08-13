@@ -17,7 +17,7 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.log.LoggerFactory;
 import com.itextpdf.text.log.SysoLogger;
 import com.itextpdf.text.pdf.security.CrlClient;
-import com.itextpdf.text.pdf.security.CrlClientImp;
+import com.itextpdf.text.pdf.security.CrlClientOnline;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import com.itextpdf.text.pdf.security.MakeSignature;
 
@@ -40,7 +40,7 @@ public class C4_03_SignWithCRLDefaultImp extends C4_01_SignWithCAcert {
         Certificate[] chain = ks.getCertificateChain(alias);
 		LoggerFactory.getInstance().setLogger(new SysoLogger());
         List<CrlClient> crlList = new ArrayList<CrlClient>();
-        crlList.add(new CrlClientImp());
+        crlList.add(new CrlClientOnline());
         C4_03_SignWithCRLDefaultImp app = new C4_03_SignWithCRLDefaultImp();
 		app.sign(pk, chain, SRC, DEST, provider.getName(), "Test", "Ghent", DigestAlgorithms.SHA256, MakeSignature.CMS,
 				crlList, null, null, 0);
