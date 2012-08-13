@@ -31,7 +31,7 @@ public class C4_10_SignWithToken extends C4_01_SignWithCAcert {
 		LoggerFactory.getInstance().setLogger(new SysoLogger());
         KeyStore ks = KeyStore.getInstance("Windows-MY");
 		ks.load(null, null);
-        String alias = "Bruno Lowagie";
+        String alias = (String)ks.aliases().nextElement();
         PrivateKey pk = (PrivateKey)ks.getKey(alias, null);
         Certificate[] chain = ks.getCertificateChain(alias);
         OcspClient ocspClient = new OcspClientBouncyCastle();

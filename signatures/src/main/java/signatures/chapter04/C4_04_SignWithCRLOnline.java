@@ -39,7 +39,7 @@ public class C4_04_SignWithCRLOnline extends C4_01_SignWithCAcert {
         String alias = (String)ks.aliases().nextElement();
         PrivateKey pk = (PrivateKey) ks.getKey(alias, pass.toCharArray());
         Certificate[] chain = ks.getCertificateChain(alias);
-        CrlClient crlClient = new CrlClientOnline("http://crl.cacert.org/revoke.crl");
+        CrlClient crlClient = new CrlClientOnline("https://crl.cacert.org/revoke.crl");
         List<CrlClient> crlList = new ArrayList<CrlClient>();
         crlList.add(crlClient);
         C4_04_SignWithCRLOnline app = new C4_04_SignWithCRLOnline();
