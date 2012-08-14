@@ -4,10 +4,13 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.PrivateKey;
+import java.security.Security;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.log.LoggerFactory;
@@ -27,8 +30,10 @@ public class C4_10_SignWithToken extends C4_01_SignWithCAcert {
 	public static final String DEST = "results/hello_token.pdf";
 
 	public static void main(String[] args) throws IOException, GeneralSecurityException, DocumentException {
-
 		LoggerFactory.getInstance().setLogger(new SysoLogger());
+		
+		BouncyCastleProvider provider = new BouncyCastleProvider();
+		Security.addProvider(provider);
         KeyStore ks = KeyStore.getInstance("Windows-MY");
 		ks.load(null, null);
         String alias = (String)ks.aliases().nextElement();

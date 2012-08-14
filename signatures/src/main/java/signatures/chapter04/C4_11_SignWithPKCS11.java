@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import sun.security.pkcs11.SunPKCS11;
 import sun.security.pkcs11.wrapper.CK_C_INITIALIZE_ARGS;
 import sun.security.pkcs11.wrapper.CK_TOKEN_INFO;
@@ -51,6 +53,8 @@ public class C4_11_SignWithPKCS11 extends C4_01_SignWithCAcert {
 		ByteArrayInputStream bais = new ByteArrayInputStream(config.getBytes());
 		Provider provider = new SunPKCS11(bais);
         Security.addProvider(provider);
+		BouncyCastleProvider provider2 = new BouncyCastleProvider();
+		Security.addProvider(provider2);
         
         KeyStore ks = KeyStore.getInstance("PKCS11");
 		ks.load(null, pass.toCharArray());
