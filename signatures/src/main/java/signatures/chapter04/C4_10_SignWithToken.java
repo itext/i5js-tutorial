@@ -16,7 +16,7 @@ import com.itextpdf.text.pdf.security.CertificateUtil;
 import com.itextpdf.text.pdf.security.CrlClient;
 import com.itextpdf.text.pdf.security.CrlClientOnline;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
-import com.itextpdf.text.pdf.security.MakeSignature;
+import com.itextpdf.text.pdf.security.MakeSignature.CryptoStandard;
 import com.itextpdf.text.pdf.security.OcspClient;
 import com.itextpdf.text.pdf.security.OcspClientBouncyCastle;
 import com.itextpdf.text.pdf.security.TSAClient;
@@ -48,7 +48,7 @@ public class C4_10_SignWithToken extends C4_01_SignWithCAcert {
         crlList.add(new CrlClientOnline(chain));
         C4_10_SignWithToken app = new C4_10_SignWithToken();
 		app.sign(pk, chain, SRC, DEST, null, "Test", "Ghent",
-				DigestAlgorithms.SHA256, MakeSignature.CMS,
+				DigestAlgorithms.SHA256, CryptoStandard.CMS,
 				crlList, ocspClient, tsaClient, 0);
 	}
 }

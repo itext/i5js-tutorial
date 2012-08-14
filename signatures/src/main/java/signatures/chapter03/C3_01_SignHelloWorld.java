@@ -18,6 +18,7 @@ import com.itextpdf.text.pdf.PdfSignatureAppearance;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import com.itextpdf.text.pdf.security.MakeSignature;
+import com.itextpdf.text.pdf.security.MakeSignature.CryptoStandard;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
 
 public class C3_01_SignHelloWorld {
@@ -30,7 +31,7 @@ public class C3_01_SignHelloWorld {
 	public void sign(PrivateKey pk, Certificate[] chain,
 			String src, String dest, String provider,
 			String reason, String location,
-			String digestAlgorithm, boolean subfilter)
+			String digestAlgorithm, CryptoStandard subfilter)
 					throws GeneralSecurityException, IOException, DocumentException {
         // Creating the reader and the stamper
         PdfReader reader = new PdfReader(src);
@@ -55,9 +56,9 @@ public class C3_01_SignHelloWorld {
         PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD.toCharArray());
         Certificate[] chain = ks.getCertificateChain(alias);
 		C3_01_SignHelloWorld app = new C3_01_SignHelloWorld();
-		app.sign(pk, chain, SRC, String.format(DEST, 1), provider.getName(), "Test 1", "Ghent", DigestAlgorithms.SHA256, MakeSignature.CMS);
-		app.sign(pk, chain, SRC, String.format(DEST, 2), provider.getName(), "Test 2", "Ghent", DigestAlgorithms.SHA512, MakeSignature.CMS);
-		app.sign(pk, chain, SRC, String.format(DEST, 3), provider.getName(), "Test 3", "Ghent", DigestAlgorithms.SHA256, MakeSignature.CADES);
-		app.sign(pk, chain, SRC, String.format(DEST, 4), provider.getName(), "Test 4", "Ghent", DigestAlgorithms.RIPEMD160, MakeSignature.CADES);
+		app.sign(pk, chain, SRC, String.format(DEST, 1), provider.getName(), "Test 1", "Ghent", DigestAlgorithms.SHA256, CryptoStandard.CMS);
+		app.sign(pk, chain, SRC, String.format(DEST, 2), provider.getName(), "Test 2", "Ghent", DigestAlgorithms.SHA512, CryptoStandard.CMS);
+		app.sign(pk, chain, SRC, String.format(DEST, 3), provider.getName(), "Test 3", "Ghent", DigestAlgorithms.SHA256, CryptoStandard.CADES);
+		app.sign(pk, chain, SRC, String.format(DEST, 4), provider.getName(), "Test 4", "Ghent", DigestAlgorithms.RIPEMD160, CryptoStandard.CADES);
 	}
 }

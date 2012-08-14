@@ -22,6 +22,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import com.itextpdf.text.pdf.security.MakeSignature;
+import com.itextpdf.text.pdf.security.MakeSignature.CryptoStandard;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
 
 public class C3_06_SignatureAppearance {
@@ -35,7 +36,7 @@ public class C3_06_SignatureAppearance {
 	public void sign1(PrivateKey pk, Certificate[] chain,
 			String src, String name, String dest, String provider,
 			String reason, String location,
-			String digestAlgorithm, boolean subfilter)
+			String digestAlgorithm, CryptoStandard subfilter)
 					throws GeneralSecurityException, IOException, DocumentException {
         // Creating the reader and the stamper
         PdfReader reader = new PdfReader(src);
@@ -57,7 +58,7 @@ public class C3_06_SignatureAppearance {
 	public void sign2(PrivateKey pk, Certificate[] chain,
 			String src, String name, String dest, String provider,
 			String reason, String location,
-			String digestAlgorithm, boolean subfilter)
+			String digestAlgorithm, CryptoStandard subfilter)
 					throws GeneralSecurityException, IOException, DocumentException {
         // Creating the reader and the stamper
         PdfReader reader = new PdfReader(src);
@@ -80,7 +81,7 @@ public class C3_06_SignatureAppearance {
 	public void sign3(PrivateKey pk, Certificate[] chain,
 			String src, String name, String dest, String provider,
 			String reason, String location,
-			String digestAlgorithm, boolean subfilter)
+			String digestAlgorithm, CryptoStandard subfilter)
 					throws GeneralSecurityException, IOException, DocumentException {
         // Creating the reader and the stamper
         PdfReader reader = new PdfReader(src);
@@ -103,7 +104,7 @@ public class C3_06_SignatureAppearance {
 	public void sign4(PrivateKey pk, Certificate[] chain,
 			String src, String name, String dest, String provider,
 			String reason, String location,
-			String digestAlgorithm, boolean subfilter)
+			String digestAlgorithm, CryptoStandard subfilter)
 					throws GeneralSecurityException, IOException, DocumentException {
         // Creating the reader and the stamper
         PdfReader reader = new PdfReader(src);
@@ -133,15 +134,15 @@ public class C3_06_SignatureAppearance {
         C3_06_SignatureAppearance app = new C3_06_SignatureAppearance();
         app.sign1(pk, chain, SRC, "Signature1", String.format(DEST, 1), provider.getName(),
         		"Custom appearance example", "Ghent",
-        		DigestAlgorithms.SHA256, MakeSignature.CMS);
+        		DigestAlgorithms.SHA256, CryptoStandard.CMS);
         app.sign2(pk, chain, SRC, "Signature1", String.format(DEST, 2), provider.getName(),
         		"Custom appearance example", "Ghent",
-        		DigestAlgorithms.SHA256, MakeSignature.CMS);
+        		DigestAlgorithms.SHA256, CryptoStandard.CMS);
         app.sign3(pk, chain, SRC, "Signature1", String.format(DEST, 3), provider.getName(),
         		"Custom appearance example", "Ghent",
-        		DigestAlgorithms.SHA256, MakeSignature.CMS);
+        		DigestAlgorithms.SHA256, CryptoStandard.CMS);
         app.sign4(pk, chain, SRC, "Signature1", String.format(DEST, 4), provider.getName(),
         		"Custom appearance example", "Ghent",
-        		DigestAlgorithms.SHA256, MakeSignature.CMS);
+        		DigestAlgorithms.SHA256, CryptoStandard.CMS);
 	}
 }

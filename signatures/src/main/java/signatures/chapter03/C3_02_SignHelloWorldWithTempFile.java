@@ -19,6 +19,7 @@ import com.itextpdf.text.pdf.PdfSignatureAppearance;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import com.itextpdf.text.pdf.security.MakeSignature;
+import com.itextpdf.text.pdf.security.MakeSignature.CryptoStandard;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
 
 public class C3_02_SignHelloWorldWithTempFile {
@@ -32,7 +33,7 @@ public class C3_02_SignHelloWorldWithTempFile {
 	public void sign(PrivateKey pk, Certificate[] chain,
 			String src, String tmp, String dest, String provider,
 			String reason, String location,
-			String digestAlgorithm, boolean subfilter)
+			String digestAlgorithm, CryptoStandard subfilter)
 					throws GeneralSecurityException, IOException, DocumentException {
         // Creating the reader and the stamper
         PdfReader reader = new PdfReader(src);
@@ -57,6 +58,6 @@ public class C3_02_SignHelloWorldWithTempFile {
         PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD.toCharArray());
         Certificate[] chain = ks.getCertificateChain(alias);
 		C3_02_SignHelloWorldWithTempFile app = new C3_02_SignHelloWorldWithTempFile();
-		app.sign(pk, chain, SRC, TEMP, DEST, provider.getName(), "Temp test", "Ghent", DigestAlgorithms.SHA256, MakeSignature.CMS);
+		app.sign(pk, chain, SRC, TEMP, DEST, provider.getName(), "Temp test", "Ghent", DigestAlgorithms.SHA256, CryptoStandard.CMS);
 	}
 }

@@ -19,7 +19,7 @@ import com.itextpdf.text.log.SysoLogger;
 import com.itextpdf.text.pdf.security.CrlClient;
 import com.itextpdf.text.pdf.security.CrlClientOnline;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
-import com.itextpdf.text.pdf.security.MakeSignature;
+import com.itextpdf.text.pdf.security.MakeSignature.CryptoStandard;
 
 public class C4_03_SignWithCRLDefaultImp extends C4_01_SignWithCAcert {
 	public static final String SRC = "src/main/resources/hello.pdf";
@@ -42,7 +42,7 @@ public class C4_03_SignWithCRLDefaultImp extends C4_01_SignWithCAcert {
         List<CrlClient> crlList = new ArrayList<CrlClient>();
         crlList.add(new CrlClientOnline());
         C4_03_SignWithCRLDefaultImp app = new C4_03_SignWithCRLDefaultImp();
-		app.sign(pk, chain, SRC, DEST, provider.getName(), "Test", "Ghent", DigestAlgorithms.SHA256, MakeSignature.CMS,
+		app.sign(pk, chain, SRC, DEST, provider.getName(), "Test", "Ghent", DigestAlgorithms.SHA256, CryptoStandard.CMS,
 				crlList, null, null, 0);
 	}
   

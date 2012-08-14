@@ -21,6 +21,7 @@ import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import com.itextpdf.text.pdf.security.MakeSignature;
+import com.itextpdf.text.pdf.security.MakeSignature.CryptoStandard;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
 
 public class C3_05_CustomAppearance {
@@ -33,7 +34,7 @@ public class C3_05_CustomAppearance {
 	public void sign(PrivateKey pk, Certificate[] chain,
 			String src, String name, String dest, String provider,
 			String reason, String location,
-			String digestAlgorithm, boolean subfilter)
+			String digestAlgorithm, CryptoStandard subfilter)
 					throws GeneralSecurityException, IOException, DocumentException {
         // Creating the reader and the stamper
         PdfReader reader = new PdfReader(src);
@@ -77,6 +78,6 @@ public class C3_05_CustomAppearance {
         C3_05_CustomAppearance app = new C3_05_CustomAppearance();
         app.sign(pk, chain, SRC, "Signature1", DEST, provider.getName(),
         		"Custom appearance example", "Ghent",
-        		DigestAlgorithms.SHA256, MakeSignature.CMS);
+        		DigestAlgorithms.SHA256, CryptoStandard.CMS);
 	}
 }

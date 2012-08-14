@@ -29,6 +29,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.TextField;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import com.itextpdf.text.pdf.security.MakeSignature;
+import com.itextpdf.text.pdf.security.MakeSignature.CryptoStandard;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
 
 public class C3_11_SignatureWorkflow {
@@ -136,7 +137,7 @@ public class C3_11_SignatureWorkflow {
         appearance.setCertificationLevel(PdfSignatureAppearance.CERTIFIED_FORM_FILLING);
         // Creating the signature
         PrivateKeySignature pks = new PrivateKeySignature(pk, DigestAlgorithms.SHA256, "BC");
-        MakeSignature.signDetached(appearance, pks, chain, null, null, null, "BC", 0, MakeSignature.CMS);
+        MakeSignature.signDetached(appearance, pks, chain, null, null, null, "BC", 0, CryptoStandard.CMS);
 	}
 	
 	public void fillOut(String src, String dest, String name, String value) throws IOException, DocumentException {
@@ -165,7 +166,7 @@ public class C3_11_SignatureWorkflow {
         appearance.setVisibleSignature(name);
         // Creating the signature
         PrivateKeySignature pks = new PrivateKeySignature(pk, DigestAlgorithms.SHA256, "BC");
-        MakeSignature.signDetached(appearance, pks, chain, null, null, null, "BC", 0, MakeSignature.CMS);
+        MakeSignature.signDetached(appearance, pks, chain, null, null, null, "BC", 0, CryptoStandard.CMS);
 	}
 	
 	public void fillOutAndSign(String keystore,
@@ -188,7 +189,7 @@ public class C3_11_SignatureWorkflow {
         appearance.setVisibleSignature(name);
         // Creating the signature
         PrivateKeySignature pks = new PrivateKeySignature(pk, DigestAlgorithms.SHA256, "BC");
-        MakeSignature.signDetached(appearance, pks, chain, null, null, null, "BC", 0, MakeSignature.CMS);
+        MakeSignature.signDetached(appearance, pks, chain, null, null, null, "BC", 0, CryptoStandard.CMS);
 	}
 	
 	public static void main(String[] args) throws IOException, DocumentException, GeneralSecurityException {

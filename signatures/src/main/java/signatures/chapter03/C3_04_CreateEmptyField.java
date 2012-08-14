@@ -26,7 +26,7 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
-import com.itextpdf.text.pdf.security.MakeSignature;
+import com.itextpdf.text.pdf.security.MakeSignature.CryptoStandard;
 
 public class C3_04_CreateEmptyField {
 
@@ -98,6 +98,6 @@ public class C3_04_CreateEmptyField {
         PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD.toCharArray());
         Certificate[] chain = ks.getCertificateChain(alias);
     	C3_03_SignEmptyField appSign = new C3_03_SignEmptyField();
-        appSign.sign(pk, chain, UNSIGNED, SIGNAME, DEST, provider.getName(), "Test", "Ghent", DigestAlgorithms.SHA256, MakeSignature.CMS);
+        appSign.sign(pk, chain, UNSIGNED, SIGNAME, DEST, provider.getName(), "Test", "Ghent", DigestAlgorithms.SHA256, CryptoStandard.CMS);
     }
 }

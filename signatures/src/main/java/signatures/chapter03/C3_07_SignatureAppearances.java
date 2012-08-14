@@ -20,6 +20,7 @@ import com.itextpdf.text.pdf.PdfSignatureAppearance.RenderingMode;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import com.itextpdf.text.pdf.security.MakeSignature;
+import com.itextpdf.text.pdf.security.MakeSignature.CryptoStandard;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
 
 public class C3_07_SignatureAppearances {
@@ -33,7 +34,7 @@ public class C3_07_SignatureAppearances {
 	public void sign(PrivateKey pk, Certificate[] chain,
 			String src, String name, String dest, String provider,
 			String reason, String location, RenderingMode renderingMode,
-			Image image, String digestAlgorithm, boolean subfilter)
+			Image image, String digestAlgorithm, CryptoStandard subfilter)
 					throws GeneralSecurityException, IOException, DocumentException {
         // Creating the reader and the stamper
         PdfReader reader = new PdfReader(src);
@@ -64,15 +65,15 @@ public class C3_07_SignatureAppearances {
         C3_07_SignatureAppearances app = new C3_07_SignatureAppearances();
         app.sign(pk, chain, SRC, "Signature1", String.format(DEST, 1), provider.getName(),
         		"Appearance 1", "Ghent", RenderingMode.DESCRIPTION, null,
-        		DigestAlgorithms.SHA256, MakeSignature.CMS);
+        		DigestAlgorithms.SHA256, CryptoStandard.CMS);
         app.sign(pk, chain, SRC, "Signature1", String.format(DEST, 2), provider.getName(),
         		"Appearance 2", "Ghent", RenderingMode.NAME_AND_DESCRIPTION, null,
-        		DigestAlgorithms.SHA256, MakeSignature.CMS);
+        		DigestAlgorithms.SHA256, CryptoStandard.CMS);
         app.sign(pk, chain, SRC, "Signature1", String.format(DEST, 3), provider.getName(),
         		"Appearance 3", "Ghent", RenderingMode.GRAPHIC_AND_DESCRIPTION, image,
-        		DigestAlgorithms.SHA256, MakeSignature.CMS);
+        		DigestAlgorithms.SHA256, CryptoStandard.CMS);
         app.sign(pk, chain, SRC, "Signature1", String.format(DEST, 4), provider.getName(),
         		"Appearance 4", "Ghent", RenderingMode.GRAPHIC, image,
-        		DigestAlgorithms.SHA256, MakeSignature.CMS);
+        		DigestAlgorithms.SHA256, CryptoStandard.CMS);
 	}
 }

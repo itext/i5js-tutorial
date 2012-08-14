@@ -21,6 +21,7 @@ import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.security.CrlClient;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import com.itextpdf.text.pdf.security.MakeSignature;
+import com.itextpdf.text.pdf.security.MakeSignature.CryptoStandard;
 import com.itextpdf.text.pdf.security.OcspClient;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
 import com.itextpdf.text.pdf.security.TSAClient;
@@ -32,7 +33,7 @@ public class C4_01_SignWithCAcert {
 	public void sign(PrivateKey pk, Certificate[] chain,
 			String src, String dest, String provider,
 			String reason, String location,
-			String digestAlgorithm, boolean subfilter,
+			String digestAlgorithm, CryptoStandard subfilter,
 			Collection<CrlClient> crlList,
 			OcspClient ocspClient,
 			TSAClient tsaClient,
@@ -66,6 +67,6 @@ public class C4_01_SignWithCAcert {
         PrivateKey pk = (PrivateKey) ks.getKey(alias, pass.toCharArray());
         Certificate[] chain = ks.getCertificateChain(alias);
         C4_01_SignWithCAcert app = new C4_01_SignWithCAcert();
-		app.sign(pk, chain, SRC, DEST, provider.getName(), "Test", "Ghent", DigestAlgorithms.SHA256, MakeSignature.CMS, null, null, null, 0);
+		app.sign(pk, chain, SRC, DEST, provider.getName(), "Test", "Ghent", DigestAlgorithms.SHA256, CryptoStandard.CMS, null, null, null, 0);
 	}
 }
