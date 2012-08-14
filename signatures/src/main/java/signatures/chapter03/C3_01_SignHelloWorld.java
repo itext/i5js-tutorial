@@ -1,3 +1,10 @@
+/*
+ * This class is part of the white paper entitled
+ * "Digital Signatures for PDF documents"
+ * written by Bruno Lowagie
+ * 
+ * For more info, go to: http://itextpdf.com/sales
+ */
 package signatures.chapter03;
 
 import java.io.FileInputStream;
@@ -26,7 +33,7 @@ public class C3_01_SignHelloWorld {
 	public static final String KEYSTORE = "src/main/resources/ks";
 	public static final String PASSWORD = "password";
 	public static final String SRC = "src/main/resources/hello.pdf";
-	public static final String DEST = "results/hello_signed%s.pdf";
+	public static final String DEST = "results/chapter3/hello_signed%s.pdf";
 	
 	public void sign(PrivateKey pk, Certificate[] chain,
 			String src, String dest, String provider,

@@ -1,3 +1,10 @@
+/*
+ * This class is part of the white paper entitled
+ * "Digital Signatures for PDF documents"
+ * written by Bruno Lowagie
+ * 
+ * For more info, go to: http://itextpdf.com/sales
+ */
 package signatures.chapter03;
 
 import java.io.File;
@@ -27,8 +34,8 @@ public class C3_02_SignHelloWorldWithTempFile {
 	public static final String KEYSTORE = "src/main/resources/ks";
 	public static final String PASSWORD = "password";
 	public static final String SRC = "src/main/resources/hello.pdf";
-	public static final String TEMP = "results/signatures/";
-	public static final String DEST = "results/hello_signed_with_temp.pdf";
+	public static final String TEMP = "results/chapter3/";
+	public static final String DEST = "results/chapter3/hello_signed_with_temp.pdf";
 	
 	public void sign(PrivateKey pk, Certificate[] chain,
 			String src, String tmp, String dest, String provider,

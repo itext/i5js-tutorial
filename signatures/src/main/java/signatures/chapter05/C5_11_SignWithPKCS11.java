@@ -1,4 +1,11 @@
-package signatures.chapter04;
+/*
+ * This class is part of the white paper entitled
+ * "Digital Signatures for PDF documents"
+ * written by Bruno Lowagie
+ * 
+ * For more info, go to: http://itextpdf.com/sales
+ */
+package signatures.chapter05;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
@@ -16,6 +23,7 @@ import java.util.Properties;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+import signatures.chapter04.C4_01_SignWithCAcert;
 import sun.security.pkcs11.SunPKCS11;
 import sun.security.pkcs11.wrapper.CK_C_INITIALIZE_ARGS;
 import sun.security.pkcs11.wrapper.CK_TOKEN_INFO;
@@ -35,9 +43,9 @@ import com.itextpdf.text.pdf.security.OcspClientBouncyCastle;
 import com.itextpdf.text.pdf.security.TSAClient;
 import com.itextpdf.text.pdf.security.TSAClientBouncyCastle;
 
-public class C4_11_SignWithPKCS11 extends C4_01_SignWithCAcert {
+public class C5_11_SignWithPKCS11 extends C4_01_SignWithCAcert {
 	public static final String SRC = "src/main/resources/hello.pdf";
-	public static final String DEST = "results/hello_token2.pdf";
+	public static final String DEST = "results/chapter5/hello_token2.pdf";
 
 	public static void main(String[] args) throws IOException, GeneralSecurityException, DocumentException {
 
@@ -73,7 +81,7 @@ public class C4_11_SignWithPKCS11 extends C4_01_SignWithCAcert {
         }
         List<CrlClient> crlList = new ArrayList<CrlClient>();
         crlList.add(new CrlClientOnline(chain));
-        C4_11_SignWithPKCS11 app = new C4_11_SignWithPKCS11();
+        C5_11_SignWithPKCS11 app = new C5_11_SignWithPKCS11();
 		app.sign(pk, chain, SRC, DEST, provider.getName(), "Test", "Ghent",
 				DigestAlgorithms.SHA256, CryptoStandard.CMS,
 				crlList, ocspClient, tsaClient, 0);

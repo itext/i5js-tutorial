@@ -1,3 +1,10 @@
+/*
+ * This class is part of the white paper entitled
+ * "Digital Signatures for PDF documents"
+ * written by Bruno Lowagie
+ * 
+ * For more info, go to: http://itextpdf.com/sales
+ */
 package signatures.chapter03;
 
 import java.io.FileInputStream;
@@ -32,12 +39,12 @@ public class C3_04_CreateEmptyField {
 
 	public static final String KEYSTORE = "src/main/resources/ks";
 	public static final String PASSWORD = "password";
-	public static final String UNSIGNED = "results/hello_empty.pdf";
+	public static final String UNSIGNED = "results/chapter3/hello_empty.pdf";
 	public static final String SIGNAME = "Signature1";
-	public static final String DEST = "results/field_signed.pdf";
+	public static final String DEST = "results/chapter3/field_signed.pdf";
 
 	public static final String SRC = "src/main/resources/hello.pdf";
-	public static final String UNSIGNED2 = "results/hello_empty2.pdf";
+	public static final String UNSIGNED2 = "results/chapter3/hello_empty2.pdf";
 	
     public void createPdf(String filename) throws IOException, DocumentException {
     	// step 1: Create a Document

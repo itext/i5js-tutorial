@@ -1,3 +1,10 @@
+/*
+ * This class is part of the white paper entitled
+ * "Digital Signatures for PDF documents"
+ * written by Bruno Lowagie
+ * 
+ * For more info, go to: http://itextpdf.com/sales
+ */
 package signatures.chapter04;
 
 import java.io.FileInputStream;

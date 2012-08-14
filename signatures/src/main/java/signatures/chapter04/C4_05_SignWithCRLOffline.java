@@ -1,3 +1,10 @@
+/*
+ * This class is part of the white paper entitled
+ * "Digital Signatures for PDF documents"
+ * written by Bruno Lowagie
+ * 
+ * For more info, go to: http://itextpdf.com/sales
+ */
 package signatures.chapter04;
 
 import java.io.ByteArrayOutputStream;
@@ -25,7 +32,7 @@ import com.itextpdf.text.pdf.security.MakeSignature.CryptoStandard;
 public class C4_05_SignWithCRLOffline extends C4_01_SignWithCAcert {
 	public static final String SRC = "src/main/resources/hello.pdf";
 	public static final String CRL = "src/main/resources/revoke.crl";
-	public static final String DEST = "results/hello_cacert_crl_offline.pdf";
+	public static final String DEST = "results/chapter4/hello_cacert_crl_offline.pdf";
 	
 	public static void main(String[] args) throws IOException, GeneralSecurityException, DocumentException {
 		LoggerFactory.getInstance().setLogger(new SysoLogger());

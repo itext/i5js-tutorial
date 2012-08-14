@@ -1,3 +1,10 @@
+/*
+ * This class is part of the white paper entitled
+ * "Digital Signatures for PDF documents"
+ * written by Bruno Lowagie
+ * 
+ * For more info, go to: http://itextpdf.com/sales
+ */
 package signatures.chapter04;
 
 import java.io.FileInputStream;
@@ -28,7 +35,7 @@ import com.itextpdf.text.pdf.security.TSAClient;
 
 public class C4_01_SignWithCAcert {
 	public static final String SRC = "src/main/resources/hello.pdf";
-	public static final String DEST = "results/hello_cacert.pdf";
+	public static final String DEST = "results/chapter4/hello_cacert.pdf";
 
 	public void sign(PrivateKey pk, Certificate[] chain,
 			String src, String dest, String provider,

@@ -1,3 +1,10 @@
+/*
+ * This class is part of the white paper entitled
+ * "Digital Signatures for PDF documents"
+ * written by Bruno Lowagie
+ * 
+ * For more info, go to: http://itextpdf.com/sales
+ */
 package signatures.chapter03;
 
 import java.io.FileInputStream;
@@ -33,13 +40,13 @@ import com.itextpdf.text.pdf.security.MakeSignature.CryptoStandard;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
 
 public class C3_11_SignatureWorkflow {
-	public static final String FORM = "results/form.pdf";
+	public static final String FORM = "results/chapter3/form.pdf";
 	public static final String ALICE = "src/main/resources/alice";
 	public static final String BOB = "src/main/resources/bob";
 	public static final String CAROL = "src/main/resources/carol";
 	public static final String DAVE = "src/main/resources/dave";
 	public static final String PASSWORD = "password";
-	public static final String DEST = "results/step%s_signed_by_%s.pdf";
+	public static final String DEST = "results/chapter3/step%s_signed_by_%s.pdf";
 	
 	public class MyTextFieldEvent implements PdfPCellEvent {
 

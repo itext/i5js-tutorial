@@ -1,3 +1,10 @@
+/*
+ * This class is part of the white paper entitled
+ * "Digital Signatures for PDF documents"
+ * written by Bruno Lowagie
+ * 
+ * For more info, go to: http://itextpdf.com/sales
+ */
 package signatures.chapter04;
 
 import java.io.FileInputStream;
@@ -23,7 +30,7 @@ import com.itextpdf.text.pdf.security.MakeSignature.CryptoStandard;
 
 public class C4_03_SignWithCRLDefaultImp extends C4_01_SignWithCAcert {
 	public static final String SRC = "src/main/resources/hello.pdf";
-	public static final String DEST = "results/hello_cacert_crl_imp.pdf";
+	public static final String DEST = "results/chapter4/hello_cacert_crl_imp.pdf";
 	
 	public static void main(String[] args) throws IOException, GeneralSecurityException, DocumentException {
 		Properties properties = new Properties();
