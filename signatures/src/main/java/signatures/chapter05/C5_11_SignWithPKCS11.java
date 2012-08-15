@@ -53,7 +53,7 @@ public class C5_11_SignWithPKCS11 extends C4_01_SignWithCAcert {
 		
 		Properties properties = new Properties();
 		properties.load(new FileInputStream("c:/home/blowagie/key.properties"));
-        String pass = properties.getProperty("PASSWORD");
+        char[] pass = properties.getProperty("PASSWORD").toCharArray();
 
 		String config = "name=Safenetikey2032\n" +
 				"library=c:/windows/system32/dkck201.dll\n" +
@@ -65,9 +65,9 @@ public class C5_11_SignWithPKCS11 extends C4_01_SignWithCAcert {
 		Security.addProvider(provider2);
         
         KeyStore ks = KeyStore.getInstance("PKCS11");
-		ks.load(null, pass.toCharArray());
+		ks.load(null, pass);
         String alias = (String)ks.aliases().nextElement();
-        PrivateKey pk = (PrivateKey)ks.getKey(alias, pass.toCharArray());
+        PrivateKey pk = (PrivateKey)ks.getKey(alias, pass);
         Certificate[] chain = ks.getCertificateChain(alias);
         OcspClient ocspClient = new OcspClientBouncyCastle();
         TSAClient tsaClient = null;

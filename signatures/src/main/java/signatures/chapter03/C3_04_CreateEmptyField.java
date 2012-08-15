@@ -38,7 +38,7 @@ import com.itextpdf.text.pdf.security.MakeSignature.CryptoStandard;
 public class C3_04_CreateEmptyField {
 
 	public static final String KEYSTORE = "src/main/resources/ks";
-	public static final String PASSWORD = "password";
+	public static final char[] PASSWORD = "password".toCharArray();
 	public static final String UNSIGNED = "results/chapter3/hello_empty.pdf";
 	public static final String SIGNAME = "Signature1";
 	public static final String DEST = "results/chapter3/field_signed.pdf";
@@ -100,9 +100,9 @@ public class C3_04_CreateEmptyField {
 		BouncyCastleProvider provider = new BouncyCastleProvider();
 		Security.addProvider(provider);
 		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-		ks.load(new FileInputStream(KEYSTORE), PASSWORD.toCharArray());
+		ks.load(new FileInputStream(KEYSTORE), PASSWORD);
         String alias = (String)ks.aliases().nextElement();
-        PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD.toCharArray());
+        PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD);
         Certificate[] chain = ks.getCertificateChain(alias);
     	C3_03_SignEmptyField appSign = new C3_03_SignEmptyField();
         appSign.sign(pk, chain, UNSIGNED, SIGNAME, DEST, provider.getName(), "Test", "Ghent", DigestAlgorithms.SHA256, CryptoStandard.CMS);

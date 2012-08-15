@@ -34,7 +34,7 @@ import com.itextpdf.text.pdf.security.PrivateKeySignature;
 public class C3_05_CustomAppearance {
 
 	public static final String KEYSTORE = "src/main/resources/ks";
-	public static final String PASSWORD = "password";
+	public static final char[] PASSWORD = "password".toCharArray();
 	public static final String SRC = "src/main/resources/hello_to_sign.pdf";
 	public static final String DEST = "results/chapter3/signature_custom.pdf";
 	
@@ -78,9 +78,9 @@ public class C3_05_CustomAppearance {
 		BouncyCastleProvider provider = new BouncyCastleProvider();
 		Security.addProvider(provider);
 		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-		ks.load(new FileInputStream(KEYSTORE), PASSWORD.toCharArray());
+		ks.load(new FileInputStream(KEYSTORE), PASSWORD);
         String alias = (String)ks.aliases().nextElement();
-        PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD.toCharArray());
+        PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD);
         Certificate[] chain = ks.getCertificateChain(alias);
         C3_05_CustomAppearance app = new C3_05_CustomAppearance();
         app.sign(pk, chain, SRC, "Signature1", DEST, provider.getName(),

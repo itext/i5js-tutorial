@@ -34,7 +34,7 @@ public class C4_09_SignWithTSA extends C4_01_SignWithCAcert {
 		Properties properties = new Properties();
 		properties.load(new FileInputStream("c:/home/blowagie/key.properties"));
     	String path = properties.getProperty("PRIVATE");
-        String pass = properties.getProperty("PASSWORD");
+        char[] pass = properties.getProperty("PASSWORD").toCharArray();
         String tsaUrl = properties.getProperty("TSAURL");
         String tsaUser = properties.getProperty("TSAUSERNAME");
         String tsaPass = properties.getProperty("TSAPASSWORD");
@@ -42,9 +42,9 @@ public class C4_09_SignWithTSA extends C4_01_SignWithCAcert {
 		BouncyCastleProvider provider = new BouncyCastleProvider();
 		Security.addProvider(provider);
         KeyStore ks = KeyStore.getInstance("pkcs12", provider.getName());
-		ks.load(new FileInputStream(path), pass.toCharArray());
+		ks.load(new FileInputStream(path), pass);
         String alias = (String)ks.aliases().nextElement();
-        PrivateKey pk = (PrivateKey) ks.getKey(alias, pass.toCharArray());
+        PrivateKey pk = (PrivateKey) ks.getKey(alias, pass);
         Certificate[] chain = ks.getCertificateChain(alias);
         OcspClient ocspClient = new OcspClientBouncyCastle();
         TSAClient tsaClient = new TSAClientBouncyCastle(tsaUrl, tsaUser, tsaPass);

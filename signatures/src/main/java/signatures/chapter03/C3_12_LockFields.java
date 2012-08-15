@@ -50,7 +50,7 @@ public class C3_12_LockFields {
 	public static final String BOB = "src/main/resources/bob";
 	public static final String CAROL = "src/main/resources/carol";
 	public static final String DAVE = "src/main/resources/dave";
-	public static final String PASSWORD = "password";
+	public static final char[] PASSWORD = "password".toCharArray();
 	public static final String DEST = "results/chapter3/step_%s_signed_by_%s.pdf";
 	
 	public class MyTextFieldEvent implements PdfPCellEvent {
@@ -140,9 +140,9 @@ public class C3_12_LockFields {
 			String src, String name, String dest)
 					throws GeneralSecurityException, IOException, DocumentException {
 		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-		ks.load(new FileInputStream(keystore), PASSWORD.toCharArray());
+		ks.load(new FileInputStream(keystore), PASSWORD);
         String alias = (String)ks.aliases().nextElement();
-        PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD.toCharArray());
+        PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD);
         Certificate[] chain = ks.getCertificateChain(alias);
         // Creating the reader and the stamper
         PdfReader reader = new PdfReader(src);
@@ -163,9 +163,9 @@ public class C3_12_LockFields {
 			String src, String name, String fname, String value, String dest)
 					throws GeneralSecurityException, IOException, DocumentException {
 		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-		ks.load(new FileInputStream(keystore), PASSWORD.toCharArray());
+		ks.load(new FileInputStream(keystore), PASSWORD);
         String alias = (String)ks.aliases().nextElement();
-        PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD.toCharArray());
+        PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD);
         Certificate[] chain = ks.getCertificateChain(alias);
         // Creating the reader and the stamper
         PdfReader reader = new PdfReader(src);
@@ -195,9 +195,9 @@ public class C3_12_LockFields {
 			String src, String name, String dest)
 					throws GeneralSecurityException, IOException, DocumentException {
 		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-		ks.load(new FileInputStream(keystore), PASSWORD.toCharArray());
+		ks.load(new FileInputStream(keystore), PASSWORD);
         String alias = (String)ks.aliases().nextElement();
-        PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD.toCharArray());
+        PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD);
         Certificate[] chain = ks.getCertificateChain(alias);
         // Creating the reader and the stamper
         PdfReader reader = new PdfReader(src);

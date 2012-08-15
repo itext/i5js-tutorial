@@ -37,14 +37,14 @@ public class C4_04_SignWithCRLOnline extends C4_01_SignWithCAcert {
 		Properties properties = new Properties();
 		properties.load(new FileInputStream("c:/home/blowagie/key.properties"));
     	String path = properties.getProperty("PRIVATE");
-        String pass = properties.getProperty("PASSWORD");
+        char[] pass = properties.getProperty("PASSWORD").toCharArray();
 
 		BouncyCastleProvider provider = new BouncyCastleProvider();
 		Security.addProvider(provider);
         KeyStore ks = KeyStore.getInstance("pkcs12", provider.getName());
-		ks.load(new FileInputStream(path), pass.toCharArray());
+		ks.load(new FileInputStream(path), pass);
         String alias = (String)ks.aliases().nextElement();
-        PrivateKey pk = (PrivateKey) ks.getKey(alias, pass.toCharArray());
+        PrivateKey pk = (PrivateKey) ks.getKey(alias, pass);
         Certificate[] chain = ks.getCertificateChain(alias);
         CrlClient crlClient = new CrlClientOnline("https://crl.cacert.org/revoke.crl");
         List<CrlClient> crlList = new ArrayList<CrlClient>();

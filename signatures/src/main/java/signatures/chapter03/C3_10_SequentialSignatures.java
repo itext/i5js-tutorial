@@ -41,7 +41,7 @@ public class C3_10_SequentialSignatures {
 	public static final String ALICE = "src/main/resources/alice";
 	public static final String BOB = "src/main/resources/bob";
 	public static final String CAROL = "src/main/resources/carol";
-	public static final String PASSWORD = "password";
+	public static final char[] PASSWORD = "password".toCharArray();
 	public static final String DEST = "results/chapter3/signed_by_%s.pdf";
 	
 	public void createForm() throws IOException, DocumentException {
@@ -92,9 +92,9 @@ public class C3_10_SequentialSignatures {
 			String src, String name, String dest)
 					throws GeneralSecurityException, IOException, DocumentException {
 		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-		ks.load(new FileInputStream(keystore), PASSWORD.toCharArray());
+		ks.load(new FileInputStream(keystore), PASSWORD);
         String alias = (String)ks.aliases().nextElement();
-        PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD.toCharArray());
+        PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD);
         Certificate[] chain = ks.getCertificateChain(alias);
         // Creating the reader and the stamper
         PdfReader reader = new PdfReader(src);

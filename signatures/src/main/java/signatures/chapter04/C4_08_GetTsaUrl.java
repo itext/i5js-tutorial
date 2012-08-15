@@ -25,12 +25,12 @@ public class C4_08_GetTsaUrl {
 		Properties properties = new Properties();
 		properties.load(new FileInputStream("c:/home/blowagie/key.properties"));
     	String path = properties.getProperty("PRIVATE");
-        String pass = properties.getProperty("PASSWORD");
+        char[] pass = properties.getProperty("PASSWORD").toCharArray();
         
 		BouncyCastleProvider provider = new BouncyCastleProvider();
 		Security.addProvider(provider);
         KeyStore ks = KeyStore.getInstance("pkcs12", provider.getName());
-		ks.load(new FileInputStream(path), pass.toCharArray());
+		ks.load(new FileInputStream(path), pass);
         String alias = (String)ks.aliases().nextElement();
         Certificate[] chain = ks.getCertificateChain(alias);	    
         for (int i = 0; i < chain.length; i++) {

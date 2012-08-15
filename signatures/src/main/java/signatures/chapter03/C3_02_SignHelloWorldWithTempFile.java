@@ -32,7 +32,7 @@ import com.itextpdf.text.pdf.security.PrivateKeySignature;
 public class C3_02_SignHelloWorldWithTempFile {
 
 	public static final String KEYSTORE = "src/main/resources/ks";
-	public static final String PASSWORD = "password";
+	public static final char[] PASSWORD = "password".toCharArray();
 	public static final String SRC = "src/main/resources/hello.pdf";
 	public static final String TEMP = "results/chapter3/";
 	public static final String DEST = "results/chapter3/hello_signed_with_temp.pdf";
@@ -60,9 +60,9 @@ public class C3_02_SignHelloWorldWithTempFile {
 		BouncyCastleProvider provider = new BouncyCastleProvider();
 		Security.addProvider(provider);
 		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-		ks.load(new FileInputStream(KEYSTORE), PASSWORD.toCharArray());
+		ks.load(new FileInputStream(KEYSTORE), PASSWORD);
         String alias = (String)ks.aliases().nextElement();
-        PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD.toCharArray());
+        PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD);
         Certificate[] chain = ks.getCertificateChain(alias);
 		C3_02_SignHelloWorldWithTempFile app = new C3_02_SignHelloWorldWithTempFile();
 		app.sign(pk, chain, SRC, TEMP, DEST, provider.getName(), "Temp test", "Ghent", DigestAlgorithms.SHA256, CryptoStandard.CMS);

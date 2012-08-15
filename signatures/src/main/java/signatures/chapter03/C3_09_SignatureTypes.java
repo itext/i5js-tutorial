@@ -35,7 +35,7 @@ import com.itextpdf.text.pdf.security.PrivateKeySignature;
 public class C3_09_SignatureTypes {
 
 	public static final String KEYSTORE = "src/main/resources/ks";
-	public static final String PASSWORD = "password";
+	public static final char[] PASSWORD = "password".toCharArray();
 	public static final String SRC = "src/main/resources/hello.pdf";
 	public static final String DEST = "results/chapter3/hello_level_%s.pdf";
 	
@@ -109,9 +109,9 @@ public class C3_09_SignatureTypes {
 		BouncyCastleProvider provider = new BouncyCastleProvider();
 		Security.addProvider(provider);
 		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-		ks.load(new FileInputStream(KEYSTORE), PASSWORD.toCharArray());
+		ks.load(new FileInputStream(KEYSTORE), PASSWORD);
         String alias = (String)ks.aliases().nextElement();
-        PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD.toCharArray());
+        PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD);
         Certificate[] chain = ks.getCertificateChain(alias);
 		C3_09_SignatureTypes app = new C3_09_SignatureTypes();
 		app.sign(pk, chain, SRC, String.format(DEST, 1), provider.getName(), "Test 1", "Ghent", PdfSignatureAppearance.NOT_CERTIFIED, DigestAlgorithms.SHA256, CryptoStandard.CMS);

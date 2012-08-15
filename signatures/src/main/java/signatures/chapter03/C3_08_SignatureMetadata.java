@@ -36,7 +36,7 @@ import com.itextpdf.text.pdf.security.PrivateKeySignature;
 public class C3_08_SignatureMetadata {
 
 	public static final String KEYSTORE = "src/main/resources/ks";
-	public static final String PASSWORD = "password";
+	public static final char[] PASSWORD = "password".toCharArray();
 	public static final String SRC = "src/main/resources/hello_to_sign.pdf";
 	public static final String DEST = "results/chapter3/field_metadata.pdf";
 	
@@ -72,9 +72,9 @@ public class C3_08_SignatureMetadata {
 		BouncyCastleProvider provider = new BouncyCastleProvider();
 		Security.addProvider(provider);
 		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-		ks.load(new FileInputStream(KEYSTORE), PASSWORD.toCharArray());
+		ks.load(new FileInputStream(KEYSTORE), PASSWORD);
         String alias = (String)ks.aliases().nextElement();
-        PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD.toCharArray());
+        PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD);
         Certificate[] chain = ks.getCertificateChain(alias);
 		C3_08_SignatureMetadata app = new C3_08_SignatureMetadata();
 		app.sign(pk, chain, SRC, "Signature1", String.format(DEST, 1), provider.getName(), "Test metadata", "Ghent", "555 123 456", new GregorianCalendar(2012, GregorianCalendar.AUGUST, 5), "Bruno L. Specimen", DigestAlgorithms.SHA256, CryptoStandard.CMS);
