@@ -19,6 +19,8 @@ import java.util.List;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+import sun.security.mscapi.SunMSCAPI;
+
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.log.LoggerFactory;
 import com.itextpdf.text.log.SysoLogger;
@@ -39,8 +41,10 @@ public class C4_10_SignWithToken extends C4_01_SignWithCAcert {
 	public static void main(String[] args) throws IOException, GeneralSecurityException, DocumentException {
 		LoggerFactory.getInstance().setLogger(new SysoLogger());
 		
-		BouncyCastleProvider provider = new BouncyCastleProvider();
-		Security.addProvider(provider);
+		BouncyCastleProvider providerBC = new BouncyCastleProvider();
+		SunMSCAPI providerMSCAPI = new SunMSCAPI();
+		Security.addProvider(providerBC);
+		Security.addProvider(providerMSCAPI);
         KeyStore ks = KeyStore.getInstance("Windows-MY");
 		ks.load(null, null);
         String alias = (String)ks.aliases().nextElement();
@@ -59,7 +63,7 @@ public class C4_10_SignWithToken extends C4_01_SignWithCAcert {
         List<CrlClient> crlList = new ArrayList<CrlClient>();
         crlList.add(new CrlClientOnline(chain));
         C4_10_SignWithToken app = new C4_10_SignWithToken();
-		app.sign(pk, chain, SRC, DEST, null, "Test", "Ghent",
+		app.sign(pk, chain, SRC, DEST, providerMSCAPI.getName(), "Test", "Ghent",
 				DigestAlgorithms.SHA256, CryptoStandard.CMS,
 				crlList, ocspClient, tsaClient, 0);
 	}
