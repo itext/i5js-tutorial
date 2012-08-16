@@ -43,9 +43,9 @@ import com.itextpdf.text.pdf.security.OcspClientBouncyCastle;
 import com.itextpdf.text.pdf.security.TSAClient;
 import com.itextpdf.text.pdf.security.TSAClientBouncyCastle;
 
-public class C5_11_SignWithPKCS11 extends C4_01_SignWithCAcert {
+public class C5_02_SignWithPKCS11USB extends C4_01_SignWithCAcert {
 	public static final String SRC = "src/main/resources/hello.pdf";
-	public static final String DEST = "results/chapter5/hello_token2.pdf";
+	public static final String DEST = "results/chapter5/hello_token.pdf";
 
 	public static void main(String[] args) throws IOException, GeneralSecurityException, DocumentException {
 
@@ -81,7 +81,7 @@ public class C5_11_SignWithPKCS11 extends C4_01_SignWithCAcert {
         }
         List<CrlClient> crlList = new ArrayList<CrlClient>();
         crlList.add(new CrlClientOnline(chain));
-        C5_11_SignWithPKCS11 app = new C5_11_SignWithPKCS11();
+        C5_02_SignWithPKCS11USB app = new C5_02_SignWithPKCS11USB();
 		app.sign(pk, chain, SRC, DEST, provider.getName(), "Test", "Ghent",
 				DigestAlgorithms.SHA256, CryptoStandard.CMS,
 				crlList, ocspClient, tsaClient, 0);

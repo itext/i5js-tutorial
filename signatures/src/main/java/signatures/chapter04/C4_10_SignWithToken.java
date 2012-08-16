@@ -42,8 +42,8 @@ public class C4_10_SignWithToken extends C4_01_SignWithCAcert {
 		LoggerFactory.getInstance().setLogger(new SysoLogger());
 		
 		BouncyCastleProvider providerBC = new BouncyCastleProvider();
-		SunMSCAPI providerMSCAPI = new SunMSCAPI();
 		Security.addProvider(providerBC);
+		SunMSCAPI providerMSCAPI = new SunMSCAPI();
 		Security.addProvider(providerMSCAPI);
         KeyStore ks = KeyStore.getInstance("Windows-MY");
 		ks.load(null, null);
