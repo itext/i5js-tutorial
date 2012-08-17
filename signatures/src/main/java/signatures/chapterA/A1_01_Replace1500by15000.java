@@ -7,7 +7,7 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 
-public class A1_01_Replace1500by1500 {
+public class A1_01_Replace1500by15000 {
 	
 	public static final String SCROOGE = "src/main/resources/ebenezer.pdf";
 	public static final String SCROOGED = "results/chapterA/ebenezer.pdf";
