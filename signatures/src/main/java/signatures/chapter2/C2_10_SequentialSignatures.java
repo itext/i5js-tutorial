@@ -31,7 +31,9 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfSignatureAppearance;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.security.BouncyCastleDigest;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
+import com.itextpdf.text.pdf.security.ExternalDigest;
 import com.itextpdf.text.pdf.security.MakeSignature;
 import com.itextpdf.text.pdf.security.MakeSignature.CryptoStandard;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
@@ -106,7 +108,8 @@ public class C2_10_SequentialSignatures {
         appearance.setCertificationLevel(level);
         // Creating the signature
         PrivateKeySignature pks = new PrivateKeySignature(pk, DigestAlgorithms.SHA256, "BC");
-        MakeSignature.signDetached(appearance, pks, chain, null, null, null, 0, CryptoStandard.CMS);
+        ExternalDigest digest = new BouncyCastleDigest();
+        MakeSignature.signDetached(appearance, digest, pks, chain, null, null, null, 0, CryptoStandard.CMS);
 	}
 	
 	public static void main(String[] args) throws IOException, DocumentException, GeneralSecurityException {

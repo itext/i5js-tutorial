@@ -23,7 +23,9 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfSignatureAppearance;
 import com.itextpdf.text.pdf.PdfStamper;
+import com.itextpdf.text.pdf.security.BouncyCastleDigest;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
+import com.itextpdf.text.pdf.security.ExternalDigest;
 import com.itextpdf.text.pdf.security.MakeSignature;
 import com.itextpdf.text.pdf.security.MakeSignature.CryptoStandard;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
@@ -51,7 +53,8 @@ public class C2_01_SignHelloWorld {
         appearance.setVisibleSignature(new Rectangle(36, 748, 144, 780), 1, "sig");
         // Creating the signature
         PrivateKeySignature pks = new PrivateKeySignature(pk, digestAlgorithm, provider);
-        MakeSignature.signDetached(appearance, pks, chain, null, null, null, 0, subfilter);
+        ExternalDigest digest = new BouncyCastleDigest();
+        MakeSignature.signDetached(appearance, digest, pks, chain, null, null, null, 0, subfilter);
 	}
 	
 	public static void main(String[] args) throws GeneralSecurityException, IOException, DocumentException {
