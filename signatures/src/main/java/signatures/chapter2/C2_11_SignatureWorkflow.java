@@ -144,7 +144,7 @@ public class C2_11_SignatureWorkflow {
         appearance.setCertificationLevel(PdfSignatureAppearance.CERTIFIED_FORM_FILLING);
         // Creating the signature
         PrivateKeySignature pks = new PrivateKeySignature(pk, DigestAlgorithms.SHA256, "BC");
-        MakeSignature.signDetached(appearance, pks, chain, null, null, null, "BC", 0, CryptoStandard.CMS);
+        MakeSignature.signDetached(appearance, pks, chain, null, null, null, 0, CryptoStandard.CMS);
 	}
 	
 	public void fillOut(String src, String dest, String name, String value) throws IOException, DocumentException {
@@ -173,7 +173,7 @@ public class C2_11_SignatureWorkflow {
         appearance.setVisibleSignature(name);
         // Creating the signature
         PrivateKeySignature pks = new PrivateKeySignature(pk, DigestAlgorithms.SHA256, "BC");
-        MakeSignature.signDetached(appearance, pks, chain, null, null, null, "BC", 0, CryptoStandard.CMS);
+        MakeSignature.signDetached(appearance, pks, chain, null, null, null, 0, CryptoStandard.CMS);
 	}
 	
 	public void fillOutAndSign(String keystore,
@@ -196,7 +196,7 @@ public class C2_11_SignatureWorkflow {
         appearance.setVisibleSignature(name);
         // Creating the signature
         PrivateKeySignature pks = new PrivateKeySignature(pk, DigestAlgorithms.SHA256, "BC");
-        MakeSignature.signDetached(appearance, pks, chain, null, null, null, "BC", 0, CryptoStandard.CMS);
+        MakeSignature.signDetached(appearance, pks, chain, null, null, null, 0, CryptoStandard.CMS);
 	}
 	
 	public static void main(String[] args) throws IOException, DocumentException, GeneralSecurityException {

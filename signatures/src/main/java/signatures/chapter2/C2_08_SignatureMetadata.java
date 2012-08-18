@@ -65,7 +65,7 @@ public class C2_08_SignatureMetadata {
         );
         // Creating the signature
         PrivateKeySignature pks = new PrivateKeySignature(pk, digestAlgorithm, provider);
-        MakeSignature.signDetached(appearance, pks, chain, null, null, null, provider, 0, subfilter);
+        MakeSignature.signDetached(appearance, pks, chain, null, null, null, 0, subfilter);
 	}
 	
 	public static void main(String[] args) throws GeneralSecurityException, IOException, DocumentException {

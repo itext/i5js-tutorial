@@ -64,7 +64,7 @@ public class C4_01_SignWithPKCS11HSM {
         appearance.setVisibleSignature(new Rectangle(36, 748, 144, 780), 1, "sig");
         // Creating the signature
         PrivateKeySignature pks = new PrivateKeySignature(pk, digestAlgorithm, provider);
-        MakeSignature.signDetached(appearance, pks, chain, crlList, ocspClient, tsaClient, provider, estimatedSize, subfilter);
+        MakeSignature.signDetached(appearance, pks, chain, crlList, ocspClient, tsaClient, estimatedSize, subfilter);
 	}
 	
 	public static void main(String[] args) throws IOException, GeneralSecurityException, DocumentException {

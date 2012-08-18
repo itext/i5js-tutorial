@@ -106,7 +106,7 @@ public class C2_10_SequentialSignatures {
         appearance.setCertificationLevel(level);
         // Creating the signature
         PrivateKeySignature pks = new PrivateKeySignature(pk, DigestAlgorithms.SHA256, "BC");
-        MakeSignature.signDetached(appearance, pks, chain, null, null, null, "BC", 0, CryptoStandard.CMS);
+        MakeSignature.signDetached(appearance, pks, chain, null, null, null, 0, CryptoStandard.CMS);
 	}
 	
 	public static void main(String[] args) throws IOException, DocumentException, GeneralSecurityException {

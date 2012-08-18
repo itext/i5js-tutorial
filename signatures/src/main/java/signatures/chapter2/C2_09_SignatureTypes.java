@@ -56,7 +56,7 @@ public class C2_09_SignatureTypes {
         appearance.setCertificationLevel(certificationLevel);
         // Creating the signature
         PrivateKeySignature pks = new PrivateKeySignature(pk, digestAlgorithm, provider);
-        MakeSignature.signDetached(appearance, pks, chain, null, null, null, provider, 0, subfilter);
+        MakeSignature.signDetached(appearance, pks, chain, null, null, null, 0, subfilter);
 	}
 	
 	public void addText(String src, String dest) throws IOException, DocumentException {
@@ -102,7 +102,7 @@ public class C2_09_SignatureTypes {
         appearance.setVisibleSignature(new Rectangle(36, 700, 144, 732), 1, "Signature2");
         // Creating the signature
         PrivateKeySignature pks = new PrivateKeySignature(pk, digestAlgorithm, provider);
-        MakeSignature.signDetached(appearance, pks, chain, null, null, null, provider, 0, subfilter);
+        MakeSignature.signDetached(appearance, pks, chain, null, null, null, 0, subfilter);
 	}
 	
 	public static void main(String[] args) throws GeneralSecurityException, IOException, DocumentException {

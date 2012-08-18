@@ -51,7 +51,7 @@ public class C2_01_SignHelloWorld {
         appearance.setVisibleSignature(new Rectangle(36, 748, 144, 780), 1, "sig");
         // Creating the signature
         PrivateKeySignature pks = new PrivateKeySignature(pk, digestAlgorithm, provider);
-        MakeSignature.signDetached(appearance, pks, chain, null, null, null, provider, 0, subfilter);
+        MakeSignature.signDetached(appearance, pks, chain, null, null, null, 0, subfilter);
 	}
 	
 	public static void main(String[] args) throws GeneralSecurityException, IOException, DocumentException {
