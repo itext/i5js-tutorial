@@ -105,6 +105,6 @@ public class C2_04_CreateEmptyField {
         PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD);
         Certificate[] chain = ks.getCertificateChain(alias);
     	C2_03_SignEmptyField appSign = new C2_03_SignEmptyField();
-        appSign.sign(pk, chain, UNSIGNED, SIGNAME, DEST, provider.getName(), "Test", "Ghent", DigestAlgorithms.SHA256, CryptoStandard.CMS);
+        appSign.sign(UNSIGNED, SIGNAME, DEST, chain, pk, DigestAlgorithms.SHA256, provider.getName(), CryptoStandard.CMS, "Test", "Ghent");
     }
 }

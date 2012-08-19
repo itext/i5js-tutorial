@@ -39,10 +39,10 @@ public class C3_01_SignWithCAcert {
 	public static final String SRC = "src/main/resources/hello.pdf";
 	public static final String DEST = "results/chapter3/hello_cacert.pdf";
 
-	public void sign(PrivateKey pk, Certificate[] chain,
-			String src, String dest, String provider,
+	public void sign(String src, String dest,
+			Certificate[] chain, PrivateKey pk,
+			String digestAlgorithm, String provider, CryptoStandard subfilter,
 			String reason, String location,
-			String digestAlgorithm, CryptoStandard subfilter,
 			Collection<CrlClient> crlList,
 			OcspClient ocspClient,
 			TSAClient tsaClient,
@@ -77,6 +77,6 @@ public class C3_01_SignWithCAcert {
         PrivateKey pk = (PrivateKey) ks.getKey(alias, pass);
         Certificate[] chain = ks.getCertificateChain(alias);
         C3_01_SignWithCAcert app = new C3_01_SignWithCAcert();
-		app.sign(pk, chain, SRC, DEST, provider.getName(), "Test", "Ghent", DigestAlgorithms.SHA256, CryptoStandard.CMS, null, null, null, 0);
+		app.sign(SRC, DEST, chain, pk, DigestAlgorithms.SHA256, provider.getName(), CryptoStandard.CMS, "Test", "Ghent", null, null, null, 0);
 	}
 }

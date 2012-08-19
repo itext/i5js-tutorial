@@ -39,10 +39,11 @@ public class C2_02_SignHelloWorldWithTempFile {
 	public static final String TEMP = "results/chapter2/";
 	public static final String DEST = "results/chapter2/hello_signed_with_temp.pdf";
 	
-	public void sign(PrivateKey pk, Certificate[] chain,
-			String src, String tmp, String dest, String provider,
-			String reason, String location,
-			String digestAlgorithm, CryptoStandard subfilter)
+	public void sign(String src, String tmp, String dest,
+			Certificate[] chain, PrivateKey pk,
+			String digestAlgorithm,  String provider,
+			CryptoStandard subfilter,
+			String reason, String location)
 					throws GeneralSecurityException, IOException, DocumentException {
         // Creating the reader and the stamper
         PdfReader reader = new PdfReader(src);
@@ -68,6 +69,6 @@ public class C2_02_SignHelloWorldWithTempFile {
         PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD);
         Certificate[] chain = ks.getCertificateChain(alias);
 		C2_02_SignHelloWorldWithTempFile app = new C2_02_SignHelloWorldWithTempFile();
-		app.sign(pk, chain, SRC, TEMP, DEST, provider.getName(), "Temp test", "Ghent", DigestAlgorithms.SHA256, CryptoStandard.CMS);
+		app.sign(SRC, TEMP, DEST, chain, pk, DigestAlgorithms.SHA256, provider.getName(), CryptoStandard.CMS, "Temp test", "Ghent");
 	}
 }

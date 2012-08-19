@@ -50,7 +50,7 @@ public class C3_04_SignWithCRLOnline extends C3_01_SignWithCAcert {
         List<CrlClient> crlList = new ArrayList<CrlClient>();
         crlList.add(crlClient);
         C3_04_SignWithCRLOnline app = new C3_04_SignWithCRLOnline();
-		app.sign(pk, chain, SRC, DEST, provider.getName(), "Test", "Ghent", DigestAlgorithms.SHA256, CryptoStandard.CMS,
+		app.sign(SRC, DEST, chain, pk, DigestAlgorithms.SHA256, provider.getName(), CryptoStandard.CMS, "Test", "Ghent",
 				crlList, null, null, 0);
 	}
   

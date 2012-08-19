@@ -26,7 +26,7 @@ import com.itextpdf.text.pdf.security.OcspClientBouncyCastle;
 import com.itextpdf.text.pdf.security.TSAClient;
 import com.itextpdf.text.pdf.security.TSAClientBouncyCastle;
 
-public class C3_11_SignWithEstimatedSize extends C3_01_SignWithCAcert {
+public class C3_12_SignWithEstimatedSize extends C3_01_SignWithCAcert {
 	public static final String SRC = "src/main/resources/hello.pdf";
 	public static final String DEST = "results/chapter3/hello_estimated.pdf";
 	
@@ -48,13 +48,13 @@ public class C3_11_SignWithEstimatedSize extends C3_01_SignWithCAcert {
         Certificate[] chain = ks.getCertificateChain(alias);
         OcspClient ocspClient = new OcspClientBouncyCastle();
         TSAClient tsaClient = new TSAClientBouncyCastle(tsaUrl, tsaUser, tsaPass);
-        C3_11_SignWithEstimatedSize app = new C3_11_SignWithEstimatedSize();
+        C3_12_SignWithEstimatedSize app = new C3_12_SignWithEstimatedSize();
         boolean succeeded = false;
         int estimatedSize = 10300;
         while (!succeeded) {
         	try {
         		System.out.println("Attempt: " + estimatedSize + " bytes");
-        		app.sign(pk, chain, SRC, DEST, provider.getName(), "Test", "Ghent", DigestAlgorithms.SHA256, CryptoStandard.CMS,
+        		app.sign(SRC, DEST, chain, pk, DigestAlgorithms.SHA256, provider.getName(), CryptoStandard.CMS, "Test", "Ghent", 
         				null, ocspClient, tsaClient, estimatedSize);
         		succeeded = true;
         		System.out.println("Succeeded!");

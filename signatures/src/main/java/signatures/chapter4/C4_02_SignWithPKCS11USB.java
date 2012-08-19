@@ -81,9 +81,8 @@ public class C4_02_SignWithPKCS11USB extends C4_01_SignWithPKCS11HSM {
         List<CrlClient> crlList = new ArrayList<CrlClient>();
         crlList.add(new CrlClientOnline(chain));
         C4_02_SignWithPKCS11USB app = new C4_02_SignWithPKCS11USB();
-		app.sign(pk, chain, SRC, DEST, provider.getName(), "Test", "Ghent",
-				DigestAlgorithms.SHA256, CryptoStandard.CMS,
-				crlList, ocspClient, tsaClient, 0);
+		app.sign(SRC, DEST, chain, pk, DigestAlgorithms.SHA256, provider.getName(), CryptoStandard.CMS,
+				"Test", "Ghent", crlList, ocspClient, tsaClient, 0);
 	}
 	
 	

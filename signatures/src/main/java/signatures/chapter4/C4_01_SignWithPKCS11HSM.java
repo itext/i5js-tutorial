@@ -46,10 +46,10 @@ public class C4_01_SignWithPKCS11HSM {
 	public static final String PROPS = "/home/itext/key.properties";
 	public static final String DEST = "/home/itext/hello_hsm.pdf";
 
-	public void sign(PrivateKey pk, Certificate[] chain,
-			String src, String dest, String provider,
+	public void sign(String src, String dest,
+			Certificate[] chain, PrivateKey pk,
+			String digestAlgorithm, String provider, CryptoStandard subfilter,
 			String reason, String location,
-			String digestAlgorithm, CryptoStandard subfilter,
 			Collection<CrlClient> crlList,
 			OcspClient ocspClient,
 			TSAClient tsaClient,
@@ -103,8 +103,7 @@ public class C4_01_SignWithPKCS11HSM {
         List<CrlClient> crlList = new ArrayList<CrlClient>();
         crlList.add(new CrlClientOnline(chain));
         C4_01_SignWithPKCS11HSM app = new C4_01_SignWithPKCS11HSM();
-		app.sign(pk, chain, SRC, DEST, providerPKCS11.getName(), "HSM test", "Ghent",
-				DigestAlgorithms.SHA256, CryptoStandard.CMS,
-				crlList, ocspClient, tsaClient, 0);
+		app.sign(SRC, DEST, chain, pk, DigestAlgorithms.SHA256, providerPKCS11.getName(), CryptoStandard.CMS,
+				"HSM test", "Ghent", crlList, ocspClient, tsaClient, 0);
 	}
 }

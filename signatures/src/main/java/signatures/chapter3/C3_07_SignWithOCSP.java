@@ -43,7 +43,7 @@ public class C3_07_SignWithOCSP extends C3_01_SignWithCAcert {
         Certificate[] chain = ks.getCertificateChain(alias);
         OcspClient ocspClient = new OcspClientBouncyCastle();
         C3_07_SignWithOCSP app = new C3_07_SignWithOCSP();
-		app.sign(pk, chain, SRC, DEST, provider.getName(), "Test", "Ghent", DigestAlgorithms.SHA256, CryptoStandard.CMS,
+		app.sign(SRC, DEST, chain, pk, DigestAlgorithms.SHA256, provider.getName(), CryptoStandard.CMS, "Test", "Ghent", 
 				null, ocspClient, null, 0);
 	}
   

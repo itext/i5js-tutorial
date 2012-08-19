@@ -40,10 +40,11 @@ public class C2_05_CustomAppearance {
 	public static final String SRC = "src/main/resources/hello_to_sign.pdf";
 	public static final String DEST = "results/chapter2/signature_custom.pdf";
 	
-	public void sign(PrivateKey pk, Certificate[] chain,
-			String src, String name, String dest, String provider,
-			String reason, String location,
-			String digestAlgorithm, CryptoStandard subfilter)
+	public void sign(String src, String name, String dest,
+			Certificate[] chain, PrivateKey pk,
+			String digestAlgorithm, String provider,
+			CryptoStandard subfilter,
+			String reason, String location)
 					throws GeneralSecurityException, IOException, DocumentException {
         // Creating the reader and the stamper
         PdfReader reader = new PdfReader(src);
@@ -86,8 +87,8 @@ public class C2_05_CustomAppearance {
         PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD);
         Certificate[] chain = ks.getCertificateChain(alias);
         C2_05_CustomAppearance app = new C2_05_CustomAppearance();
-        app.sign(pk, chain, SRC, "Signature1", DEST, provider.getName(),
-        		"Custom appearance example", "Ghent",
-        		DigestAlgorithms.SHA256, CryptoStandard.CMS);
+        app.sign(SRC, "Signature1", DEST, chain, pk,
+        		DigestAlgorithms.SHA256, provider.getName(), CryptoStandard.CMS,
+        		"Custom appearance example", "Ghent");
 	}
 }

@@ -41,10 +41,11 @@ public class C2_09_SignatureTypes {
 	public static final String SRC = "src/main/resources/hello.pdf";
 	public static final String DEST = "results/chapter2/hello_level_%s.pdf";
 	
-	public void sign(PrivateKey pk, Certificate[] chain,
-			String src, String dest, String provider,
-			String reason, String location, int certificationLevel,
-			String digestAlgorithm, CryptoStandard subfilter)
+	public void sign(String src, String dest,
+			Certificate[] chain, PrivateKey pk,
+			String digestAlgorithm, String provider,
+			CryptoStandard subfilter, int certificationLevel,
+			String reason, String location)
 					throws GeneralSecurityException, IOException, DocumentException {
         // Creating the reader and the stamper
         PdfReader reader = new PdfReader(src);
@@ -89,10 +90,10 @@ public class C2_09_SignatureTypes {
 		stamper.close();
 	}
 	
-	public void signAgain(PrivateKey pk, Certificate[] chain,
-			String src, String dest, String provider,
-			String reason, String location,
-			String digestAlgorithm, CryptoStandard subfilter)
+	public void signAgain(String src, String dest, Certificate[] chain, PrivateKey pk,
+			String digestAlgorithm, String provider,
+			CryptoStandard subfilter,
+			String reason, String location)
 					throws GeneralSecurityException, IOException, DocumentException {
         // Creating the reader and the stamper
         PdfReader reader = new PdfReader(src);
@@ -118,19 +119,19 @@ public class C2_09_SignatureTypes {
         PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD);
         Certificate[] chain = ks.getCertificateChain(alias);
 		C2_09_SignatureTypes app = new C2_09_SignatureTypes();
-		app.sign(pk, chain, SRC, String.format(DEST, 1), provider.getName(), "Test 1", "Ghent", PdfSignatureAppearance.NOT_CERTIFIED, DigestAlgorithms.SHA256, CryptoStandard.CMS);
-		app.sign(pk, chain, SRC, String.format(DEST, 2), provider.getName(), "Test 2", "Ghent", PdfSignatureAppearance.CERTIFIED_FORM_FILLING_AND_ANNOTATIONS, DigestAlgorithms.SHA256, CryptoStandard.CMS);
-		app.sign(pk, chain, SRC, String.format(DEST, 3), provider.getName(), "Test 3", "Ghent", PdfSignatureAppearance.CERTIFIED_FORM_FILLING, DigestAlgorithms.SHA256, CryptoStandard.CMS);
-		app.sign(pk, chain, SRC, String.format(DEST, 4), provider.getName(), "Test 4", "Ghent", PdfSignatureAppearance.CERTIFIED_NO_CHANGES_ALLOWED, DigestAlgorithms.SHA256, CryptoStandard.CMS);
+		app.sign(SRC, String.format(DEST, 1), chain, pk, DigestAlgorithms.SHA256, provider.getName(), CryptoStandard.CMS, PdfSignatureAppearance.NOT_CERTIFIED, "Test 1", "Ghent");
+		app.sign(SRC, String.format(DEST, 2), chain, pk, DigestAlgorithms.SHA256, provider.getName(), CryptoStandard.CMS, PdfSignatureAppearance.CERTIFIED_FORM_FILLING_AND_ANNOTATIONS, "Test 1", "Ghent");
+		app.sign(SRC, String.format(DEST, 3), chain, pk, DigestAlgorithms.SHA256, provider.getName(), CryptoStandard.CMS, PdfSignatureAppearance.CERTIFIED_FORM_FILLING, "Test 1", "Ghent");
+		app.sign(SRC, String.format(DEST, 4), chain, pk, DigestAlgorithms.SHA256, provider.getName(), CryptoStandard.CMS, PdfSignatureAppearance.CERTIFIED_NO_CHANGES_ALLOWED, "Test 1", "Ghent");
 		app.addWrongAnnotation(String.format(DEST, 1), String.format(DEST, "1_annotated_wrong"));
 		app.addAnnotation(String.format(DEST, 1), String.format(DEST, "1_annotated"));
 		app.addAnnotation(String.format(DEST, 2), String.format(DEST, "2_annotated"));
 		app.addAnnotation(String.format(DEST, 3), String.format(DEST, "3_annotated"));
 		app.addAnnotation(String.format(DEST, 4), String.format(DEST, "4_annotated"));
 		app.addText(String.format(DEST, 1), String.format(DEST, "1_text"));
-		app.signAgain(pk, chain, String.format(DEST, 1), String.format(DEST, "1_double"), provider.getName(), "Second signature test", "Gent", DigestAlgorithms.SHA256, CryptoStandard.CMS);
-		app.signAgain(pk, chain, String.format(DEST, 2), String.format(DEST, "2_double"), provider.getName(), "Second signature test", "Gent", DigestAlgorithms.SHA256, CryptoStandard.CMS);
-		app.signAgain(pk, chain, String.format(DEST, 3), String.format(DEST, "3_double"), provider.getName(), "Second signature test", "Gent", DigestAlgorithms.SHA256, CryptoStandard.CMS);
-		app.signAgain(pk, chain, String.format(DEST, 4), String.format(DEST, "4_double"), provider.getName(), "Second signature test", "Gent", DigestAlgorithms.SHA256, CryptoStandard.CMS);
+		app.signAgain(String.format(DEST, 1), String.format(DEST, "1_double"), chain, pk, DigestAlgorithms.SHA256, provider.getName(), CryptoStandard.CMS, "Second signature test", "Gent");
+		app.signAgain(String.format(DEST, 2), String.format(DEST, "2_double"), chain, pk, DigestAlgorithms.SHA256, provider.getName(), CryptoStandard.CMS, "Second signature test", "Gent");
+		app.signAgain(String.format(DEST, 3), String.format(DEST, "3_double"), chain, pk, DigestAlgorithms.SHA256, provider.getName(), CryptoStandard.CMS, "Second signature test", "Gent");
+		app.signAgain(String.format(DEST, 4), String.format(DEST, "4_double"), chain, pk, DigestAlgorithms.SHA256, provider.getName(), CryptoStandard.CMS, "Second signature test", "Gent");
 	}
 }

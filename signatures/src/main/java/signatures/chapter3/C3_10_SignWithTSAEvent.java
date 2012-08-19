@@ -1,10 +1,3 @@
-/*
- * This class is part of the white paper entitled
- * "Digital Signatures for PDF documents"
- * written by Bruno Lowagie
- * 
- * For more info, go to: http://itextpdf.com/sales
- */
 package signatures.chapter3;
 
 import java.io.FileInputStream;
@@ -17,16 +10,17 @@ import java.security.cert.Certificate;
 import java.util.Properties;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.tsp.TimeStampTokenInfo;
 
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
-import com.itextpdf.text.pdf.security.MakeSignature.CryptoStandard;
 import com.itextpdf.text.pdf.security.OcspClient;
 import com.itextpdf.text.pdf.security.OcspClientBouncyCastle;
-import com.itextpdf.text.pdf.security.TSAClient;
 import com.itextpdf.text.pdf.security.TSAClientBouncyCastle;
+import com.itextpdf.text.pdf.security.MakeSignature.CryptoStandard;
+import com.itextpdf.text.pdf.security.TSAInfoBouncyCastle;
 
-public class C3_09_SignWithTSA extends C3_01_SignWithCAcert {
+public class C3_10_SignWithTSAEvent extends C3_01_SignWithCAcert {
 	public static final String SRC = "src/main/resources/hello.pdf";
 	public static final String DEST = "results/chapter3/hello_cacert_ocsp_ts.pdf";
 	
@@ -47,10 +41,13 @@ public class C3_09_SignWithTSA extends C3_01_SignWithCAcert {
         PrivateKey pk = (PrivateKey) ks.getKey(alias, pass);
         Certificate[] chain = ks.getCertificateChain(alias);
         OcspClient ocspClient = new OcspClientBouncyCastle();
-        TSAClient tsaClient = new TSAClientBouncyCastle(tsaUrl, tsaUser, tsaPass);
+        TSAClientBouncyCastle tsaClient = new TSAClientBouncyCastle(tsaUrl, tsaUser, tsaPass);
+        tsaClient.setTSAInfo(new TSAInfoBouncyCastle() {
+			public void inspectTimeStampTokenInfo(TimeStampTokenInfo info) {
+				System.out.println(info.getGenTime());
+			}});
         C3_09_SignWithTSA app = new C3_09_SignWithTSA();
 		app.sign(SRC, DEST, chain, pk, DigestAlgorithms.SHA256, provider.getName(), CryptoStandard.CMS, "Test", "Ghent", 
 				null, ocspClient, tsaClient, 0);
 	}
-  
 }

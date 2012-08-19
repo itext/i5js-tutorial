@@ -49,7 +49,7 @@ public class C3_03_SignWithCRLDefaultImp extends C3_01_SignWithCAcert {
         List<CrlClient> crlList = new ArrayList<CrlClient>();
         crlList.add(new CrlClientOnline());
         C3_03_SignWithCRLDefaultImp app = new C3_03_SignWithCRLDefaultImp();
-		app.sign(pk, chain, SRC, DEST, provider.getName(), "Test", "Ghent", DigestAlgorithms.SHA256, CryptoStandard.CMS,
+		app.sign(SRC, DEST, chain, pk, DigestAlgorithms.SHA256, provider.getName(), CryptoStandard.CMS, "Test", "Ghent",
 				crlList, null, null, 0);
 	}
   

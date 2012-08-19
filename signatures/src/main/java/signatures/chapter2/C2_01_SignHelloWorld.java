@@ -26,6 +26,7 @@ import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.security.BouncyCastleDigest;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import com.itextpdf.text.pdf.security.ExternalDigest;
+import com.itextpdf.text.pdf.security.ExternalSignature;
 import com.itextpdf.text.pdf.security.MakeSignature;
 import com.itextpdf.text.pdf.security.MakeSignature.CryptoStandard;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
@@ -37,10 +38,11 @@ public class C2_01_SignHelloWorld {
 	public static final String SRC = "src/main/resources/hello.pdf";
 	public static final String DEST = "results/chapter2/hello_signed%s.pdf";
 	
-	public void sign(PrivateKey pk, Certificate[] chain,
-			String src, String dest, String provider,
-			String reason, String location,
-			String digestAlgorithm, CryptoStandard subfilter)
+	public void sign(String src, String dest,
+			Certificate[] chain,
+			PrivateKey pk, String digestAlgorithm, String provider,
+			CryptoStandard subfilter,
+			String reason, String location)
 					throws GeneralSecurityException, IOException, DocumentException {
         // Creating the reader and the stamper
         PdfReader reader = new PdfReader(src);
@@ -52,9 +54,9 @@ public class C2_01_SignHelloWorld {
         appearance.setLocation(location);
         appearance.setVisibleSignature(new Rectangle(36, 748, 144, 780), 1, "sig");
         // Creating the signature
-        PrivateKeySignature pks = new PrivateKeySignature(pk, digestAlgorithm, provider);
         ExternalDigest digest = new BouncyCastleDigest();
-        MakeSignature.signDetached(appearance, digest, pks, chain, null, null, null, 0, subfilter);
+        ExternalSignature signature = new PrivateKeySignature(pk, digestAlgorithm, provider);
+        MakeSignature.signDetached(appearance, digest, signature, chain, null, null, null, 0, subfilter);
 	}
 	
 	public static void main(String[] args) throws GeneralSecurityException, IOException, DocumentException {
@@ -66,9 +68,9 @@ public class C2_01_SignHelloWorld {
         PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD);
         Certificate[] chain = ks.getCertificateChain(alias);
 		C2_01_SignHelloWorld app = new C2_01_SignHelloWorld();
-		app.sign(pk, chain, SRC, String.format(DEST, 1), provider.getName(), "Test 1", "Ghent", DigestAlgorithms.SHA256, CryptoStandard.CMS);
-		app.sign(pk, chain, SRC, String.format(DEST, 2), provider.getName(), "Test 2", "Ghent", DigestAlgorithms.SHA512, CryptoStandard.CMS);
-		app.sign(pk, chain, SRC, String.format(DEST, 3), provider.getName(), "Test 3", "Ghent", DigestAlgorithms.SHA256, CryptoStandard.CADES);
-		app.sign(pk, chain, SRC, String.format(DEST, 4), provider.getName(), "Test 4", "Ghent", DigestAlgorithms.RIPEMD160, CryptoStandard.CADES);
+		app.sign(SRC, String.format(DEST, 1), chain, pk, DigestAlgorithms.SHA256, provider.getName(), CryptoStandard.CMS, "Test 1", "Ghent");
+		app.sign(SRC, String.format(DEST, 2), chain, pk, DigestAlgorithms.SHA512, provider.getName(), CryptoStandard.CMS, "Test 2", "Ghent");
+		app.sign(SRC, String.format(DEST, 3), chain, pk, DigestAlgorithms.SHA256, provider.getName(), CryptoStandard.CADES, "Test 3", "Ghent");
+		app.sign(SRC, String.format(DEST, 4), chain, pk, DigestAlgorithms.RIPEMD160, provider.getName(), CryptoStandard.CADES, "Test 4", "Ghent");
 	}
 }

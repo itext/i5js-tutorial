@@ -42,10 +42,12 @@ public class C2_08_SignatureMetadata {
 	public static final String SRC = "src/main/resources/hello_to_sign.pdf";
 	public static final String DEST = "results/chapter2/field_metadata.pdf";
 	
-	public void sign(PrivateKey pk, Certificate[] chain,
-			String src, String name, String dest, String provider,
+	public void sign(String src, String name, String dest,
+			Certificate[] chain, PrivateKey pk,
+			String digestAlgorithm, String provider,
+			CryptoStandard subfilter,
 			String reason, String location, String contact, Calendar signDate,
-			final String fullName, String digestAlgorithm, CryptoStandard subfilter)
+			final String fullName)
 					throws GeneralSecurityException, IOException, DocumentException {
         // Creating the reader and the stamper
         PdfReader reader = new PdfReader(src);
@@ -80,6 +82,6 @@ public class C2_08_SignatureMetadata {
         PrivateKey pk = (PrivateKey) ks.getKey(alias, PASSWORD);
         Certificate[] chain = ks.getCertificateChain(alias);
 		C2_08_SignatureMetadata app = new C2_08_SignatureMetadata();
-		app.sign(pk, chain, SRC, "Signature1", String.format(DEST, 1), provider.getName(), "Test metadata", "Ghent", "555 123 456", new GregorianCalendar(2012, GregorianCalendar.AUGUST, 5), "Bruno L. Specimen", DigestAlgorithms.SHA256, CryptoStandard.CMS);
+		app.sign(SRC, "Signature1", String.format(DEST, 1), chain, pk, DigestAlgorithms.SHA256, provider.getName(), CryptoStandard.CMS, "Test metadata", "Ghent", "555 123 456", new GregorianCalendar(2012, GregorianCalendar.AUGUST, 5), "Bruno L. Specimen");
 	}
 }
