@@ -30,6 +30,7 @@ import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.security.BouncyCastleDigest;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import com.itextpdf.text.pdf.security.ExternalDigest;
+import com.itextpdf.text.pdf.security.ExternalSignature;
 import com.itextpdf.text.pdf.security.MakeSignature;
 import com.itextpdf.text.pdf.security.MakeSignature.CryptoStandard;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
@@ -58,7 +59,7 @@ public class C2_09_SignatureTypes {
         appearance.setVisibleSignature(new Rectangle(36, 748, 144, 780), 1, "sig");
         appearance.setCertificationLevel(certificationLevel);
         // Creating the signature
-        PrivateKeySignature pks = new PrivateKeySignature(pk, digestAlgorithm, provider);
+        ExternalSignature pks = new PrivateKeySignature(pk, digestAlgorithm, provider);
         ExternalDigest digest = new BouncyCastleDigest();
         MakeSignature.signDetached(appearance, digest, pks, chain, null, null, null, 0, subfilter);
 	}
@@ -105,7 +106,7 @@ public class C2_09_SignatureTypes {
         appearance.setLocation(location);
         appearance.setVisibleSignature(new Rectangle(36, 700, 144, 732), 1, "Signature2");
         // Creating the signature
-        PrivateKeySignature pks = new PrivateKeySignature(pk, digestAlgorithm, provider);
+        ExternalSignature pks = new PrivateKeySignature(pk, digestAlgorithm, provider);
         ExternalDigest digest = new BouncyCastleDigest();
         MakeSignature.signDetached(appearance, digest, pks, chain, null, null, null, 0, subfilter);
 	}

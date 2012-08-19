@@ -54,14 +54,15 @@ public class C4_02_SignWithPKCS11USB extends C4_01_SignWithPKCS11HSM {
 		properties.load(new FileInputStream("c:/home/blowagie/key.properties"));
         char[] pass = properties.getProperty("PASSWORD").toCharArray();
 
-		String config = "name=Safenetikey2032\n" +
+		String config = "name=ikey4000\n" +
 				"library=c:/windows/system32/dkck201.dll\n" +
 				"slotListIndex = " + getSlotsWithTokens()[0];
 		ByteArrayInputStream bais = new ByteArrayInputStream(config.getBytes());
-		Provider provider = new SunPKCS11(bais);
-        Security.addProvider(provider);
-		BouncyCastleProvider provider2 = new BouncyCastleProvider();
-		Security.addProvider(provider2);
+		Provider providerPKCS11 = new SunPKCS11(bais);
+        Security.addProvider(providerPKCS11);
+        System.out.println(providerPKCS11.getName());
+		BouncyCastleProvider providerBC = new BouncyCastleProvider();
+		Security.addProvider(providerBC);
         
         KeyStore ks = KeyStore.getInstance("PKCS11");
 		ks.load(null, pass);
@@ -81,7 +82,7 @@ public class C4_02_SignWithPKCS11USB extends C4_01_SignWithPKCS11HSM {
         List<CrlClient> crlList = new ArrayList<CrlClient>();
         crlList.add(new CrlClientOnline(chain));
         C4_02_SignWithPKCS11USB app = new C4_02_SignWithPKCS11USB();
-		app.sign(SRC, DEST, chain, pk, DigestAlgorithms.SHA256, provider.getName(), CryptoStandard.CMS,
+		app.sign(SRC, DEST, chain, pk, DigestAlgorithms.SHA256, providerPKCS11.getName(), CryptoStandard.CMS,
 				"Test", "Ghent", crlList, ocspClient, tsaClient, 0);
 	}
 	
