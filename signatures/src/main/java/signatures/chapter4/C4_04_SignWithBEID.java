@@ -14,7 +14,6 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import com.itextpdf.smartcard.CardReaders;
 import com.itextpdf.smartcard.EidSignature;
-import com.itextpdf.smartcard.PinDialog;
 import com.itextpdf.smartcard.SmartCardWithKey;
 import com.itextpdf.smartcard.beid.BeIDCard;
 import com.itextpdf.smartcard.beid.BeIDCertificates;
@@ -60,7 +59,7 @@ public class C4_04_SignWithBEID {
         appearance.setLocation(location);
         appearance.setVisibleSignature(new Rectangle(36, 748, 144, 780), 1, "sig");
         // Creating the signature
-        ExternalSignature eid = new EidSignature(card, "SHA256", "RSA", "BC");
+        ExternalSignature eid = new EidSignature(card, "SHA256", "BC");
         ExternalDigest digest = new BouncyCastleDigest();
         MakeSignature.signDetached(appearance, digest, eid, chain, crlList, ocspClient, tsaClient, estimatedSize, subfilter);
 	}
@@ -72,8 +71,8 @@ public class C4_04_SignWithBEID {
 		Security.addProvider(provider);
 		
 		CardReaders readers = new CardReaders();
-		BeIDCard card = new BeIDCard(readers.getReadersWithCard().get(0));
-		card.setPinProvider(new PinDialog());
+		SmartCardWithKey card = new BeIDCard(readers.getReadersWithCard().get(0));
+		card.setSecure(true);
 		Certificate[] chain = BeIDCertificates.getSignCertificateChain(card);
 		Collection<CrlClient> crlList = new ArrayList<CrlClient>();
 		crlList.add(new CrlClientOnline(chain));

@@ -37,7 +37,7 @@ public class C4_03_InspectBEID {
 			fos.flush();
 			fos.close();
 			
-			card.setPinProvider(new PinDialog());
+			card.setPinProvider(new PinDialog(4));
 			System.out.println(new String(card.sign("ABCD".getBytes(), "SHA-1")));
 		}
 	} 
