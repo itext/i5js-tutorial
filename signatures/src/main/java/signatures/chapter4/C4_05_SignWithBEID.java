@@ -35,7 +35,7 @@ import com.itextpdf.text.pdf.security.OcspClientBouncyCastle;
 import com.itextpdf.text.pdf.security.TSAClient;
 import com.itextpdf.text.pdf.security.MakeSignature.CryptoStandard;
 
-public class C4_04_SignWithBEID {
+public class C4_05_SignWithBEID {
 
 	public static final String SRC = "src/main/resources/hello.pdf";
 	public static final String DEST = "results/chapter4/hello_beid.pdf";
@@ -77,7 +77,7 @@ public class C4_04_SignWithBEID {
 		Collection<CrlClient> crlList = new ArrayList<CrlClient>();
 		crlList.add(new CrlClientOnline(chain));
         OcspClient ocspClient = new OcspClientBouncyCastle();
-		C4_04_SignWithBEID app = new C4_04_SignWithBEID();
+		C4_05_SignWithBEID app = new C4_05_SignWithBEID();
 		app.sign(SRC, DEST, card, chain, CryptoStandard.CMS,
 				"Test", "Ghent", crlList, ocspClient, null, 0);
 	}

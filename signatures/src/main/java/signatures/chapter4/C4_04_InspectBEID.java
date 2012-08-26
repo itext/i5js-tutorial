@@ -14,7 +14,7 @@ import com.itextpdf.smartcard.beid.pojos.AddressPojo;
 import com.itextpdf.smartcard.beid.pojos.IdentityPojo;
 import com.itextpdf.smartcard.beid.pojos.PhotoPojo;
 
-public class C4_03_InspectBEID {
+public class C4_04_InspectBEID {
 
 	public static final String PHOTO = "results/chapter4/photo.jpg"; 
 	
