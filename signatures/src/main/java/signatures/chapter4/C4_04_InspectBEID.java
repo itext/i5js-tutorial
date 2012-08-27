@@ -7,8 +7,7 @@ import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
 
 import com.itextpdf.smartcard.CardReaders;
-import com.itextpdf.smartcard.PinDialog;
-import com.itextpdf.smartcard.beid.BeIDCard;
+import com.itextpdf.smartcard.SmartCard;
 import com.itextpdf.smartcard.beid.BeIDFileFactory;
 import com.itextpdf.smartcard.beid.pojos.AddressPojo;
 import com.itextpdf.smartcard.beid.pojos.IdentityPojo;
@@ -25,20 +24,16 @@ public class C4_04_InspectBEID {
 		}
 		for (CardTerminal terminal : readers.getReadersWithCard()) {
 			System.out.println(terminal.getName());
-			BeIDCard card = new BeIDCard(terminal);
+			SmartCard card = new SmartCard(terminal);
 			IdentityPojo id = BeIDFileFactory.getIdentity(card);
 			System.out.println(id.toString());
 			AddressPojo address = BeIDFileFactory.getAddress(card);
 			System.out.println(address);
 			PhotoPojo photo = BeIDFileFactory.getPhoto(card);
-			card.getFeature((byte) 0x01);
-			FileOutputStream fos = new FileOutputStream("smartcard.jpg");
+			FileOutputStream fos = new FileOutputStream(PHOTO);
 			fos.write(photo.getPhoto());
 			fos.flush();
 			fos.close();
-			
-			card.setPinProvider(new PinDialog(4));
-			System.out.println(new String(card.sign("ABCD".getBytes(), "SHA-1")));
 		}
 	} 
 }
