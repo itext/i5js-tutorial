@@ -12,6 +12,7 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.ExceptionConverter;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfSignatureAppearance;
@@ -27,11 +28,12 @@ public class C4_07_ClientServerSigning {
 
 	public static final String SRC = "src/main/resources/hello.pdf";
 	public static final String DEST = "results/chapter4/hello_server.pdf";
+
 	public static final String CERT = "http://demo.itextsupport.com/SigningApp/itextpdf.cer";
-	public static final String SIGN = "http://demo.itextsupport.com/SigningApp/signbytes";
 	
 	public class ServerSignature implements ExternalSignature {
-
+		public static final String SIGN = "http://demo.itextsupport.com/SigningApp/signbytes";
+		
 		public String getHashAlgorithm() {
 			return DigestAlgorithms.SHA256;
 		}
@@ -61,7 +63,7 @@ public class C4_07_ClientServerSigning {
 			    is.close();
 				return baos.toByteArray();
 			} catch (IOException e) {
-				return new byte[]{};
+				throw new ExceptionConverter(e);
 			}
 		}
 		
@@ -93,6 +95,6 @@ public class C4_07_ClientServerSigning {
 		Certificate[] chain = new Certificate[1];
 		chain[0] = factory.generateCertificate(certUrl.openStream());
 		C4_07_ClientServerSigning app = new C4_07_ClientServerSigning();
-		app.sign(SRC, DEST, chain, CryptoStandard.CMS, "Test 1", "Ghent");
+		app.sign(SRC, DEST, chain, CryptoStandard.CMS, "Test", "Ghent");
 	}
 }
