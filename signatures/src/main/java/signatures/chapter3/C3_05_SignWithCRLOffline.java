@@ -15,6 +15,8 @@ import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.Security;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509CRL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -31,7 +33,7 @@ import com.itextpdf.text.pdf.security.MakeSignature.CryptoStandard;
 
 public class C3_05_SignWithCRLOffline extends C3_01_SignWithCAcert {
 	public static final String SRC = "src/main/resources/hello.pdf";
-	public static final String CRL = "src/main/resources/revoke.crl";
+	public static final String CRLURL = "src/main/resources/revoke.crl";
 	public static final String DEST = "results/chapter3/hello_cacert_crl_offline.pdf";
 	
 	public static void main(String[] args) throws IOException, GeneralSecurityException, DocumentException {
@@ -48,11 +50,16 @@ public class C3_05_SignWithCRLOffline extends C3_01_SignWithCAcert {
         String alias = (String)ks.aliases().nextElement();
         PrivateKey pk = (PrivateKey) ks.getKey(alias, pass);
         Certificate[] chain = ks.getCertificateChain(alias);
-        FileInputStream is = new FileInputStream(CRL);
+        FileInputStream is = new FileInputStream(CRLURL);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] buf = new byte[1024];
         while (is.read(buf) != -1) baos.write(buf);
         CrlClient crlClient = new CrlClientOffline(baos.toByteArray());
+        
+        CertificateFactory cf = CertificateFactory.getInstance("X.509");
+        X509CRL crl = (X509CRL)cf.generateCRL(new FileInputStream(CRLURL));
+        System.out.println(crl.getNextUpdate());
+        
         List<CrlClient> crlList = new ArrayList<CrlClient>();
         crlList.add(crlClient);
         C3_05_SignWithCRLOffline app = new C3_05_SignWithCRLOffline();
