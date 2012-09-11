@@ -18,14 +18,14 @@ import com.itextpdf.text.pdf.security.CertificateVerification;
 import com.itextpdf.text.pdf.security.PdfPKCS7;
 
 public class C5_01_SignatureInfo {
-
 	public static final String EXAMPLE1 = "results/chapter2/step_4_signed_by_alice_bob_carol_and_dave.pdf";
-	public static final String EXAMPLE2 = "results/chapter2/step_5_signed_by_alice_and_bob_broken_by_chuck.pdf";
-	public static final String EXAMPLE3 = "results/chapter2/step_6_signed_by_dave_broken_by_chuck.pdf";
-	public static final String EXAMPLE4 = "results/chapter3/hello_cacert_ocsp_ts.pdf";
-	public static final String EXAMPLE5 = "results/chapter3/hello_token.pdf";
-	public static final String EXAMPLE6 = "results/chapter4/hello_smartcard_Authentication.pdf";
-	public static final String EXAMPLE7 = "results/chapter4/hello_smartcard_Signature.pdf";
+	public static final String EXAMPLE2 = "results/chapter2/hello_level_1_annotated_wrong.pdf";
+	public static final String EXAMPLE3 = "results/chapter2/step_5_signed_by_alice_and_bob_broken_by_chuck.pdf";
+	public static final String EXAMPLE4 = "results/chapter2/step_6_signed_by_dave_broken_by_chuck.pdf";
+	public static final String EXAMPLE5 = "results/chapter3/hello_cacert_ocsp_ts.pdf";
+	public static final String EXAMPLE6 = "results/chapter3/hello_token.pdf";
+	public static final String EXAMPLE7 = "results/chapter4/hello_smartcard_Authentication.pdf";
+	public static final String EXAMPLE8 = "results/chapter4/hello_smartcard_Signature.pdf";
 
 	public void verifySignature(AcroFields fields, String name) throws GeneralSecurityException, IOException {
 		System.out.println("Signature covers whole document: " + fields.signatureCoversWholeDocument(name));
@@ -78,5 +78,6 @@ public class C5_01_SignatureInfo {
 		app.verifySignatures(EXAMPLE5);
 		app.verifySignatures(EXAMPLE6);
 		app.verifySignatures(EXAMPLE7);
+		app.verifySignatures(EXAMPLE8);
 	}
 }
