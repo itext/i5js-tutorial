@@ -9,15 +9,21 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import org.bouncycastle.cert.ocsp.BasicOCSPResp;
+import org.bouncycastle.cert.ocsp.CertificateStatus;
+import org.bouncycastle.cert.ocsp.SingleResp;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+import com.itextpdf.text.log.LoggerFactory;
+import com.itextpdf.text.log.SysoLogger;
 import com.itextpdf.text.pdf.AcroFields;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.security.CertificateInfo;
 import com.itextpdf.text.pdf.security.CertificateVerification;
+import com.itextpdf.text.pdf.security.OcspClientBouncyCastle;
 import com.itextpdf.text.pdf.security.PdfPKCS7;
 
-public class C5_01_SignatureInfo {
+public class C5_03_SignatureValidation {
 	public static final String EXAMPLE1 = "results/chapter2/step_4_signed_by_alice_bob_carol_and_dave.pdf";
 	public static final String EXAMPLE2 = "results/chapter2/hello_level_1_annotated_wrong.pdf";
 	public static final String EXAMPLE3 = "results/chapter2/step_5_signed_by_alice_and_bob_broken_by_chuck.pdf";
@@ -33,7 +39,7 @@ public class C5_01_SignatureInfo {
         PdfPKCS7 pkcs7 = fields.verifySignature(name);
         System.out.println("Subject: " + CertificateInfo.getSubjectFields(pkcs7.getSigningCertificate()));
         System.out.println("Revision modified: " + !pkcs7.verify());
-        Certificate[] certs = pkcs7.getCertificates();
+        Certificate[] certs = pkcs7.getSignCertificateChain();
         KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
         ks.load(null, null);
         for (int i = 0; i < certs.length; i++) {
@@ -48,6 +54,28 @@ public class C5_01_SignatureInfo {
             System.out.println("Certificates verified against the KeyStore");
         else
         	System.out.println("Certificate failed: " + fails[1]);  
+        if (certs.length > 1) {
+        	OcspClientBouncyCastle ocsp = new OcspClientBouncyCastle();
+        	BasicOCSPResp ocspResp = ocsp.getBasicOCSPResp((X509Certificate)certs[0], (X509Certificate)certs[1], null);
+        	if (ocspResp == null) {
+        		System.out.println("NO OCSP");
+        	}
+        	else {
+        		SingleResp[] resp = ocspResp.getResponses();
+        		for (int i = 0; i < resp.length; i++) {
+        			Object status = resp[i].getCertStatus();
+                    if (status == CertificateStatus.GOOD) {
+                    	System.out.println("OCSP Status: GOOD");
+                    }
+                    else if (status instanceof org.bouncycastle.ocsp.RevokedStatus) {
+                    	System.out.println("OCSP Status: REVOKED");
+                    }
+                    else {
+                    	System.out.println("OCSP Status: UNKNOWN");
+                    }
+        		}
+        	}
+        }
 	}
 	
 	public void showCertificateInfo(X509Certificate cert) {
@@ -68,9 +96,10 @@ public class C5_01_SignatureInfo {
 	}
 	
 	public static void main(String[] args) throws IOException, GeneralSecurityException {
+		LoggerFactory.getInstance().setLogger(new SysoLogger());
 		BouncyCastleProvider provider = new BouncyCastleProvider();
 		Security.addProvider(provider);
-		C5_01_SignatureInfo app = new C5_01_SignatureInfo();
+		C5_03_SignatureValidation app = new C5_03_SignatureValidation();
 		app.verifySignatures(EXAMPLE1);
 		app.verifySignatures(EXAMPLE2);
 		app.verifySignatures(EXAMPLE3);

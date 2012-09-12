@@ -63,7 +63,7 @@ public class C3_11_SignWithToken extends C3_01_SignWithCAcert {
         List<CrlClient> crlList = new ArrayList<CrlClient>();
         crlList.add(new CrlClientOnline(chain));
         C3_11_SignWithToken app = new C3_11_SignWithToken();
-		app.sign(SRC, DEST, chain, pk, DigestAlgorithms.SHA256, providerMSCAPI.getName(), CryptoStandard.CMS, "Test", "Ghent",
+		app.sign(SRC, DEST, chain, pk, DigestAlgorithms.SHA384, providerMSCAPI.getName(), CryptoStandard.CMS, "Test", "Ghent",
 				crlList, ocspClient, tsaClient, 0);
 	}
 }
