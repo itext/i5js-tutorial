@@ -3,17 +3,20 @@ package signatures.chapter5;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.Security;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.tsp.TimeStampToken;
 
 import com.itextpdf.text.log.LoggerFactory;
 import com.itextpdf.text.log.SysoLogger;
 import com.itextpdf.text.pdf.AcroFields;
-import com.itextpdf.text.pdf.PdfArray;
 import com.itextpdf.text.pdf.PdfDictionary;
-import com.itextpdf.text.pdf.PdfName;
-import com.itextpdf.text.pdf.PdfNumber;
+import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.security.PdfPKCS7;
+import com.itextpdf.text.pdf.security.SignaturePermissions;
+import com.itextpdf.text.pdf.security.SignaturePermissions.FieldLock;
 
 public class C5_02_SignatureInfo extends C5_01_SignatureIntegrity {
 	public static final String EXAMPLE1 = "results/chapter2/step_4_signed_by_alice_bob_carol_and_dave.pdf";
@@ -21,62 +24,46 @@ public class C5_02_SignatureInfo extends C5_01_SignatureIntegrity {
 	public static final String EXAMPLE3 = "results/chapter3/hello_token.pdf";
 	public static final String EXAMPLE4 = "results/chapter2/hello_signed4.pdf";
 	public static final String EXAMPLE5 = "results/chapter4/hello_smartcard_Signature.pdf";
+	public static final String EXAMPLE6 = "results/chapter2/field_metadata.pdf";
 
-	public PdfPKCS7 verifySignature(AcroFields fields, String name) throws GeneralSecurityException, IOException {
+	public SignaturePermissions inspectSignature(AcroFields fields, String name, SignaturePermissions perms) throws GeneralSecurityException, IOException {
 		PdfPKCS7 pkcs7 = super.verifySignature(fields, name);
 		System.out.println("Digest algorithm: " + pkcs7.getHashAlgorithm());
 		System.out.println("Encryption algorithm: " + pkcs7.getEncryptionAlgorithm());
 		System.out.println("Filter subtype: " + pkcs7.getFilterSubtype());
+		if (pkcs7.getSignName() != null)
+			System.out.println("Name of the signer: " + pkcs7.getSignName());
+		SimpleDateFormat date_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SS");
+		System.out.println("Signed on: " + date_format.format(pkcs7.getSignDate().getTime()));
+		if (pkcs7.getTimeStampDate() != null) {
+			System.out.println("TimeStamp: " + date_format.format(pkcs7.getTimeStampDate().getTime()));
+			TimeStampToken ts = pkcs7.getTimeStampToken();
+			System.out.println("TimeStamp service: " + ts.getTimeStampInfo().getTsa());
+		}
+		System.out.println("Location: " + pkcs7.getLocation());
+		System.out.println("Reason: " + pkcs7.getReason());
 		PdfDictionary sigDict = fields.getSignatureDictionary(name);
-		PdfArray ref = sigDict.getAsArray(PdfName.REFERENCE);
-		if (ref == null) {
-			System.out.println("Signature type: approval");
+		perms = new SignaturePermissions(sigDict, perms);
+		System.out.println("Signature type: " + (perms.isCertification() ? "certification" : "approval"));
+		System.out.println("Filling out fields allowed: " + perms.isFillInAllowed());
+		System.out.println("Adding annotations allowed: " + perms.isAnnotationsAllowed());
+		for (FieldLock lock : perms.getFieldLocks()) {
+			System.out.println("Lock: " + lock.toString());
 		}
-		else {
-			boolean certification = false;
-			boolean fillInAllowed = true;
-			boolean annotationsAllowed = true;
-			PdfName action = null;
-			PdfArray fieldlocks = null;
-			for (int i = 0; i < ref.size(); i++) {
-				PdfDictionary dict = ref.getAsDict(i);
-				PdfDictionary params = dict.getAsDict(PdfName.TRANSFORMPARAMS);
-				if (PdfName.DOCMDP.equals(dict.getAsName(PdfName.TRANSFORMMETHOD))) {
-					certification = true;
-				}
-				if (action == null)
-					action = params.getAsName(PdfName.ACTION);
-				if (fieldlocks == null)
-					fieldlocks = params.getAsArray(PdfName.FIELDS);
-				PdfNumber p = params.getAsNumber(PdfName.P);
-				if (p == null)
-					continue;
-				switch (p.intValue()) {
-				default:
-					break;
-				case 1:
-					fillInAllowed &= false;
-				case 2:
-					annotationsAllowed &= false;
-				}
-			}
-			if (certification) {
-				System.out.println("Signature type: certification");
-			}
-			else {
-				System.out.println("Signature type: approval");
-			}
-			System.out.println("Form filling allowed: " + fillInAllowed);
-			System.out.println("Annotations allowed: " + annotationsAllowed);
-			if (action != null) {
-				System.out.print("Field locks: " + action);
-				if (fieldlocks != null) {
-					System.out.print(fieldlocks);
-				}
-				System.out.println();
-			}
+        return perms;
+	}
+	
+	public void inspectSignatures(String path) throws IOException, GeneralSecurityException {
+		System.out.println(path);
+        PdfReader reader = new PdfReader(path);
+        AcroFields fields = reader.getAcroFields();
+        ArrayList<String> names = fields.getSignatureNames();
+        SignaturePermissions perms = null;
+		for (String name : names) {
+			System.out.println("===== " + name + " =====");
+			perms = inspectSignature(fields, name, perms);
 		}
-        return pkcs7;
+		System.out.println();
 	}
 	
 	public static void main(String[] args) throws IOException, GeneralSecurityException {
@@ -84,10 +71,11 @@ public class C5_02_SignatureInfo extends C5_01_SignatureIntegrity {
 		BouncyCastleProvider provider = new BouncyCastleProvider();
 		Security.addProvider(provider);
 		C5_02_SignatureInfo app = new C5_02_SignatureInfo();
-		app.verifySignatures(EXAMPLE1);
-		app.verifySignatures(EXAMPLE2);
-		app.verifySignatures(EXAMPLE3);
-		app.verifySignatures(EXAMPLE4);
-		app.verifySignatures(EXAMPLE5);
+		app.inspectSignatures(EXAMPLE1);
+		app.inspectSignatures(EXAMPLE2);
+		app.inspectSignatures(EXAMPLE3);
+		app.inspectSignatures(EXAMPLE4);
+		app.inspectSignatures(EXAMPLE5);
+		app.inspectSignatures(EXAMPLE6);
 	}
 }
