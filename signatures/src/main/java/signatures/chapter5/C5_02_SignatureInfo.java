@@ -11,6 +11,7 @@ import java.util.List;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.tsp.TimeStampToken;
 
+import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.log.LoggerFactory;
 import com.itextpdf.text.log.SysoLogger;
 import com.itextpdf.text.pdf.AcroFields;
@@ -34,13 +35,16 @@ public class C5_02_SignatureInfo extends C5_01_SignatureIntegrity {
 
 	public SignaturePermissions inspectSignature(AcroFields fields, String name, SignaturePermissions perms) throws GeneralSecurityException, IOException {
 		List<FieldPosition> fps = fields.getFieldPositions(name);
-		if (fps == null || fps.size() == 0) {
-			System.out.println("Invisible signature");
-		}
-		else {
+		if (fps != null && fps.size() > 0) {
 			FieldPosition fp = fps.get(0);
-			System.out.println(String.format("Field on page %s; llx: %s, lly: %s, urx: %s; ury: %s",
-					fp.page, fp.position.getLeft(), fp.position.getBottom(), fp.position.getRight(), fp.position.getTop()));
+			Rectangle pos = fp.position;
+			if (pos.getWidth() == 0 || pos.getHeight() == 0) {
+				System.out.println("Invisible signature");
+			}
+			else {
+				System.out.println(String.format("Field on page %s; llx: %s, lly: %s, urx: %s; ury: %s",
+					fp.page, pos.getLeft(), pos.getBottom(), pos.getRight(), pos.getTop()));
+			}
 		}
 		
 		PdfPKCS7 pkcs7 = super.verifySignature(fields, name);
