@@ -58,7 +58,8 @@ public class C3_05_SignWithCRLOffline extends C3_01_SignWithCAcert {
         
         CertificateFactory cf = CertificateFactory.getInstance("X.509");
         X509CRL crl = (X509CRL)cf.generateCRL(new FileInputStream(CRLURL));
-        System.out.println(crl.getNextUpdate());
+        System.out.println("CRL valid until: " + crl.getNextUpdate());
+        System.out.println("Certificate revoked: " + crl.isRevoked(chain[0]));
         
         List<CrlClient> crlList = new ArrayList<CrlClient>();
         crlList.add(crlClient);
