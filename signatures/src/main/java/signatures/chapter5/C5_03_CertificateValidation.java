@@ -14,6 +14,7 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -66,6 +67,9 @@ public class C5_03_CertificateValidation extends C5_01_SignatureIntegrity {
 	public void showCertificateInfo(X509Certificate cert, Date signDate) {
 		System.out.println("Issuer: " + cert.getIssuerDN());
 		System.out.println("Subject: " + cert.getSubjectDN());
+		SimpleDateFormat date_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SS");
+		System.out.println("Valid from: " + date_format.format(cert.getNotBefore()));
+		System.out.println("Valid to: " + date_format.format(cert.getNotAfter()));
 		try {
 			cert.checkValidity(signDate);
 			System.out

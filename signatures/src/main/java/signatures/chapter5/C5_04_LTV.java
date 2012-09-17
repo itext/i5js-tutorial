@@ -25,7 +25,7 @@ import com.itextpdf.text.pdf.security.OcspClientBouncyCastle;
 import com.itextpdf.text.pdf.security.TSAClient;
 import com.itextpdf.text.pdf.security.TSAClientBouncyCastle;
 
-public class C5_05_LTV {
+public class C5_04_LTV {
 
 	public static final String EXAMPLE1 = "results/chapter3/hello_token.pdf";
 	public static final String EXAMPLE2 = "results/chapter3/hello_cacert.pdf";
@@ -40,7 +40,7 @@ public class C5_05_LTV {
         String tsaUrl = properties.getProperty("TSAURL");
         String tsaUser = properties.getProperty("TSAUSERNAME");
         String tsaPass = properties.getProperty("TSAPASSWORD");
-        C5_05_LTV app = new C5_05_LTV();
+        C5_04_LTV app = new C5_04_LTV();
         TSAClient tsa = new TSAClientBouncyCastle(tsaUrl, tsaUser, tsaPass, 6500, "sha256");
         OcspClient ocsp = new OcspClientBouncyCastle();
         CrlClient crl = new CrlClientOnline();
