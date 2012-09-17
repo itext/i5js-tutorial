@@ -48,17 +48,17 @@ public class C5_03_CertificateValidation extends C5_01_SignatureIntegrity {
 		PdfPKCS7 pkcs7 = super.verifySignature(fields, name);
 		Certificate[] certs = pkcs7.getSignCertificateChain();
 		Calendar cal = pkcs7.getSignDate();
-		for (int i = 0; i < certs.length; i++) {
-			X509Certificate cert = (X509Certificate) certs[i];
-			System.out.println("=== Certificate " + i + " ===");
-			showCertificateInfo(cert, cal.getTime());
-		}
 		Object fails[] = CertificateVerification.verifyCertificates(certs, ks,
 				pkcs7.getCRLs(), cal);
 		if (fails == null)
 			System.out.println("Certificates verified against the KeyStore");
 		else
 			System.out.println("Certificate failed: " + fails[1]);
+		for (int i = 0; i < certs.length; i++) {
+			X509Certificate cert = (X509Certificate) certs[i];
+			System.out.println("=== Certificate " + i + " ===");
+			showCertificateInfo(cert, cal.getTime());
+		}
 		if (!checkOcsp(certs))
 			checkCrls(certs);
 		return pkcs7;
