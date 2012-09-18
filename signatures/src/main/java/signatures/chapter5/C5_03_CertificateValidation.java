@@ -53,7 +53,7 @@ public class C5_03_CertificateValidation extends C5_01_SignatureIntegrity {
 		if (fails == null)
 			System.out.println("Certificates verified against the KeyStore");
 		else
-			System.out.println("Certificate failed: " + fails[1]);
+			System.out.println("Certificate " + ((X509Certificate)fails[0]).getSubjectDN().getName() + " failed: " + fails[1]);
 		for (int i = 0; i < certs.length; i++) {
 			X509Certificate cert = (X509Certificate) certs[i];
 			System.out.println("=== Certificate " + i + " ===");
