@@ -47,6 +47,7 @@ public class C5_04_LTV {
         app.addLtv(EXAMPLE1, String.format(DEST, 1), ocsp, crl, tsa);
         app.addLtv(EXAMPLE2, String.format(DEST, 2), ocsp, new CrlClientOnline("https://crl.cacert.org/revoke.crl"), tsa);
         app.addLtv(EXAMPLE3, String.format(DEST, 3), ocsp, crl, tsa);
+        app.addLtv(String.format(DEST, 1), String.format(DEST, 4), null, null, tsa);
         
 	}
 	

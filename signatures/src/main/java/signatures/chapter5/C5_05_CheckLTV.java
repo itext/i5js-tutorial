@@ -19,6 +19,7 @@ public class C5_05_CheckLTV {
 	public static final String EXAMPLE1 = "results/chapter5/ltv_1.pdf";
 	public static final String EXAMPLE2 = "results/chapter5/ltv_2.pdf";
 	public static final String EXAMPLE3 = "results/chapter5/ltv_3.pdf";
+	public static final String EXAMPLE4 = "results/chapter5/ltv_4.pdf";
 
 	public PdfPKCS7 verifySignature(AcroFields fields, String name) throws GeneralSecurityException, IOException {
 		System.out.println("Signature covers whole document: " + fields.signatureCoversWholeDocument(name));
@@ -53,5 +54,6 @@ public class C5_05_CheckLTV {
 		app.verifySignatures(EXAMPLE1);
 		app.verifySignatures(EXAMPLE2);
 		app.verifySignatures(EXAMPLE3);
+		app.verifySignatures(EXAMPLE4);
 	}
 }
