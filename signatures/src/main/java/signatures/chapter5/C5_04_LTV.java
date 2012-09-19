@@ -53,8 +53,8 @@ public class C5_04_LTV {
 	
 	public void addLtv(String src, String dest, OcspClient ocsp, CrlClient crl, TSAClient tsa) throws IOException, DocumentException, GeneralSecurityException {
         PdfReader r = new PdfReader(src);
-        FileOutputStream fout = new FileOutputStream(dest);
-        PdfStamper stp = PdfStamper.createSignature(r, fout, '\0', null, true);
+        FileOutputStream fos = new FileOutputStream(dest);
+        PdfStamper stp = PdfStamper.createSignature(r, fos, '\0', null, true);
         LtvVerification v = stp.getLtvVerification();
         AcroFields af = stp.getAcroFields();
         for (String sigName : af.getSignatureNames()) {
