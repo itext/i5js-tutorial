@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.Security;
+import java.util.List;
 import java.util.Properties;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -22,6 +23,7 @@ import com.itextpdf.text.pdf.security.LtvTimestamp;
 import com.itextpdf.text.pdf.security.LtvVerification;
 import com.itextpdf.text.pdf.security.OcspClient;
 import com.itextpdf.text.pdf.security.OcspClientBouncyCastle;
+import com.itextpdf.text.pdf.security.PdfPKCS7;
 import com.itextpdf.text.pdf.security.TSAClient;
 import com.itextpdf.text.pdf.security.TSAClientBouncyCastle;
 
@@ -43,12 +45,13 @@ public class C5_04_LTV {
         C5_04_LTV app = new C5_04_LTV();
         TSAClient tsa = new TSAClientBouncyCastle(tsaUrl, tsaUser, tsaPass, 6500, "sha256");
         OcspClient ocsp = new OcspClientBouncyCastle();
-        CrlClient crl = new CrlClientOnline();
-        app.addLtv(EXAMPLE1, String.format(DEST, 1), ocsp, crl, tsa);
+        app.addLtv(EXAMPLE1, String.format(DEST, 1), ocsp, new CrlClientOnline(), tsa);
+        System.out.println();
         app.addLtv(EXAMPLE2, String.format(DEST, 2), ocsp, new CrlClientOnline("https://crl.cacert.org/revoke.crl"), tsa);
-        app.addLtv(EXAMPLE3, String.format(DEST, 3), ocsp, crl, tsa);
-        app.addLtv(String.format(DEST, 1), String.format(DEST, 4), null, null, tsa);
-        
+        System.out.println();
+        app.addLtv(EXAMPLE3, String.format(DEST, 3), ocsp, new CrlClientOnline(), tsa);
+        System.out.println();
+        app.addLtv(String.format(DEST, 1), String.format(DEST, 4), null, new CrlClientOnline(), tsa);
 	}
 	
 	public void addLtv(String src, String dest, OcspClient ocsp, CrlClient crl, TSAClient tsa) throws IOException, DocumentException, GeneralSecurityException {
@@ -56,9 +59,16 @@ public class C5_04_LTV {
         FileOutputStream fos = new FileOutputStream(dest);
         PdfStamper stp = PdfStamper.createSignature(r, fos, '\0', null, true);
         LtvVerification v = stp.getLtvVerification();
-        AcroFields af = stp.getAcroFields();
-        for (String sigName : af.getSignatureNames()) {
-            v.addVerification(sigName, ocsp, crl, LtvVerification.CertificateOption.WHOLE_CHAIN, LtvVerification.Level.OCSP_CRL, LtvVerification.CertificateInclusion.NO);
+        AcroFields fields = stp.getAcroFields();
+		List<String> names = fields.getSignatureNames();
+        String sigName = names.get(names.size() - 1);
+		PdfPKCS7 pkcs7 = fields.verifySignature(sigName);
+        if (pkcs7.isTsp()) 
+        	v.addVerification(sigName, ocsp, crl, LtvVerification.CertificateOption.WHOLE_CHAIN, LtvVerification.Level.OCSP_CRL, LtvVerification.CertificateInclusion.NO);
+        else {
+        	for (String name : names) {
+        		v.addVerification(name, ocsp, crl, LtvVerification.CertificateOption.WHOLE_CHAIN, LtvVerification.Level.OCSP_CRL, LtvVerification.CertificateInclusion.NO);
+        	}
         }
         PdfSignatureAppearance sap = stp.getSignatureAppearance();
         LtvTimestamp.timestamp(sap, tsa, null); 
