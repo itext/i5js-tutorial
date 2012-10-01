@@ -43,7 +43,7 @@ public class C5_04_LTV {
         String tsaUser = properties.getProperty("TSAUSERNAME");
         String tsaPass = properties.getProperty("TSAPASSWORD");
         C5_04_LTV app = new C5_04_LTV();
-        TSAClient tsa = new TSAClientBouncyCastle(tsaUrl, tsaUser, tsaPass, 6500, "sha256");
+        TSAClient tsa = new TSAClientBouncyCastle(tsaUrl, tsaUser, tsaPass, 6500, "SHA512");
         OcspClient ocsp = new OcspClientBouncyCastle();
         app.addLtv(EXAMPLE1, String.format(DEST, 1), ocsp, new CrlClientOnline(), tsa);
         System.out.println();
@@ -64,7 +64,7 @@ public class C5_04_LTV {
         String sigName = names.get(names.size() - 1);
 		PdfPKCS7 pkcs7 = fields.verifySignature(sigName);
         if (pkcs7.isTsp()) 
-        	v.addVerification(sigName, ocsp, crl, LtvVerification.CertificateOption.WHOLE_CHAIN, LtvVerification.Level.OCSP_CRL, LtvVerification.CertificateInclusion.NO);
+        	v.addVerification(sigName, ocsp, crl, LtvVerification.CertificateOption.SIGNING_CERTIFICATE, LtvVerification.Level.OCSP_CRL, LtvVerification.CertificateInclusion.NO);
         else {
         	for (String name : names) {
         		v.addVerification(name, ocsp, crl, LtvVerification.CertificateOption.WHOLE_CHAIN, LtvVerification.Level.OCSP_CRL, LtvVerification.CertificateInclusion.NO);
