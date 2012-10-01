@@ -61,6 +61,7 @@ public class C5_02_SignatureInfo extends C5_01_SignatureIntegrity {
 			System.out.println("TimeStamp: " + date_format.format(pkcs7.getTimeStampDate().getTime()));
 			TimeStampToken ts = pkcs7.getTimeStampToken();
 			System.out.println("TimeStamp service: " + ts.getTimeStampInfo().getTsa());
+			System.out.println("Timestamp verified? " + pkcs7.verifyTimestampImprint());
 		}
 		System.out.println("Location: " + pkcs7.getLocation());
 		System.out.println("Reason: " + pkcs7.getReason());
