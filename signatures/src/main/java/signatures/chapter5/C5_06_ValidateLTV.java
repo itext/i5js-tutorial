@@ -133,13 +133,14 @@ public class C5_06_ValidateLTV {
 			String crlurl = CertificateUtil.getCRLURL(signCert);
 			CertificateFactory cf = CertificateFactory.getInstance("X.509");
 	        X509CRL crl = (X509CRL) cf.generateCRL(new URL(crlurl).openStream());
+	        crl.verify(issuerCert.getPublicKey());
 	        crls = new ArrayList<X509CRL>();
 	        crls.add(crl);
 		}
 		else {
 			crls = getCRLsFromDSS(data.dss);
 		}
-		boolean crlFound = checkCrls(signCert, data.signDate, crls);
+		boolean crlFound = checkCrls(signCert, issuerCert, data.signDate, crls);
 		
 		// Checking OCSP
 		List<BasicOCSPResp> ocsps;
@@ -155,7 +156,10 @@ public class C5_06_ValidateLTV {
 		boolean ocspFound = checkOCSPs(signCert, data.signDate, ocsps);
 		if (!crlFound && !ocspFound)
 			throw new GeneralSecurityException("Couldn't verify with CRL or OCSP");
-		
+		if (crlFound)
+			System.out.println("CRL found!");
+		if (ocspFound)
+			System.out.println("OCSP found!");
 		VerificationData res = new VerificationData();
 		res.dss = data.reader.getCatalog().getAsDict(PdfName.DSS);
 	    res.reader = new PdfReader(fields.extractRevision(sig));
@@ -167,16 +171,26 @@ public class C5_06_ValidateLTV {
 		PdfPKCS7 pkcs7;
 		for (String name : names) {
 			System.out.println("Signature: " + name);
-			pkcs7 = fields.verifySignature(name);
-			X509Certificate signCert = pkcs7.getSigningCertificate();
+			pkcs7 = fields.verifySignature(name);        
+			Certificate[] certs = pkcs7.getSignCertificateChain();
+			checkCertificateValidity(certs, data.signDate);
+			if (certs.length < 2)
+	        	throw new GeneralSecurityException("Self-signed TSA certificates can't be checked");
+			X509Certificate signCert = (X509Certificate) certs[0];
+			X509Certificate issuerCert = (X509Certificate) certs[1];
+			signCert.verify(issuerCert.getPublicKey());
 			if (pkcs7.verify()) {
 				System.out.println("Integrity OK!");
 				List<X509CRL> crls = getCRLsFromDSS(data.dss);
-				boolean crlFound = checkCrls(signCert, data.signDate, crls);
+				boolean crlFound = checkCrls(signCert, issuerCert, data.signDate, crls);
 				List<BasicOCSPResp> ocsps = getOCSPResponsesFromDSS(data.dss);
 				boolean ocspFound = checkOCSPs(signCert, data.signDate, ocsps);
 				if (!crlFound && !ocspFound)
 					throw new GeneralSecurityException("Couldn't verify with CRL or OCSP");
+				if (crlFound)
+					System.out.println("CRL found!");
+				if (ocspFound)
+					System.out.println("OCSP found!");
 			}
 			else {
 				throw new GeneralSecurityException("The document was altered after the final signature was applied.");
@@ -198,13 +212,17 @@ public class C5_06_ValidateLTV {
 		return crls;
 	}
 	
-	public boolean checkCrls(X509Certificate cert, Date date, List<X509CRL> crls) throws GeneralSecurityException {
+	public boolean checkCrls(X509Certificate signCert, X509Certificate issuerCert, Date date, List<X509CRL> crls) throws GeneralSecurityException {
 		int validCrlsFound = 0;
 		for (X509CRL crl : crls) {
-			// TODO: check if the CRL corresponds with cert and date; we need at least one match!
-			validCrlsFound++;
-			if (crl.isRevoked(cert)) {
-				throw new GeneralSecurityException("The certificate of the final document-level timestamp has been revoked.");
+			if (crl.getIssuerX500Principal().equals(signCert.getIssuerX500Principal())) {
+				crl.verify(issuerCert.getPublicKey());
+				if (date.after(crl.getThisUpdate()) && date.before(crl.getNextUpdate())) {
+					if (crl.isRevoked(signCert)) {
+						throw new GeneralSecurityException("The certificate has been revoked.");
+					}
+					validCrlsFound++;
+				}
 			}
 		}
 		return validCrlsFound > 0;

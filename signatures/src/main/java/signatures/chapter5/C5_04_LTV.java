@@ -30,7 +30,7 @@ import com.itextpdf.text.pdf.security.TSAClientBouncyCastle;
 public class C5_04_LTV {
 
 	public static final String EXAMPLE1 = "results/chapter3/hello_token.pdf";
-	public static final String EXAMPLE2 = "results/chapter3/hello_cacert.pdf";
+	public static final String EXAMPLE2 = "results/chapter4/hello_smartcard_Signature.pdf";
 	public static final String EXAMPLE3 = "results/chapter3/hello_cacert_ocsp_ts.pdf";
 	public static final String DEST = "results/chapter5/ltv_%s.pdf";
 	
@@ -47,7 +47,7 @@ public class C5_04_LTV {
         OcspClient ocsp = new OcspClientBouncyCastle();
         app.addLtv(EXAMPLE1, String.format(DEST, 1), ocsp, new CrlClientOnline(), tsa);
         System.out.println();
-        app.addLtv(EXAMPLE2, String.format(DEST, 2), ocsp, new CrlClientOnline("https://crl.cacert.org/revoke.crl"), tsa);
+        app.addLtv(EXAMPLE2, String.format(DEST, 2), ocsp, new CrlClientOnline(), tsa);
         System.out.println();
         app.addLtv(EXAMPLE3, String.format(DEST, 3), ocsp, new CrlClientOnline(), tsa);
         System.out.println();
