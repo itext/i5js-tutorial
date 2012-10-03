@@ -29,11 +29,14 @@ import com.itextpdf.text.pdf.PdfDictionary;
 import com.itextpdf.text.pdf.PdfName;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.security.CertificateUtil;
+import com.itextpdf.text.pdf.security.OcspClientBouncyCastle;
 import com.itextpdf.text.pdf.security.PdfPKCS7;
 
 public class C5_06_ValidateLTV {
-	public static final String EXAMPLE = "results/chapter5/ltv_4.pdf";
-	public static final String REV = "results/chapter5/rev_%s.pdf";
+	public static final String EXAMPLE1 = "results/chapter5/ltv_1.pdf";
+	public static final String EXAMPLE2 = "results/chapter5/ltv_2.pdf";
+	public static final String EXAMPLE3 = "results/chapter5/ltv_3.pdf";
+	public static final String EXAMPLE4 = "results/chapter5/ltv_4.pdf";
 
 	protected AcroFields fields;
 	
@@ -47,14 +50,26 @@ public class C5_06_ValidateLTV {
 		LoggerFactory.getInstance().setLogger(new SysoLogger());
 		BouncyCastleProvider provider = new BouncyCastleProvider();
 		Security.addProvider(provider);
-		
 		C5_06_ValidateLTV app = new C5_06_ValidateLTV();
-		VerificationData data = app.new VerificationData();
-		data.reader = new PdfReader(EXAMPLE);
+		System.out.println(EXAMPLE1);
+		app.validate(EXAMPLE1);
+		System.out.println();
+		System.out.println(EXAMPLE2);
+		app.validate(EXAMPLE2);
+		System.out.println();
+		System.out.println(EXAMPLE3);
+		app.validate(EXAMPLE3);
+		System.out.println();
+		System.out.println(EXAMPLE4);
+		app.validate(EXAMPLE4);
+	}
+	
+	public void validate(String path) throws IOException, GeneralSecurityException, OCSPException {
+ 		VerificationData data = new VerificationData();
+		data.reader = new PdfReader(path);
 		data.signDate = new Date();
-		
 		while (data != null) {
-			data = app.verifySignatures(data);
+			data = verifySignatures(data);
 		}
 	}
 	
@@ -110,6 +125,7 @@ public class C5_06_ValidateLTV {
 		if (certs.length < 2)
         	throw new GeneralSecurityException("Self-signed TSA certificates can't be checked");
 		X509Certificate signCert = (X509Certificate) certs[0];
+		X509Certificate issuerCert = (X509Certificate) certs[1];
 		
 		// Checking CRLs
 		List<X509CRL> crls;
@@ -129,7 +145,9 @@ public class C5_06_ValidateLTV {
 		List<BasicOCSPResp> ocsps;
 		if (data.dss == null) {
 			ocsps = new ArrayList<BasicOCSPResp>();
-			// TODO try to fetch OCSP online
+			BasicOCSPResp ocsp = getOcspResponse(signCert, issuerCert);
+			if (ocsp != null)
+				ocsps.add(ocsp);
 		}
 		else {
 			ocsps = getOCSPResponsesFromDSS(data.dss);
@@ -190,6 +208,26 @@ public class C5_06_ValidateLTV {
 			}
 		}
 		return validCrlsFound > 0;
+	}
+	
+	public BasicOCSPResp getOcspResponse(X509Certificate signCert, X509Certificate issuerCert) {
+		if (signCert == null && issuerCert == null) {
+			return null;
+		}
+		OcspClientBouncyCastle ocsp = new OcspClientBouncyCastle();
+		BasicOCSPResp ocspResp = ocsp.getBasicOCSPResp(
+				(X509Certificate) signCert, issuerCert, null);
+		if (ocspResp == null) {
+			return null;
+		}
+		SingleResp[] resp = ocspResp.getResponses();
+		for (int i = 0; i < resp.length; i++) {
+			Object status = resp[i].getCertStatus();
+			if (status == CertificateStatus.GOOD) {
+				return ocspResp;
+			}
+		}
+		return null;
 	}
 	
 	public List<BasicOCSPResp> getOCSPResponsesFromDSS(PdfDictionary dss) throws IOException, OCSPException {
