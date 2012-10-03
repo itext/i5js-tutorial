@@ -218,14 +218,17 @@ public class C5_06_ValidateLTV {
 	public boolean checkCrls(X509Certificate signCert, X509Certificate issuerCert, Date date, List<X509CRL> crls) throws GeneralSecurityException {
 		int validCrlsFound = 0;
 		for (X509CRL crl : crls) {
-			if (crl.getIssuerX500Principal().equals(signCert.getIssuerX500Principal())) {
-				crl.verify(issuerCert.getPublicKey());
-				if (date.after(crl.getThisUpdate()) && date.before(crl.getNextUpdate())) {
-					if (crl.isRevoked(signCert)) {
-						throw new GeneralSecurityException("The certificate has been revoked.");
-					}
-					validCrlsFound++;
+			if (crl.getIssuerX500Principal().equals(signCert.getIssuerX500Principal())
+				&& date.after(crl.getThisUpdate()) && date.before(crl.getNextUpdate())) {
+				try {
+					crl.verify(issuerCert.getPublicKey());
+				} catch (GeneralSecurityException e) {
+					continue;
 				}
+				if (crl.isRevoked(signCert)) {
+					throw new GeneralSecurityException("The certificate has been revoked.");
+				}
+				validCrlsFound++;
 			}
 		}
 		return validCrlsFound > 0;
