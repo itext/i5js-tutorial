@@ -15,13 +15,17 @@ import java.util.Date;
 import java.util.List;
 
 import org.bouncycastle.cert.X509CertificateHolder;
+import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.ocsp.BasicOCSPResp;
 import org.bouncycastle.cert.ocsp.CertificateStatus;
 import org.bouncycastle.cert.ocsp.OCSPException;
 import org.bouncycastle.cert.ocsp.OCSPResp;
 import org.bouncycastle.cert.ocsp.SingleResp;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.operator.ContentVerifierProvider;
+import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.bc.BcDigestCalculatorProvider;
+import org.bouncycastle.operator.jcajce.JcaContentVerifierProviderBuilder;
 
 import com.itextpdf.text.log.LoggerFactory;
 import com.itextpdf.text.log.SysoLogger;
@@ -49,7 +53,7 @@ public class C5_06_ValidateLTV {
 		protected Date signDate;
 	}
 	
-	public static void main(String[] args) throws IOException, GeneralSecurityException, OCSPException {
+	public static void main(String[] args) throws IOException, GeneralSecurityException, OCSPException, OperatorCreationException {
 		LoggerFactory.getInstance().setLogger(new SysoLogger());
 		BouncyCastleProvider provider = new BouncyCastleProvider();
 		Security.addProvider(provider);
@@ -67,7 +71,7 @@ public class C5_06_ValidateLTV {
 		app.validate(EXAMPLE4);
 	}
 	
-	public void validate(String path) throws IOException, GeneralSecurityException, OCSPException {
+	public void validate(String path) throws IOException, GeneralSecurityException, OCSPException, OperatorCreationException {
  		VerificationData data = new VerificationData();
 		data.reader = new PdfReader(path);
 		data.signDate = new Date();
@@ -78,7 +82,7 @@ public class C5_06_ValidateLTV {
 	
 
 	
-	public VerificationData verifySignatures(VerificationData data) throws IOException, GeneralSecurityException, OCSPException {
+	public VerificationData verifySignatures(VerificationData data) throws IOException, GeneralSecurityException, OCSPException, OperatorCreationException {
 		fields = data.reader.getAcroFields();
 		List<String> names = fields.getSignatureNames();
 		String lastSig = names.get(names.size() - 1);
@@ -122,7 +126,7 @@ public class C5_06_ValidateLTV {
 		return true;
 	}
 	
-	public VerificationData checkDocumentLevelTimestamp(String sig, PdfPKCS7 pkcs7, VerificationData data) throws GeneralSecurityException, IOException, OCSPException {
+	public VerificationData checkDocumentLevelTimestamp(String sig, PdfPKCS7 pkcs7, VerificationData data) throws GeneralSecurityException, IOException, OCSPException, OperatorCreationException {
         Certificate[] certs = pkcs7.getSignCertificateChain();
 		checkCertificateValidity(certs, data.signDate);
 		if (certs.length < 2)
@@ -170,7 +174,7 @@ public class C5_06_ValidateLTV {
 		return res;
 	}
 	
-	public void checkRemainingSignatures(List<String> names, VerificationData data) throws GeneralSecurityException, IOException, OCSPException {
+	public void checkRemainingSignatures(List<String> names, VerificationData data) throws GeneralSecurityException, IOException, OCSPException, OperatorCreationException {
 		PdfPKCS7 pkcs7;
 		for (String name : names) {
 			System.out.println("Signature: " + name);
@@ -268,14 +272,21 @@ public class C5_06_ValidateLTV {
 		return ocsps;
 	}
 	
-	public boolean checkOCSPs(X509Certificate signCert, X509Certificate issuerCert, Date date, List<BasicOCSPResp> ocsps) throws GeneralSecurityException, OCSPException, IOException {
+	public boolean checkOCSPs(X509Certificate signCert, X509Certificate issuerCert, Date date, List<BasicOCSPResp> ocsps) throws GeneralSecurityException, OCSPException, IOException, OperatorCreationException {
 		int validOCSPsFound = 0;
 		BigInteger serialNumber = signCert.getSerialNumber();
 		for (BasicOCSPResp ocspResp : ocsps) {
+			X509CertificateHolder[] certHolders = ocspResp.getCerts();
+			Certificate certif = new JcaX509CertificateConverter().setProvider( "BC" ).getCertificate( certHolders[0] );
+			certif.verify(issuerCert.getPublicKey());
+			ContentVerifierProvider verifierProvider = new JcaContentVerifierProviderBuilder().setProvider("BC").build(certif.getPublicKey());
+			if (!ocspResp.isSignatureValid(verifierProvider)) {
+				throw new GeneralSecurityException("OCSP response could not be verified");
+			}
 			SingleResp[] resp = ocspResp.getResponses();
 			for (int i = 0; i < resp.length; i++) {
-				if (date.before(resp[i].getThisUpdate()) || date.after(resp[i].getNextUpdate())) {
-					System.out.println(String.format("OCSP no longer valid: %s not between %s and %s", date, resp[i].getThisUpdate(), resp[i].getNextUpdate()));
+				if (date.after(resp[i].getNextUpdate())) {
+					System.out.println(String.format("OCSP no longer valid: %s after %s", date, resp[i].getThisUpdate(), resp[i].getNextUpdate()));
 					continue;
 				}
 				if (!resp[i].getCertID().matchesIssuer(new X509CertificateHolder(issuerCert.getEncoded()), new BcDigestCalculatorProvider())) {
