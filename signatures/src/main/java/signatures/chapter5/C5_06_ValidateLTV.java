@@ -2,6 +2,7 @@ package signatures.chapter5;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.security.Security;
@@ -13,12 +14,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.ocsp.BasicOCSPResp;
 import org.bouncycastle.cert.ocsp.CertificateStatus;
 import org.bouncycastle.cert.ocsp.OCSPException;
 import org.bouncycastle.cert.ocsp.OCSPResp;
 import org.bouncycastle.cert.ocsp.SingleResp;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.operator.bc.BcDigestCalculatorProvider;
 
 import com.itextpdf.text.log.LoggerFactory;
 import com.itextpdf.text.log.SysoLogger;
@@ -153,7 +156,7 @@ public class C5_06_ValidateLTV {
 		else {
 			ocsps = getOCSPResponsesFromDSS(data.dss);
 		}
-		boolean ocspFound = checkOCSPs(signCert, data.signDate, ocsps);
+		boolean ocspFound = checkOCSPs(signCert, issuerCert, data.signDate, ocsps);
 		if (!crlFound && !ocspFound)
 			throw new GeneralSecurityException("Couldn't verify with CRL or OCSP");
 		if (crlFound)
@@ -184,7 +187,7 @@ public class C5_06_ValidateLTV {
 				List<X509CRL> crls = getCRLsFromDSS(data.dss);
 				boolean crlFound = checkCrls(signCert, issuerCert, data.signDate, crls);
 				List<BasicOCSPResp> ocsps = getOCSPResponsesFromDSS(data.dss);
-				boolean ocspFound = checkOCSPs(signCert, data.signDate, ocsps);
+				boolean ocspFound = checkOCSPs(signCert, issuerCert, data.signDate, ocsps);
 				if (!crlFound && !ocspFound)
 					throw new GeneralSecurityException("Couldn't verify with CRL or OCSP");
 				if (crlFound)
@@ -262,12 +265,24 @@ public class C5_06_ValidateLTV {
 		return ocsps;
 	}
 	
-	public boolean checkOCSPs(X509Certificate cert, Date date, List<BasicOCSPResp> ocsps) {
+	public boolean checkOCSPs(X509Certificate signCert, X509Certificate issuerCert, Date date, List<BasicOCSPResp> ocsps) throws GeneralSecurityException, OCSPException, IOException {
 		int validOCSPsFound = 0;
+		BigInteger serialNumber = signCert.getSerialNumber();
 		for (BasicOCSPResp ocspResp : ocsps) {
-			// TODO: check if the OCSP response corresponds with cert and date; we need at least one match!
 			SingleResp[] resp = ocspResp.getResponses();
 			for (int i = 0; i < resp.length; i++) {
+				if (date.before(resp[i].getThisUpdate()) || date.after(resp[i].getNextUpdate())) {
+					System.out.println(String.format("OCSP no longer valid: %s not between %s and %s", date, resp[i].getThisUpdate(), resp[i].getNextUpdate()));
+					continue;
+				}
+				if (!resp[i].getCertID().matchesIssuer(new X509CertificateHolder(issuerCert.getEncoded()), new BcDigestCalculatorProvider())) {
+					System.out.println("OCSP: Issuer doesn't match.");
+					continue;
+				}
+				if (!serialNumber.equals(resp[i].getCertID().getSerialNumber())) {
+					System.out.println("OCSP: Serial number doesn't match");
+					continue;
+				}
 				Object status = resp[i].getCertStatus();
 				if (status == CertificateStatus.GOOD) {
 					validOCSPsFound++;
