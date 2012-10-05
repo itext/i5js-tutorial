@@ -17,6 +17,7 @@ import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.bouncycastle.cert.ocsp.BasicOCSPResp;
 import org.bouncycastle.cert.ocsp.CertificateStatus;
@@ -30,6 +31,7 @@ import com.itextpdf.text.pdf.security.CertificateUtil;
 import com.itextpdf.text.pdf.security.CertificateVerification;
 import com.itextpdf.text.pdf.security.OcspClientBouncyCastle;
 import com.itextpdf.text.pdf.security.PdfPKCS7;
+import com.itextpdf.text.pdf.security.VerificationError;
 
 public class C5_03_CertificateValidation extends C5_01_SignatureIntegrity {
 	public static final String ADOBE = "src/main/resources/adobeRootCA.cer";
@@ -48,12 +50,12 @@ public class C5_03_CertificateValidation extends C5_01_SignatureIntegrity {
 		PdfPKCS7 pkcs7 = super.verifySignature(fields, name);
 		Certificate[] certs = pkcs7.getSignCertificateChain();
 		Calendar cal = pkcs7.getSignDate();
-		Object fails[] = CertificateVerification.verifyCertificates(certs, ks,
+		List<VerificationError> errors = CertificateVerification.verifyCertificates(certs, ks,
 				pkcs7.getCRLs(), cal);
-		if (fails == null)
+		if (errors.size() == 0)
 			System.out.println("Certificates verified against the KeyStore");
 		else
-			System.out.println("Certificate " + ((X509Certificate)fails[0]).getSubjectDN().getName() + " failed: " + fails[1]);
+			System.out.println(errors);
 		for (int i = 0; i < certs.length; i++) {
 			X509Certificate cert = (X509Certificate) certs[i];
 			System.out.println("=== Certificate " + i + " ===");
