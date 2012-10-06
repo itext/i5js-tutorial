@@ -14,7 +14,7 @@ import org.bouncycastle.operator.OperatorCreationException;
 import com.itextpdf.text.log.LoggerFactory;
 import com.itextpdf.text.log.SysoLogger;
 import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.security.LtvValidation;
+import com.itextpdf.text.pdf.security.LtvVerifier;
 import com.itextpdf.text.pdf.security.LtvVerification.CertificateOption;
 
 public class C5_06_ValidateLTV {
@@ -49,9 +49,10 @@ public class C5_06_ValidateLTV {
 		ks.setCertificateEntry("adobe",
 				cf.generateCertificate(new FileInputStream(ADOBE)));
 		
- 		LtvValidation data = new LtvValidation(reader);
+ 		LtvVerifier data = new LtvVerifier(reader);
  		data.setCertificateOption(CertificateOption.WHOLE_CHAIN);
  		data.setVerifyRootCertificate(false);
+ 		data.setOnlineCheckingAllowed(false);
  		data.setKeyStore(ks);
 		data.verify();
 	}
