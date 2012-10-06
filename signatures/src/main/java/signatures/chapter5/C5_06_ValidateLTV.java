@@ -6,6 +6,8 @@ import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.Security;
 import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+import java.util.Date;
 
 import org.bouncycastle.cert.ocsp.OCSPException;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -14,6 +16,7 @@ import org.bouncycastle.operator.OperatorCreationException;
 import com.itextpdf.text.log.LoggerFactory;
 import com.itextpdf.text.log.SysoLogger;
 import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.security.CertificateVerifier;
 import com.itextpdf.text.pdf.security.LtvVerifier;
 import com.itextpdf.text.pdf.security.LtvVerification.CertificateOption;
 
@@ -43,14 +46,25 @@ public class C5_06_ValidateLTV {
 	}
 	
 	public void validate(PdfReader reader) throws IOException, GeneralSecurityException, OCSPException, OperatorCreationException {
+		
 		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
 		ks.load(null, null);
 		CertificateFactory cf = CertificateFactory.getInstance("X.509");
 		ks.setCertificateEntry("adobe",
 				cf.generateCertificate(new FileInputStream(ADOBE)));
 		
+		CertificateVerifier custom = new CertificateVerifier(null) {
+			public boolean verify(X509Certificate signCert,
+					X509Certificate issuerCert, Date signDate)
+					throws GeneralSecurityException, IOException {
+				System.out.println("ALL VERIFICATIONS DONE");
+				return false;
+			}
+		};
+		
  		LtvVerifier data = new LtvVerifier(reader);
  		data.setCertificateOption(CertificateOption.WHOLE_CHAIN);
+ 		data.setVerifier(custom);
  		data.setVerifyRootCertificate(false);
  		data.setOnlineCheckingAllowed(false);
  		data.setKeyStore(ks);
