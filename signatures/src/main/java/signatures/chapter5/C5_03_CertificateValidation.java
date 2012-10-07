@@ -2,36 +2,34 @@ package signatures.chapter5;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.Security;
-import java.security.cert.CRLException;
+import java.security.cert.CRL;
 import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
 import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.bouncycastle.cert.ocsp.BasicOCSPResp;
-import org.bouncycastle.cert.ocsp.CertificateStatus;
-import org.bouncycastle.cert.ocsp.SingleResp;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import com.itextpdf.text.log.LoggerFactory;
 import com.itextpdf.text.log.SysoLogger;
 import com.itextpdf.text.pdf.AcroFields;
-import com.itextpdf.text.pdf.security.CertificateUtil;
+import com.itextpdf.text.pdf.security.CRLVerifier;
 import com.itextpdf.text.pdf.security.CertificateVerification;
-import com.itextpdf.text.pdf.security.OcspClientBouncyCastle;
+import com.itextpdf.text.pdf.security.OCSPVerifier;
 import com.itextpdf.text.pdf.security.PdfPKCS7;
 import com.itextpdf.text.pdf.security.VerificationException;
+import com.itextpdf.text.pdf.security.VerificationOK;
 
 public class C5_03_CertificateValidation extends C5_01_SignatureIntegrity {
 	public static final String ADOBE = "src/main/resources/adobeRootCA.cer";
@@ -50,8 +48,7 @@ public class C5_03_CertificateValidation extends C5_01_SignatureIntegrity {
 		PdfPKCS7 pkcs7 = super.verifySignature(fields, name);
 		Certificate[] certs = pkcs7.getSignCertificateChain();
 		Calendar cal = pkcs7.getSignDate();
-		List<VerificationException> errors = CertificateVerification.verifyCertificates(certs, ks,
-				pkcs7.getCRLs(), cal);
+		List<VerificationException> errors = CertificateVerification.verifyCertificates(certs, ks, cal);
 		if (errors.size() == 0)
 			System.out.println("Certificates verified against the KeyStore");
 		else
@@ -61,9 +58,38 @@ public class C5_03_CertificateValidation extends C5_01_SignatureIntegrity {
 			System.out.println("=== Certificate " + i + " ===");
 			showCertificateInfo(cert, cal.getTime());
 		}
-		if (!checkOcsp(certs))
-			checkCrls(certs);
+		System.out.println("=== Checking validity of the document at the time of signing ===");
+		checkRevocation(pkcs7, certs, cal.getTime());
+		System.out.println("=== Checking validity of the document today ===");
+		checkRevocation(pkcs7, certs, new Date());
 		return pkcs7;
+	}
+	
+	public void checkRevocation(PdfPKCS7 pkcs7, Certificate[] certs, Date date) throws GeneralSecurityException, IOException {
+		List<BasicOCSPResp> ocsps = new ArrayList<BasicOCSPResp>();
+		if (pkcs7.getOcsp() != null)
+			ocsps.add(pkcs7.getOcsp());
+		OCSPVerifier ocspVerifier = new OCSPVerifier(null, ocsps);
+		X509Certificate signCert = (X509Certificate)certs[0];
+		X509Certificate issuerCert = (certs.length > 1 ? (X509Certificate)certs[1] : null);
+		List<VerificationOK> verification =
+			ocspVerifier.verify(signCert, issuerCert, date);
+		if (verification.size() == 0) {
+			List<X509CRL> crls = new ArrayList<X509CRL>();
+			if (pkcs7.getCRLs() != null) {
+				for (CRL crl : pkcs7.getCRLs())
+					crls.add((X509CRL)crl);
+			}
+			CRLVerifier crlVerifier = new CRLVerifier(null, crls);
+			verification.addAll(crlVerifier.verify(signCert, issuerCert, date));
+		}
+		if (verification.size() == 0) {
+			System.out.println("The signing certificate couldn't be verified");
+		}
+		else {
+			for (VerificationOK v : verification)
+				System.out.println(v);
+		}
 	}
 
 	public void showCertificateInfo(X509Certificate cert, Date signDate) {
@@ -90,55 +116,6 @@ public class C5_03_CertificateValidation extends C5_01_SignatureIntegrity {
 			System.out.println("The certificate has expired.");
 		} catch (CertificateNotYetValidException e) {
 			System.out.println("The certificate isn't valid yet.");
-		}
-	}
-
-	public boolean checkOcsp(Certificate[] certs) {
-		if (certs.length < 2) {
-			System.out.println("SELF-SIGNED CERTIFICATE");
-			return false;
-		}
-		OcspClientBouncyCastle ocsp = new OcspClientBouncyCastle();
-		BasicOCSPResp ocspResp = ocsp.getBasicOCSPResp(
-				(X509Certificate) certs[0], (X509Certificate) certs[1], null);
-		if (ocspResp == null) {
-			System.out.println("NO OCSP");
-			return false;
-		}
-		SingleResp[] resp = ocspResp.getResponses();
-		for (int i = 0; i < resp.length; i++) {
-			Object status = resp[i].getCertStatus();
-			if (status == CertificateStatus.GOOD) {
-				System.out.println("OCSP Status: GOOD");
-				return true;
-			} else if (status instanceof org.bouncycastle.ocsp.RevokedStatus) {
-				System.out.println("OCSP Status: REVOKED");
-			} else {
-				System.out.println("OCSP Status: UNKNOWN");
-			}
-		}
-		return false;
-	}
-
-	public void checkCrls(Certificate[] certs) throws CertificateException {
-        CertificateFactory cf = CertificateFactory.getInstance("X.509");
-		for (int i = 0; i < certs.length; i++) {
-			X509Certificate cert = (X509Certificate)certs[i];
-			String url = CertificateUtil.getCRLURL(cert);
-			if (url == null) {
-				System.out.println("No CRL for Certificate " + i);
-				continue;
-			}
-			System.out.println("CRL URL for Certificate " + i + ": " + url);
-			try {
-				URL crlurl = new URL(url);
-		        X509CRL crl = (X509CRL)cf.generateCRL(crlurl.openStream());
-		        System.out.println(crl.isRevoked(cert) ? "The certificate was revoked (CRL)" : "The certificate is valid according to the CRL");
-			} catch (CRLException e) {
-				System.out.println(e.getMessage());
-			} catch (IOException e) {
-				System.out.println(e.getMessage());
-			}
 		}
 	}
 	
