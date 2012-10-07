@@ -75,6 +75,9 @@ public class C5_06_ValidateLTV {
  			System.err.println(e.getMessage());
  		}
 		System.out.println();
+		if (list.size() == 0) {
+			System.out.println("The document can't be verified");
+		}
  		for (VerificationOK v : list)
  			System.out.println(v.toString());
 	}

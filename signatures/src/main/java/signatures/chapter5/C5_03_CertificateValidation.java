@@ -58,20 +58,20 @@ public class C5_03_CertificateValidation extends C5_01_SignatureIntegrity {
 			System.out.println("=== Certificate " + i + " ===");
 			showCertificateInfo(cert, cal.getTime());
 		}
+		X509Certificate signCert = (X509Certificate)certs[0];
+		X509Certificate issuerCert = (certs.length > 1 ? (X509Certificate)certs[1] : null);
 		System.out.println("=== Checking validity of the document at the time of signing ===");
-		checkRevocation(pkcs7, certs, cal.getTime());
+		checkRevocation(pkcs7, signCert, issuerCert, cal.getTime());
 		System.out.println("=== Checking validity of the document today ===");
-		checkRevocation(pkcs7, certs, new Date());
+		checkRevocation(pkcs7, signCert, issuerCert, new Date());
 		return pkcs7;
 	}
 	
-	public void checkRevocation(PdfPKCS7 pkcs7, Certificate[] certs, Date date) throws GeneralSecurityException, IOException {
+	public void checkRevocation(PdfPKCS7 pkcs7, X509Certificate signCert, X509Certificate issuerCert, Date date) throws GeneralSecurityException, IOException {
 		List<BasicOCSPResp> ocsps = new ArrayList<BasicOCSPResp>();
 		if (pkcs7.getOcsp() != null)
 			ocsps.add(pkcs7.getOcsp());
 		OCSPVerifier ocspVerifier = new OCSPVerifier(null, ocsps);
-		X509Certificate signCert = (X509Certificate)certs[0];
-		X509Certificate issuerCert = (certs.length > 1 ? (X509Certificate)certs[1] : null);
 		List<VerificationOK> verification =
 			ocspVerifier.verify(signCert, issuerCert, date);
 		if (verification.size() == 0) {
