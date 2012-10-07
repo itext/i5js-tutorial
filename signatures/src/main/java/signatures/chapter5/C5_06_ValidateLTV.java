@@ -7,18 +7,19 @@ import java.security.KeyStore;
 import java.security.Security;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.bouncycastle.cert.ocsp.OCSPException;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.OperatorCreationException;
 
-import com.itextpdf.text.log.LoggerFactory;
-import com.itextpdf.text.log.SysoLogger;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.security.CertificateVerifier;
 import com.itextpdf.text.pdf.security.LtvVerifier;
 import com.itextpdf.text.pdf.security.LtvVerification.CertificateOption;
+import com.itextpdf.text.pdf.security.VerificationOK;
 
 public class C5_06_ValidateLTV {
 	public static final String ADOBE = "src/main/resources/adobeRootCA.cer";
@@ -28,7 +29,6 @@ public class C5_06_ValidateLTV {
 	public static final String EXAMPLE4 = "results/chapter5/ltv_4.pdf";
 	
 	public static void main(String[] args) throws IOException, GeneralSecurityException, OCSPException, OperatorCreationException {
-		LoggerFactory.getInstance().setLogger(new SysoLogger());
 		BouncyCastleProvider provider = new BouncyCastleProvider();
 		Security.addProvider(provider);
 		C5_06_ValidateLTV app = new C5_06_ValidateLTV();
@@ -46,7 +46,6 @@ public class C5_06_ValidateLTV {
 	}
 	
 	public void validate(PdfReader reader) throws IOException, GeneralSecurityException, OCSPException, OperatorCreationException {
-		
 		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
 		ks.load(null, null);
 		CertificateFactory cf = CertificateFactory.getInstance("X.509");
@@ -54,11 +53,11 @@ public class C5_06_ValidateLTV {
 				cf.generateCertificate(new FileInputStream(ADOBE)));
 		
 		CertificateVerifier custom = new CertificateVerifier(null) {
-			public boolean verify(X509Certificate signCert,
+			public List<VerificationOK> verify(X509Certificate signCert,
 					X509Certificate issuerCert, Date signDate)
 					throws GeneralSecurityException, IOException {
-				System.out.println("ALL VERIFICATIONS DONE");
-				return false;
+				System.out.println(signCert.getSubjectDN().getName() + ": ALL VERIFICATIONS DONE");
+				return new ArrayList<VerificationOK>();
 			}
 		};
 		
@@ -67,7 +66,16 @@ public class C5_06_ValidateLTV {
  		data.setVerifier(custom);
  		data.setVerifyRootCertificate(false);
  		data.setOnlineCheckingAllowed(false);
- 		data.setKeyStore(ks);
-		data.verify();
+ 		data.setRootStore(ks);
+ 		List<VerificationOK> list = new ArrayList<VerificationOK>();
+ 		try {
+ 			data.verify(list);
+ 		}
+ 		catch(GeneralSecurityException e) {
+ 			System.err.println(e.getMessage());
+ 		}
+		System.out.println();
+ 		for (VerificationOK v : list)
+ 			System.out.println(v.toString());
 	}
 }

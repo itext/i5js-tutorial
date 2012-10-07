@@ -31,7 +31,7 @@ import com.itextpdf.text.pdf.security.CertificateUtil;
 import com.itextpdf.text.pdf.security.CertificateVerification;
 import com.itextpdf.text.pdf.security.OcspClientBouncyCastle;
 import com.itextpdf.text.pdf.security.PdfPKCS7;
-import com.itextpdf.text.pdf.security.VerificationError;
+import com.itextpdf.text.pdf.security.VerificationException;
 
 public class C5_03_CertificateValidation extends C5_01_SignatureIntegrity {
 	public static final String ADOBE = "src/main/resources/adobeRootCA.cer";
@@ -50,7 +50,7 @@ public class C5_03_CertificateValidation extends C5_01_SignatureIntegrity {
 		PdfPKCS7 pkcs7 = super.verifySignature(fields, name);
 		Certificate[] certs = pkcs7.getSignCertificateChain();
 		Calendar cal = pkcs7.getSignDate();
-		List<VerificationError> errors = CertificateVerification.verifyCertificates(certs, ks,
+		List<VerificationException> errors = CertificateVerification.verifyCertificates(certs, ks,
 				pkcs7.getCRLs(), cal);
 		if (errors.size() == 0)
 			System.out.println("Certificates verified against the KeyStore");
