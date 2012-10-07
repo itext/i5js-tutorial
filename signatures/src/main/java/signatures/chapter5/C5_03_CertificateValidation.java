@@ -67,7 +67,7 @@ public class C5_03_CertificateValidation extends C5_01_SignatureIntegrity {
 		return pkcs7;
 	}
 	
-	public void checkRevocation(PdfPKCS7 pkcs7, X509Certificate signCert, X509Certificate issuerCert, Date date) throws GeneralSecurityException, IOException {
+	public static void checkRevocation(PdfPKCS7 pkcs7, X509Certificate signCert, X509Certificate issuerCert, Date date) throws GeneralSecurityException, IOException {
 		List<BasicOCSPResp> ocsps = new ArrayList<BasicOCSPResp>();
 		if (pkcs7.getOcsp() != null)
 			ocsps.add(pkcs7.getOcsp());

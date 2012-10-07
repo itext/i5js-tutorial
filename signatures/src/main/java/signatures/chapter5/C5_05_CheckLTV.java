@@ -30,7 +30,7 @@ public class C5_05_CheckLTV {
 		System.out.println("Encryption algorithm: " + pkcs7.getEncryptionAlgorithm());
 		System.out.println("Filter subtype: " + pkcs7.getFilterSubtype());
 		X509Certificate cert = (X509Certificate) pkcs7.getSigningCertificate();
-			System.out.println("Name of the signer: " + CertificateInfo.getSubjectFields(cert).getField("CN"));
+		System.out.println("Name of the signer: " + CertificateInfo.getSubjectFields(cert).getField("CN"));
         return pkcs7;
 	}
 	

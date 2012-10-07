@@ -11,9 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.bouncycastle.cert.ocsp.OCSPException;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.operator.OperatorCreationException;
 
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.security.CertificateVerifier;
@@ -28,7 +26,7 @@ public class C5_06_ValidateLTV {
 	public static final String EXAMPLE3 = "results/chapter5/ltv_3.pdf";
 	public static final String EXAMPLE4 = "results/chapter5/ltv_4.pdf";
 	
-	public static void main(String[] args) throws IOException, GeneralSecurityException, OCSPException, OperatorCreationException {
+	public static void main(String[] args) throws IOException, GeneralSecurityException {
 		BouncyCastleProvider provider = new BouncyCastleProvider();
 		Security.addProvider(provider);
 		C5_06_ValidateLTV app = new C5_06_ValidateLTV();
@@ -45,7 +43,7 @@ public class C5_06_ValidateLTV {
 		app.validate(new PdfReader(EXAMPLE4));
 	}
 	
-	public void validate(PdfReader reader) throws IOException, GeneralSecurityException, OCSPException, OperatorCreationException {
+	public void validate(PdfReader reader) throws IOException, GeneralSecurityException {
 		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
 		ks.load(null, null);
 		CertificateFactory cf = CertificateFactory.getInstance("X.509");
