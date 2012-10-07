@@ -60,11 +60,11 @@ public class C5_06_ValidateLTV {
 		};
 		
  		LtvVerifier data = new LtvVerifier(reader);
+ 		data.setRootStore(ks);
  		data.setCertificateOption(CertificateOption.WHOLE_CHAIN);
  		data.setVerifier(custom);
- 		data.setVerifyRootCertificate(false);
  		data.setOnlineCheckingAllowed(false);
- 		data.setRootStore(ks);
+ 		data.setVerifyRootCertificate(false);
  		List<VerificationOK> list = new ArrayList<VerificationOK>();
  		try {
  			data.verify(list);
