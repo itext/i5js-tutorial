@@ -63,12 +63,10 @@ public class C5_04_LTV {
 		List<String> names = fields.getSignatureNames();
         String sigName = names.get(names.size() - 1);
 		PdfPKCS7 pkcs7 = fields.verifySignature(sigName);
-        if (pkcs7.isTsp()) 
-        	v.addVerification(sigName, ocsp, crl, LtvVerification.CertificateOption.SIGNING_CERTIFICATE, LtvVerification.Level.OCSP_CRL, LtvVerification.CertificateInclusion.NO);
-        else {
-        	for (String name : names) {
-        		v.addVerification(name, ocsp, crl, LtvVerification.CertificateOption.WHOLE_CHAIN, LtvVerification.Level.OCSP_CRL, LtvVerification.CertificateInclusion.NO);
-        	}
+		if (pkcs7.isTsp())
+			System.out.println("TIMESTAMP!");
+		for (String name : names) {
+			v.addVerification(name, ocsp, crl, LtvVerification.CertificateOption.WHOLE_CHAIN, LtvVerification.Level.OCSP_CRL, LtvVerification.CertificateInclusion.NO);
         }
         PdfSignatureAppearance sap = stp.getSignatureAppearance();
         LtvTimestamp.timestamp(sap, tsa, null); 
