@@ -7,10 +7,10 @@
 		<version>1.0.0</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>itext-attachmentsdemo</artifactId>
+	<artifactId>itext-basics</artifactId>
 	<name>iText examples</name>
 	<version>0.0.1-SNAPSHOT</version>
-	<description>iText, a free Java-PDF library: Attachments demo</description>
+	<description>iText, a free Java-PDF library: The ABC of PDF</description>
 	<!-- General Info -->
 	<url>http://www.itextpdf.com/</url>
 	<mailingLists>
@@ -20,15 +20,6 @@
 				http://lists.sourceforge.net/lists/listinfo/itext-questions
 			</subscribe>
 			<post>itext-questions@lists.sourceforge.net</post>
-			<archive>
-				http://news.gmane.org/gmane.comp.java.lib.itext.general
-			</archive>
-			<otherArchives>
-				<otherArchive>http://itext-general.2136553.n4.nabble.com/</otherArchive>
-				<otherArchive>http://www.junlu.com/2.html</otherArchive>
-				<otherArchive>http://sourceforge.net/mailarchive/forum.php?forum_id=3273</otherArchive>
-				<otherArchive>http://www.mail-archive.com/itext-questions%40lists.sourceforge.net/</otherArchive>
-			</otherArchives>
 		</mailingList>
 	</mailingLists>
 	<developers>
@@ -65,7 +56,7 @@
 		<dependency>
 			<groupId>com.itextpdf</groupId>
 			<artifactId>itextpdf</artifactId>
-			<version>5.3.2-SNAPSHOT</version>
+			<version>5.4.2-SNAPSHOT</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
