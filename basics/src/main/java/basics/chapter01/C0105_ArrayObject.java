@@ -10,14 +10,12 @@ import com.itextpdf.text.pdf.PdfString;
 public class C0105_ArrayObject {
 
 	public static void main(String[] args) {
-		
 		PdfArray array = new PdfArray();
 		array.add(PdfName.FIRST);
 		array.add(new PdfString("Second"));
 		array.add(new PdfNumber(3));
 		array.add(PdfBoolean.PDFFALSE);
 		showObject(array);
-
 		showObject(new PdfRectangle(595, 842));
 	}
 	
@@ -27,9 +25,12 @@ public class C0105_ArrayObject {
 		System.out.println("-> type: " + obj.type());
 		System.out.println("-> toString: " + obj.toString());
 		System.out.println("-> size: " + obj.size());
+		System.out.print("-> Values:");
 		for (int i = 0; i < obj.size(); i++) {
-			System.out.println(obj.getPdfObject(i));
+			System.out.print(" ");
+			System.out.print(obj.getPdfObject(i));
 		}
+		System.out.println();
 	}
 
 }

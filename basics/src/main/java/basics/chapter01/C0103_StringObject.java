@@ -6,12 +6,12 @@ import com.itextpdf.text.pdf.PdfString;
 public class C0103_StringObject {
 
 	public static void main(String[] args) {	
-		PdfString test1 = new PdfString("Test");
-		PdfString test2 = new PdfString("\u6d4b\u8bd5", PdfString.TEXT_UNICODE);
-		showObject(test1);
-		showObject(test2);
-		test1.setHexWriting(true);
-		showObject(test1);
+		PdfString s1 = new PdfString("Test");
+		PdfString s2 = new PdfString("\u6d4b\u8bd5", PdfString.TEXT_UNICODE);
+		showObject(s1);
+		showObject(s2);
+		s1.setHexWriting(true);
+		showObject(s1);
 		showObject(new PdfDate());
 	}
 	
@@ -23,7 +23,7 @@ public class C0103_StringObject {
 		System.out.println("-> toString: " + obj.toString());
 		System.out.println("-> hexWriting: " + obj.isHexWriting());
 		System.out.println("-> encoding: " + obj.getEncoding());
-		System.out.println("-> original bytes: " + new String(obj.getOriginalBytes()));
+		System.out.println("-> bytes: " + new String(obj.getOriginalBytes()));
 		System.out.println("-> unicode string: " + obj.toUnicodeString());
 	}
 }

@@ -6,7 +6,9 @@ import com.itextpdf.text.pdf.PdfStream;
 public class C0107_StreamObject {
 
 	public static void main(String[] args) {
-		PdfStream stream = new PdfStream("Long stream of data stored in a FlateDecode compressed stream object".getBytes());
+		PdfStream stream = new PdfStream(
+		 "Long stream of data stored in a FlateDecode compressed stream object"
+		 .getBytes());
 		stream.flateCompress();
 		showObject(stream);
 	}
@@ -19,11 +21,8 @@ public class C0107_StreamObject {
 		System.out.println("-> raw length: " + obj.getRawLength());
 		System.out.println("-> size: " + obj.size());
 		for (PdfName key : obj.getKeys()) {
-			System.out.print(key);
-			System.out.print(": ");
+			System.out.print(" " + key + ": ");
 			System.out.println(obj.get(key));
 		}
 	}
-	
-	
 }
