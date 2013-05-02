@@ -5,16 +5,11 @@ import com.itextpdf.text.pdf.PdfBoolean;
 import com.itextpdf.text.pdf.PdfDictionary;
 import com.itextpdf.text.pdf.PdfName;
 import com.itextpdf.text.pdf.PdfNumber;
-import com.itextpdf.text.pdf.PdfStream;
 import com.itextpdf.text.pdf.PdfString;
 
 public class PdfObjects {
 
 	public static void main(String[] args) {
-
-		PdfStream stream = new PdfStream("Long stream of data stored in a FlateDecode compressed stream object".getBytes());
-		stream.flateCompress();
-		
 		PdfArray array = new PdfArray();
 		array.add(PdfName.FIRST);
 		array.add(new PdfString("Second"));
@@ -27,7 +22,6 @@ public class PdfObjects {
 		dict.put(new PdfName("3rd"), new PdfNumber(3));
 		dict.put(new PdfName("Fourth"), PdfBoolean.PDFFALSE);
 		dict.put(new PdfName("Fifth"), array);
-		dict.put(new PdfName("6th"), stream);
 		
 		array.add(dict);
 		
@@ -49,8 +43,5 @@ public class PdfObjects {
 		PdfDictionary d = array.getAsDict(4);
 		if (d != null)
 			C0106_DictionaryObject.showObject(d);
-		PdfStream s = dict.getAsStream(new PdfName("6th"));
-		if (s != null)
-			C0107_StreamObject.showObject(s);
 	}
 }

@@ -12,9 +12,6 @@ import com.itextpdf.text.pdf.PdfString;
 public class C0109_Objects {
 
 	public static void main(String[] args) {
-
-		PdfStream stream = new PdfStream("Long stream of data stored in a FlateDecode compressed stream object".getBytes());
-		stream.flateCompress();
 		
 		PdfArray array = new PdfArray();
 		array.add(PdfName.FIRST);
@@ -28,7 +25,6 @@ public class C0109_Objects {
 		dict.put(new PdfName("3rd"), new PdfNumber(3));
 		dict.put(new PdfName("Fourth"), PdfBoolean.PDFFALSE);
 		dict.put(new PdfName("Fifth"), array);
-		dict.put(new PdfName("6th"), stream);
 		
 		array.add(dict);
 		
