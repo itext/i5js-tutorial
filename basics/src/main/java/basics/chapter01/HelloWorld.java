@@ -22,43 +22,39 @@ public class HelloWorld {
 	
 	public static void createPdf1() throws IOException, DocumentException {
 		Document document = new Document();
-		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("hello1.pdf"));
+		PdfWriter.getInstance(document, new FileOutputStream("hello1.pdf"));
 		document.open();
 		document.add(new Paragraph("Hello World"));
 		document.close();
 	}
 	
 	public static void createPdf2() throws IOException, DocumentException {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		Document document = new Document();
-		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("hello2.pdf"));
-		writer.setFullCompression();
+		PdfWriter.getInstance(document, baos);
 		document.open();
 		document.add(new Paragraph("Hello World"));
 		document.close();
+		PdfReader reader = new PdfReader(baos.toByteArray());
+		PdfStamper stamper = new PdfStamper(reader, new FileOutputStream("hello2.pdf"), '\0', true);
+		stamper.close();
 	}
 	
 	public static void createPdf3() throws IOException, DocumentException {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		Document document = new Document();
-		PdfWriter writer = PdfWriter.getInstance(document, baos);
-		document.open();
-		document.add(new Paragraph("Hello World"));
-		document.close();
-		PdfReader reader = new PdfReader(baos.toByteArray());
-		PdfStamper stamper = new PdfStamper(reader, new FileOutputStream("hello3.pdf"), '\0', true);
-		stamper.close();
-	}
-	
-	public static void createPdf4() throws IOException, DocumentException {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		Document document = new Document();
-		PdfWriter writer = PdfWriter.getInstance(document, baos);
+		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("hello3.pdf"));
 		writer.setFullCompression();
 		document.open();
 		document.add(new Paragraph("Hello World"));
 		document.close();
-		PdfReader reader = new PdfReader(baos.toByteArray());
-		PdfStamper stamper = new PdfStamper(reader, new FileOutputStream("hello4.pdf"), '\0', true);
-		stamper.close();
+	}
+	
+	public static void createPdf4() throws IOException, DocumentException {
+		Document document = new Document();
+		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("hello4.pdf"));
+		writer.createXmpMetadata();
+		document.open();
+		document.add(new Paragraph("Hello World"));
+		document.close();
 	}
 }
