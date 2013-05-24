@@ -1,4 +1,4 @@
-package basics.chapter01;
+package basics.chapter02;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
@@ -11,7 +11,7 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
 
-public class HelloWorld {
+public class C0201_HelloWorld {
 
 	public static void main(String[] args) throws IOException, DocumentException {
 		createPdf1();
