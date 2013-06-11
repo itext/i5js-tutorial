@@ -3,10 +3,16 @@ package basics.chapter02;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.itextpdf.text.Anchor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfDestination;
+import com.itextpdf.text.pdf.PdfEncryption;
+import com.itextpdf.text.pdf.PdfOutline;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -51,10 +57,37 @@ public class C0201_HelloWorld {
 	
 	public static void createPdf4() throws IOException, DocumentException {
 		Document document = new Document();
-		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("hello4.pdf"));
+		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("primes.pdf"));
 		writer.createXmpMetadata();
 		document.open();
-		document.add(new Paragraph("Hello World"));
+		List<Integer> factors;
+		PdfOutline bookmarks = writer.getRootOutline();
+		for (int i = 2; i < 301; i++) {
+			document.add(new Paragraph("These are the factors of " + i + ":"));
+			factors = getFactors(i);
+			if (factors.size() == 1) {
+				String name = "Prime" + i;
+				Anchor a = new Anchor("This is a prime number!");
+				a.setName(name);
+				document.add(a);
+				new PdfOutline(bookmarks, new PdfDestination(PdfDestination.FIT), name);
+			}
+			for (int factor : factors) {
+				document.add(new Paragraph("Factor: " + factor));
+			}
+			document.newPage();
+		}
 		document.close();
 	}
+	
+	public static List<Integer> getFactors(int n) {
+	    List<Integer> factors = new ArrayList<Integer>();
+	    for (int i = 2; i <= n; i++) {
+	      while (n % i == 0) {
+	        factors.add(i);
+	        n /= i;
+	      }
+	    }
+	    return factors;
+	  }
 }
