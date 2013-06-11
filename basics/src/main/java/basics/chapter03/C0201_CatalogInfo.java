@@ -32,15 +32,19 @@ public class C0201_CatalogInfo {
 		showObject(id2);
 		PdfObject object = trailer.get(PdfName.INFO);
 		showObject(object);
+		showObject(trailer.getAsDict(PdfName.INFO));
 		PdfIndirectReference ref = trailer.getAsIndirectObject(PdfName.INFO);
+		showObject(ref);
 		object = reader.getPdfObject(ref.getNumber());
 		showObject(object);
-		showObject(trailer.getAsDict(PdfName.INFO));
+		object = PdfReader.getPdfObject(trailer.get(PdfName.INFO));
+		showObject(object);
+		reader.close();
 	}
 	
 	public static void showEntries(PdfDictionary dict) {
 		for (PdfName key : dict.getKeys()) {
-			System.out.print(" " + key + ": ");
+			System.out.print(key + ": ");
 			System.out.println(dict.get(key));
 		}
 	}
