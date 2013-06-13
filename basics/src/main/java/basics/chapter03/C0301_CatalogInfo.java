@@ -13,7 +13,7 @@ import com.itextpdf.text.pdf.PdfObject;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfString;
 
-public class C0201_CatalogInfo {
+public class C0301_CatalogInfo {
 
 	public static void main(String[] args) throws IOException {
 		RandomAccessSourceFactory rasf = new RandomAccessSourceFactory();
