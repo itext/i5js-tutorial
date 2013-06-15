@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.itextpdf.text.Anchor;
+import com.itextpdf.text.Annotation;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
@@ -102,7 +103,7 @@ public class C0201_HelloWorld {
 	public static void createPdf5() throws IOException, DocumentException {
 		Document document = new Document();
 		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("pages.pdf"));
-		writer.setViewerPreferences(PdfWriter.PageLayoutTwoPageLeft);
+		writer.setViewerPreferences(PdfWriter.PageLayoutTwoPageLeft | PdfWriter.PageModeUseThumbs);
 		writer.addViewerPreference(PdfName.PRINTSCALING, PdfName.NONE);
 		PdfPageLabels labels = new PdfPageLabels();
         labels.addPageLabel(1, PdfPageLabels.UPPERCASE_LETTERS);
@@ -152,9 +153,18 @@ public class C0201_HelloWorld {
 		document.add(new Paragraph("Hello World"));
 
 		writer.setCropBoxSize(null);
-		writer.addPageDictEntry(PdfName.USERUNIT, new PdfNumber(5));
 		document.newPage();
+		writer.addPageDictEntry(PdfName.USERUNIT, new PdfNumber(5));
 		document.add(new Paragraph("Hello World"));
+		
+		document.newPage();
+		Anchor anchor = new Anchor("World");
+		anchor.setReference("http://maps.google.com");
+		Paragraph p = new Paragraph("Hello ");
+		p.add(anchor);
+		document.add(p);
+		Annotation a = new Annotation("Example", "This is a post-it annotation");
+		document.add(a);
 		
 		document.close();
 	}
