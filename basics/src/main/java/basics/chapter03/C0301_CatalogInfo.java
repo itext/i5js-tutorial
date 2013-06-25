@@ -2,8 +2,6 @@ package basics.chapter03;
 
 import java.io.IOException;
 
-import com.itextpdf.text.io.RandomAccessSource;
-import com.itextpdf.text.io.RandomAccessSourceFactory;
 import com.itextpdf.text.pdf.PdfArray;
 import com.itextpdf.text.pdf.PdfDictionary;
 import com.itextpdf.text.pdf.PdfIndirectReference;
@@ -16,9 +14,7 @@ import com.itextpdf.text.pdf.PdfString;
 public class C0301_CatalogInfo {
 
 	public static void main(String[] args) throws IOException {
-		RandomAccessSourceFactory rasf = new RandomAccessSourceFactory();
-		RandomAccessSource ras = rasf.createBestSource("src/main/resources/primes.pdf");
-		PdfReader reader = new PdfReader(ras);
+		PdfReader reader = new PdfReader("src/main/resources/primes.pdf");
 		PdfDictionary trailer = reader.getTrailer();
 		showEntries(trailer);
 		PdfNumber size = (PdfNumber)trailer.get(PdfName.SIZE);
