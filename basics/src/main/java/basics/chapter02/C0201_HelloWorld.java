@@ -156,7 +156,8 @@ public class C0201_HelloWorld {
 		document.newPage();
 		writer.addPageDictEntry(PdfName.USERUNIT, new PdfNumber(5));
 		document.add(new Paragraph("Hello World"));
-		
+
+		writer.setBoxSize("art", new Rectangle(36, 36, 559, 806));
 		document.newPage();
 		Anchor anchor = new Anchor("World");
 		anchor.setReference("http://maps.google.com");
