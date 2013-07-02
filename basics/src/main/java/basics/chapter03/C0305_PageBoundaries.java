@@ -20,8 +20,8 @@ public class C0305_PageBoundaries {
 		
 		show(reader.getPageSize(5));
 		show(reader.getCropBox(5));
-		
-		show(reader.getPageSize(7));
+
+		show(reader.getBoxSize(7, "media"));
 		show(reader.getBoxSize(7, "art"));
 		
 		PdfDictionary page6 = reader.getPageN(6);
