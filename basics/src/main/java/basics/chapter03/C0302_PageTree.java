@@ -15,6 +15,7 @@ public class C0302_PageTree {
 		PdfDictionary dict = reader.getCatalog();
 		PdfDictionary pageroot = dict.getAsDict(PdfName.PAGES);
 		new C0302_PageTree().expand(pageroot);
+		reader.close();
 	}
 
 	private int page = 1;

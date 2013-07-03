@@ -26,6 +26,8 @@ public class C0305_PageBoundaries {
 		
 		PdfDictionary page6 = reader.getPageN(6);
 		System.out.println(page6.getAsNumber(PdfName.USERUNIT));
+		
+		reader.close();
 	}
 	
 	public static void show(Rectangle rect) {

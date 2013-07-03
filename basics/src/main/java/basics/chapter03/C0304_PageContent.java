@@ -46,5 +46,7 @@ public class C0304_PageContent {
 		for (PdfName key : font.getKeys()) {
 			System.out.println(key + ": " + font.getDirectObject(key));
 		}
+		
+		reader.close();
 	}
 }

@@ -15,5 +15,6 @@ public class C0303_PageNumbers {
 			page = reader.getPageN(i);
 			System.out.println("The parent of page " + i + " is " + page.get(PdfName.PARENT));
 		}
+		reader.close();
 	}
 }
