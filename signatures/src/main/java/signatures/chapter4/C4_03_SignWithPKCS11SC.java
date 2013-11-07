@@ -3,7 +3,7 @@
  * "Digital Signatures for PDF documents"
  * written by Bruno Lowagie
  * 
- * For more info, go to: http://itextpdf.com/sales
+ * For more info, go to: http://itextpdf.com/learn
  */
 package signatures.chapter4;
 
