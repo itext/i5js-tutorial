@@ -11,7 +11,7 @@ import com.itextpdf.text.pdf.PdfObject;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfString;
 
-public class C0301_CatalogInfo {
+public class C0301_TrailerInfo {
 
 	public static void main(String[] args) throws IOException {
 		PdfReader reader = new PdfReader("src/main/resources/primes.pdf");
