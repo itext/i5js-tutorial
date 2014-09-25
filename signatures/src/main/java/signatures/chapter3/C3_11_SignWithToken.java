@@ -47,7 +47,7 @@ public class C3_11_SignWithToken extends C3_01_SignWithCAcert {
 		Security.addProvider(providerMSCAPI);
         KeyStore ks = KeyStore.getInstance("Windows-MY");
 		ks.load(null, null);
-        String alias = (String)ks.aliases().nextElement();
+		String alias = "Bruno Lowagie";
         PrivateKey pk = (PrivateKey)ks.getKey(alias, null);
         Certificate[] chain = ks.getCertificateChain(alias);
         OcspClient ocspClient = new OcspClientBouncyCastle();
